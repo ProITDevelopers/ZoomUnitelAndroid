@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--  Cores_Principais  -->
+    <color name="colorPrimary">#e6540f</color>
+    <color name="colorPrimaryDark">#e6540f</color>
+    <color name="colorAccent">#5c0f8b</color>
+
+
+    <color name="white">#ffffff</color>
+    <color name="default_night_color">#444444</color>
+    <color name="orange_unitel">#e6540f</color>
+    <color name="blue_unitel">#5c0f8b</color>
+    <color name="transparentBlack">#80000000</color>
+    <color name="gray_color">#808080</color>
+    <!--  Cores_Principais  -->
+
+    <color name="unitel_logo_tint_color">@color/white</color>
+    <color name="edittext_box_bkg_color">@color/default_night_color</color>
+    <color name="edittext_text_color">@color/orange_unitel</color>
+    <color name="edittext_cursor_color">@color/orange_unitel</color>
+    <color name="box_border_color">@color/white</color>
+
+    <color name="btn_login_start_color">@color/orange_unitel</color>
+    <color name="btn_login_end_color">@color/orange_unitel</color>
+    <color name="txt_color_login">@color/white</color>
+
+    <color name="txt_color_alterar_pass">@color/white</color>
+    <color name="txt_color_alterar_pass_number">@color/orange_unitel</color>
+    <color name="txt_color_register">@color/orange_unitel</color>
+
+
+    <color name="edittext_perfil_text_color">@color/white</color>
+    <color name="edittext_perfil_cursor_color">@color/white</color>
+
+    <color name="bottom_navigation_color">@color/default_night_color</color>
+    <color name="txt_position_color">@color/white</color>
+    <color name="spinKitView_color">@color/orange_unitel</color>
+    <color name="box_border_grey">@color/default_night_color</color>
+
+</resources>
