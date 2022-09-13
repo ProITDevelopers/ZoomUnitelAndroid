@@ -3,7 +3,7 @@ package ao.co.proitconsulting.zoomunitel.localDB
 import android.content.Context
 import android.content.SharedPreferences
 import ao.co.proitconsulting.zoomunitel.ZoOmUnitelApplication
-import ao.co.proitconsulting.zoomunitel.models.Usuario
+import ao.co.proitconsulting.zoomunitel.models.UsuarioModel
 import com.google.gson.Gson
 
 
@@ -59,7 +59,7 @@ class AppPrefsSettings {
 
 
     //SAVE USER DATA
-    fun saveUser(usuario: Usuario){
+    fun saveUser(usuario: UsuarioModel){
         val editor: SharedPreferences.Editor = sharedPreferences.edit()
         val userData:String = gson.toJson(usuario)
         editor.putString(KEY_USER, userData)
@@ -68,10 +68,10 @@ class AppPrefsSettings {
 
 
     //GET USER DATA
-    fun getUser():Usuario?{
+    fun getUser():UsuarioModel?{
 
         val userData:String? = sharedPreferences.getString(KEY_USER, null)
-        return  gson.fromJson(userData,Usuario::class.java)
+        return  gson.fromJson(userData,UsuarioModel::class.java)
     }
 
 

@@ -29,16 +29,17 @@ import ao.co.proitconsulting.zoomunitel.helpers.Constants
 import ao.co.proitconsulting.zoomunitel.helpers.MetodosUsados
 import ao.co.proitconsulting.zoomunitel.helpers.network.ConnectionLiveData
 import ao.co.proitconsulting.zoomunitel.localDB.AppPrefsSettings
-import ao.co.proitconsulting.zoomunitel.models.LoginRequest
-import ao.co.proitconsulting.zoomunitel.models.RegisterRequest
-import ao.co.proitconsulting.zoomunitel.models.Usuario
+import ao.co.proitconsulting.zoomunitel.models.UsuarioModel
+import ao.co.proitconsulting.zoomunitel.models.UsuarioRequest
 import ao.co.proitconsulting.zoomunitel.ui.CadastroActivity
 import ao.co.proitconsulting.zoomunitel.ui.MainActivity
 import okhttp3.ResponseBody
+import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.IOException
 
 class RegistroFragment : Fragment() {
     private val TAG = "TAG_RegistFrag"
@@ -198,7 +199,7 @@ class RegistroFragment : Fragment() {
     private fun registrar() {
         deActivateViews()
         binding.spinKitBottom.visibility = View.VISIBLE
-        val registerRequest =  RegisterRequest(
+        val registerRequest =  UsuarioRequest.RegisterRequest(
             nome,telefone,email,confirmSenha
         )
         val retrofit = RetrofitInstance.api.userRegister(registerRequest)
@@ -216,31 +217,44 @@ class RegistroFragment : Fragment() {
 
                     AppPrefsSettings.getInstance().clearAppPrefs()
 
-                    var mensagem = response.body()?.string()
-                    if (!mensagem.isNullOrEmpty()){
-                        val jsonObject = JSONObject(mensagem)
+                    try {
+                        var mensagem = response.body()?.string()
+                        if (!mensagem.isNullOrEmpty()){
+                            val jsonObject = JSONObject(mensagem)
 
-                        mensagem = jsonObject.getString("msg")
+                            mensagem = jsonObject.getString("msg")
 
-                        showMessage(mensagem)
+                            showMessage(mensagem)
+
+                        }
+
+
+                        Log.d(TAG,"ResponseBody: "+mensagem)
+                    }catch (e: IOException){
+
+                    }catch (e:JSONException){
 
                     }
-
-
-                    Log.d(TAG,"ResponseBody: "+mensagem)
 
                 } else{
                     binding.spinKitBottom.visibility = View.GONE
                     activateViews()
-                    val responseBodyError = response.errorBody()?.string()
-                    if (!responseBodyError.isNullOrEmpty()){
-                        val jsonResponseBodyError = JSONObject(responseBodyError)
-                        val jsorError = jsonResponseBodyError.get("erro")
-                        val jsonBodyError = JSONObject(jsorError.toString())
-                        val errorMessage = jsonBodyError.get("mensagem")
-                        MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastERRO,errorMessage.toString())
+
+                    try {
+                        val responseBodyError = response.errorBody()?.string()
+                        if (!responseBodyError.isNullOrEmpty()){
+                            val jsonResponseBodyError = JSONObject(responseBodyError)
+                            val jsorError = jsonResponseBodyError.get("erro")
+                            val jsonBodyError = JSONObject(jsorError.toString())
+                            val errorMessage = jsonBodyError.get("mensagem")
+                            MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastERRO,errorMessage.toString())
+                        }
+                        Log.d(TAG, "onResponse_NOTsuccess: ${response.errorBody()?.string()}")
+                    }catch (e:IOException){
+
+                    }catch (e:JSONException){
+
                     }
-                    Log.d(TAG, "onResponse_NOTsuccess: ${response.errorBody()?.string()}")
                 }
             }
 
@@ -278,7 +292,7 @@ class RegistroFragment : Fragment() {
 
     private fun autenticar() {
 
-        val loginRequest = LoginRequest(email,confirmSenha)
+        val loginRequest = UsuarioRequest.LoginRequest(email,confirmSenha)
 
         val retrofit = RetrofitInstance.api.userLogin(loginRequest)
         retrofit.enqueue(object :
@@ -288,24 +302,31 @@ class RegistroFragment : Fragment() {
                 if (response.isSuccessful) {
 
                     if (response.body()!=null){
-                        val userData = response.body()?.string()
-                        if (!userData.isNullOrEmpty()){
-                            Log.d(TAG, "onResponse_success: $userData")
-                            val jsonResponse = JSONObject(userData)
-                            val usuario = Usuario(
-                                jsonResponse.getLong("userid"),
-                                jsonResponse.getString("nome"),
-                                jsonResponse.getString("email"),
-                                jsonResponse.getString("telefone"),
-                                jsonResponse.getString("imagem")
+                        try {
+                            val userData = response.body()?.string()
+                            if (!userData.isNullOrEmpty()){
+                                Log.d(TAG, "onResponse_success: $userData")
+                                val jsonResponse = JSONObject(userData)
+                                val usuario = UsuarioModel(
+                                    jsonResponse.getLong("userid"),
+                                    jsonResponse.getString("nome"),
+                                    jsonResponse.getString("email"),
+                                    jsonResponse.getString("telefone"),
+                                    jsonResponse.getString("imagem")
 
-                            )
+                                )
 
-                            binding.spinKitBottom.visibility = View.GONE
-                            AppPrefsSettings.getInstance().saveUser(usuario)
-                            AppPrefsSettings.getInstance().saveAuthToken(jsonResponse.getString("token"))
-                            launchHomescreen()
+                                binding.spinKitBottom.visibility = View.GONE
+                                AppPrefsSettings.getInstance().saveUser(usuario)
+                                AppPrefsSettings.getInstance().saveAuthToken(jsonResponse.getString("token"))
+                                launchHomescreen()
+                            }
+                        }catch (e:IOException){
+
+                        }catch (e:JSONException){
+
                         }
+
                     }else{
                         binding.spinKitBottom.visibility = View.GONE
                         activateViews()
@@ -498,7 +519,7 @@ class RegistroFragment : Fragment() {
             return false
         }
 
-        if (!MetodosUsados.validarEmail(email!!)) {
+        if (!MetodosUsados.validarEmail(email)) {
             MetodosUsados.showCustomSnackBar(view,activity, Constants.ToastALERTA,getString(R.string.msg_erro_email_invalido))
             binding.editEmail.requestFocus()
             binding.editEmail.error = ""
@@ -579,6 +600,15 @@ class RegistroFragment : Fragment() {
         binding.editConfirmPass.isEnabled = false
         binding.btnRegistro.isEnabled = false
         binding.txtLogin.isEnabled = false
+    }
+
+    override fun onResume() {
+        binding.editNome.error = null
+        binding.editTelefone.error = null
+        binding.editEmail.error = null
+        binding.editPass.error = null
+        binding.editConfirmPass.error = null
+        super.onResume()
     }
 
     override fun onDestroyView() {

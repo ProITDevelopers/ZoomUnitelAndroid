@@ -19,12 +19,14 @@ import ao.co.proitconsulting.zoomunitel.databinding.FragmentNovaPassBinding
 import ao.co.proitconsulting.zoomunitel.helpers.Constants
 import ao.co.proitconsulting.zoomunitel.helpers.MetodosUsados
 import ao.co.proitconsulting.zoomunitel.helpers.network.ConnectionLiveData
-import ao.co.proitconsulting.zoomunitel.models.PasswordRequest
+import ao.co.proitconsulting.zoomunitel.models.UsuarioRequest
 import okhttp3.ResponseBody
+import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.IOException
 
 class NovaPassFragment : Fragment() {
     val TAG="TAG_NovaPassFrag"
@@ -87,6 +89,7 @@ class NovaPassFragment : Fragment() {
             }
 
         })
+
 
         val btnContinuar : Button = binding.btnContinuar
         btnContinuar.setOnClickListener {
@@ -195,9 +198,9 @@ class NovaPassFragment : Fragment() {
     private fun enviarNovaPass() {
         deActivateViews()
         binding.spinKitBottom.visibility = View.VISIBLE
-        val passwordRequest = PasswordRequest.NewPass(confirmSenha.toString())
+        val passSendNewPass = UsuarioRequest.PassSendNewPass(confirmSenha)
 
-        val retrofit = RetrofitInstance.api.resetPassWord(passwordRequest)
+        val retrofit = RetrofitInstance.api.resetPassWord(passSendNewPass)
         retrofit.enqueue(object :
             Callback<ResponseBody> {
 
@@ -214,15 +217,21 @@ class NovaPassFragment : Fragment() {
                 } else{
                     binding.spinKitBottom.visibility = View.GONE
                     activateViews()
-                    val responseBodyError = response.errorBody()?.string()
-                    if (!responseBodyError.isNullOrEmpty()){
-                        val jsonResponseBodyError = JSONObject(responseBodyError)
-                        val jsorError = jsonResponseBodyError.get("erro")
-                        val jsonBodyError = JSONObject(jsorError.toString())
-                        val errorMessage = jsonBodyError.get("mensagem")
-                        MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastERRO,errorMessage.toString())
+                    try {
+                        val responseBodyError = response.errorBody()?.string()
+                        if (!responseBodyError.isNullOrEmpty()){
+                            val jsonResponseBodyError = JSONObject(responseBodyError)
+                            val jsorError = jsonResponseBodyError.get("erro")
+                            val jsonBodyError = JSONObject(jsorError.toString())
+                            val errorMessage = jsonBodyError.get("mensagem")
+                            MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastERRO,errorMessage.toString())
+                        }
+                        Log.d(TAG, "onResponse_NOTsuccess: ${response.errorBody()?.string()}")
+                    }catch (e:IOException){
+
+                    }catch (e:JSONException){
+
                     }
-                    Log.d(TAG, "onResponse_NOTsuccess: ${response.errorBody()?.string()}")
                 }
             }
 
@@ -261,6 +270,12 @@ class NovaPassFragment : Fragment() {
         binding.editConfirmPassword.isEnabled = false
         binding.btnContinuar.isEnabled = false
 
+    }
+
+    override fun onResume() {
+        binding.editPassword.error = null
+        binding.editConfirmPassword.error = null
+        super.onResume()
     }
 
     override fun onDestroyView() {

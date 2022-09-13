@@ -8,6 +8,7 @@ class Constants {
         const val USER_IMAGE_PATH = BASE_URL_ZOOM_UNITEL+"user/image/"
         const val IMAGE_PATH = BASE_URL_ZOOM_UNITEL+"revista/image/"
         const val PDF_PATH = BASE_URL_ZOOM_UNITEL+"revista/view/"
+        var SEND_EMAIL = "email"
         const val REQUEST_TIMEOUT:Long = 10000
 
         const val ToastSUCESS:Int = 0

@@ -27,16 +27,18 @@ import ao.co.proitconsulting.zoomunitel.helpers.Constants
 import ao.co.proitconsulting.zoomunitel.helpers.MetodosUsados
 import ao.co.proitconsulting.zoomunitel.helpers.network.ConnectionLiveData
 import ao.co.proitconsulting.zoomunitel.localDB.AppPrefsSettings
-import ao.co.proitconsulting.zoomunitel.models.LoginRequest
-import ao.co.proitconsulting.zoomunitel.models.Usuario
+import ao.co.proitconsulting.zoomunitel.models.UsuarioModel
+import ao.co.proitconsulting.zoomunitel.models.UsuarioRequest
 import ao.co.proitconsulting.zoomunitel.ui.CadastroActivity
 import ao.co.proitconsulting.zoomunitel.ui.MainActivity
 import ao.co.proitconsulting.zoomunitel.ui.SenhaActivity
 import okhttp3.ResponseBody
+import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.IOException
 
 class LoginFragment : Fragment() {
 val TAG = "TAG_LoginFrag"
@@ -106,6 +108,7 @@ val TAG = "TAG_LoginFrag"
             }
 
         })
+
         val btnLogin: Button = binding.btnLogin
         btnLogin.setOnClickListener {
             if (verificarCampos()){
@@ -274,7 +277,9 @@ val TAG = "TAG_LoginFrag"
     private fun autenticar() {
         deActivateViews()
         binding.spinKitBottom.visibility = View.VISIBLE
-        val loginRequest = LoginRequest(emailTelefone,password)
+        val loginRequest = UsuarioRequest.LoginRequest(emailTelefone,password)
+
+        Log.d(TAG, "autenticar: ${loginRequest.toString()}")
 
         val retrofit = RetrofitInstance.api.userLogin(loginRequest)
         retrofit.enqueue(object :
@@ -284,23 +289,29 @@ val TAG = "TAG_LoginFrag"
                 if (response.isSuccessful) {
 
                     if (response.body()!=null){
-                        val userData = response.body()?.string()
-                        if (!userData.isNullOrEmpty()){
-                            Log.d(TAG, "onResponse_success: $userData")
-                            val jsonResponse = JSONObject(userData)
-                            val usuario = Usuario(
-                                jsonResponse.getLong("userid"),
-                                jsonResponse.getString("nome"),
-                                jsonResponse.getString("email"),
-                                jsonResponse.getString("telefone"),
-                                jsonResponse.getString("imagem")
+                        try {
+                            val userData = response.body()?.string()
+                            if (!userData.isNullOrEmpty()){
+                                Log.d(TAG, "onResponse_success: $userData")
+                                val jsonResponse = JSONObject(userData)
+                                val usuario = UsuarioModel(
+                                    jsonResponse.getLong("userid"),
+                                    jsonResponse.getString("nome"),
+                                    jsonResponse.getString("email"),
+                                    jsonResponse.getString("telefone"),
+                                    jsonResponse.getString("imagem")
 
-                            )
+                                )
 
-                            binding.spinKitBottom.visibility = View.GONE
-                            AppPrefsSettings.getInstance().saveUser(usuario)
-                            AppPrefsSettings.getInstance().saveAuthToken(jsonResponse.getString("token"))
-                            launchHomescreen()
+                                binding.spinKitBottom.visibility = View.GONE
+                                AppPrefsSettings.getInstance().saveUser(usuario)
+                                AppPrefsSettings.getInstance().saveAuthToken(jsonResponse.getString("token"))
+                                launchHomescreen()
+                            }
+                        }catch (e:IOException){
+
+                        }catch (e: JSONException){
+
                         }
                     }else{
                         binding.spinKitBottom.visibility = View.GONE
@@ -311,15 +322,23 @@ val TAG = "TAG_LoginFrag"
                 } else{
                     binding.spinKitBottom.visibility = View.GONE
                     activateViews()
-                    val responseBodyError = response.errorBody()?.string()
-                    if (!responseBodyError.isNullOrEmpty()){
-                        val jsonResponseBodyError = JSONObject(responseBodyError)
-                        val jsorError = jsonResponseBodyError.get("erro")
-                        val jsonBodyError = JSONObject(jsorError.toString())
-                        val errorMessage = jsonBodyError.get("mensagem")
-                        MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastERRO,errorMessage.toString())
+
+                    try{
+                        val responseBodyError = response.errorBody()?.string()
+                        if (!responseBodyError.isNullOrEmpty()){
+                            val jsonResponseBodyError = JSONObject(responseBodyError)
+                            val jsorError = jsonResponseBodyError.get("erro")
+                            val jsonBodyError = JSONObject(jsorError.toString())
+                            val errorMessage = jsonBodyError.get("mensagem")
+                            MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastERRO,errorMessage.toString())
+                        }
+                        Log.d(TAG, "onResponse_NOTsuccess: ${response.errorBody()?.string()}")
+                    }catch (e: IOException){
+
+                    }catch (e: JSONException){
+
                     }
-                    Log.d(TAG, "onResponse_NOTsuccess: ${response.errorBody()?.string()}")
+
                 }
             }
 
@@ -377,6 +396,12 @@ val TAG = "TAG_LoginFrag"
         binding.txtForgotPassword.isEnabled = false
         binding.btnLogin.isEnabled = false
         binding.txtRegister.isEnabled = false
+    }
+
+    override fun onResume() {
+        binding.editEmail.error =null
+        binding.editPassword.error =null
+        super.onResume()
     }
 
     override fun onDestroyView() {

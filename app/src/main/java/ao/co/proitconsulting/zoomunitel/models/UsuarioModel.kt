@@ -4,7 +4,7 @@ package ao.co.proitconsulting.zoomunitel.models
 import com.google.gson.annotations.SerializedName
 
 
-data class Usuario(
+data class UsuarioModel(
 
     @SerializedName("userid")
     val userId:Long?,

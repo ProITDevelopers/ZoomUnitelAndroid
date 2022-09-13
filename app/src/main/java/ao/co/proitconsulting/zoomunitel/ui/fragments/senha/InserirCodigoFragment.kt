@@ -16,19 +16,22 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.viewpager2.widget.ViewPager2
 import ao.co.proitconsulting.zoomunitel.R
 import ao.co.proitconsulting.zoomunitel.api.RetrofitInstance
 import ao.co.proitconsulting.zoomunitel.databinding.FragmentInserirCodigoBinding
 import ao.co.proitconsulting.zoomunitel.helpers.Constants
 import ao.co.proitconsulting.zoomunitel.helpers.MetodosUsados
 import ao.co.proitconsulting.zoomunitel.helpers.network.ConnectionLiveData
-import ao.co.proitconsulting.zoomunitel.models.PasswordRequest
+import ao.co.proitconsulting.zoomunitel.models.UsuarioRequest
 import ao.co.proitconsulting.zoomunitel.ui.SenhaActivity
 import okhttp3.ResponseBody
+import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.IOException
 
 private const val ARG_PARAM1 = "email"
 class InserirCodigoFragment : Fragment() {
@@ -65,6 +68,8 @@ class InserirCodigoFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             email = it.getString(ARG_PARAM1)
+
+            Log.d(TAG, "onCreate: ${email.toString()}")
 
         }
     }
@@ -114,9 +119,9 @@ class InserirCodigoFragment : Fragment() {
     private fun enviarCodigo() {
         deActivateViews()
         binding.spinKitBottom.visibility = View.VISIBLE
-        val passwordRequest = PasswordRequest.Code(email.toString(),codigo.toString())
+        val passSendCode = UsuarioRequest.PassSendCode(email.toString(),codigo.toString())
 
-        val retrofit = RetrofitInstance.api.sendVerificationCode(passwordRequest)
+        val retrofit = RetrofitInstance.api.sendVerificationCode(passSendCode)
         retrofit.enqueue(object :
             Callback<ResponseBody> {
 
@@ -146,15 +151,24 @@ class InserirCodigoFragment : Fragment() {
                 } else{
                     binding.spinKitBottom.visibility = View.GONE
                     activateViews()
-                    val responseBodyError = response.errorBody()?.string()
-                    if (!responseBodyError.isNullOrEmpty()){
-                        val jsonResponseBodyError = JSONObject(responseBodyError)
-                        val jsorError = jsonResponseBodyError.get("erro")
-                        val jsonBodyError = JSONObject(jsorError.toString())
-                        val errorMessage = jsonBodyError.get("mensagem")
-                        MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastERRO,errorMessage.toString())
+                    try {
+                        val responseBodyError = response.errorBody()?.string()
+                        if (!responseBodyError.isNullOrEmpty()){
+//                            val jsonResponseBodyError = JSONObject(responseBodyError)
+//                            val jsorError = jsonResponseBodyError.get("erro")
+//                            val jsonBodyError = JSONObject(jsorError.toString())
+//                            val errorMessage = jsonBodyError.get("mensagem")
+
+                            val jsonResponseBodyError = JSONObject(responseBodyError)
+                            val errorMessage = jsonResponseBodyError.get("mensagem")
+                            MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastERRO,errorMessage.toString())
+                        }
+                        Log.d(TAG, "onResponse_NOTsuccess: ${response.errorBody()?.string()}")
+                    }catch (e:IOException){
+
+                    }catch (e:JSONException){
+
                     }
-                    Log.d(TAG, "onResponse_NOTsuccess: ${response.errorBody()?.string()}")
                 }
             }
 
@@ -199,7 +213,12 @@ class InserirCodigoFragment : Fragment() {
     }
 
     private fun goToNextFragment() {
-        if (activity!=null){
+
+        binding.firstPinView.text?.clear()
+        val viewPager: ViewPager2? = SenhaActivity.getViewPager()
+        viewPager?.currentItem = 2
+        /*
+        *if (activity!=null){
             val fragmentManager = (activity as SenhaActivity).supportFragmentManager
             val transaction = fragmentManager.beginTransaction()
                 .setCustomAnimations(
@@ -210,7 +229,7 @@ class InserirCodigoFragment : Fragment() {
                 )
             transaction.replace(R.id.frame_layout_senha, NovaPassFragment(), null)
             transaction.commit()
-        }
+        }**/
     }
 
     private fun activateViews(){

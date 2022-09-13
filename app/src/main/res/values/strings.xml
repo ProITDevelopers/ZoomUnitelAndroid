@@ -98,4 +98,7 @@
     <string name="msg_nenhuma_informacao">Nenhuma informação disponível</string>
     <string name="msg_permissao_armazenamento_continuar">É necessário a permissão de Armazenamento para continuar</string>
     <string name="msg_erro_codigo_invalido">Código inválido</string>
+    <string name="recuperar_senha">Recuperar Senha</string>
+    <string name="inserir_codigo">Inserir Código</string>
+    <string name="nova_senha">Nova Senha</string>
 </resources>

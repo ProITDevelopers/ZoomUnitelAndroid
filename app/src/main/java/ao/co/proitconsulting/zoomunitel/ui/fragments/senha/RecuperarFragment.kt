@@ -2,6 +2,8 @@ package ao.co.proitconsulting.zoomunitel.ui.fragments.senha
 
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -10,19 +12,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
+import androidx.viewpager2.widget.ViewPager2
 import ao.co.proitconsulting.zoomunitel.R
 import ao.co.proitconsulting.zoomunitel.api.RetrofitInstance
 import ao.co.proitconsulting.zoomunitel.databinding.FragmentRecuperarBinding
 import ao.co.proitconsulting.zoomunitel.helpers.Constants
 import ao.co.proitconsulting.zoomunitel.helpers.MetodosUsados
 import ao.co.proitconsulting.zoomunitel.helpers.network.ConnectionLiveData
-import ao.co.proitconsulting.zoomunitel.models.PasswordRequest
+import ao.co.proitconsulting.zoomunitel.models.UsuarioRequest
 import ao.co.proitconsulting.zoomunitel.ui.SenhaActivity
 import okhttp3.ResponseBody
+import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.IOException
 
 
 private const val ARG_PARAM1 = "email"
@@ -160,9 +165,12 @@ class RecuperarFragment : Fragment(){
     private fun enviarEmail() {
         deActivateViews()
         binding.spinKitBottom.visibility = View.VISIBLE
-        val passwordRequest = PasswordRequest.Email(email.toString())
+        val passSendEmail = UsuarioRequest.PassSendEmail(email.toString())
 
-        val retrofit = RetrofitInstance.api.sendUserEmail(passwordRequest)
+        Constants.SEND_EMAIL = email.toString()
+        Log.d(TAG, "enviarEmail: $passSendEmail")
+
+        val retrofit = RetrofitInstance.api.sendUserEmail(passSendEmail)
         retrofit.enqueue(object :
             Callback<ResponseBody> {
 
@@ -171,37 +179,52 @@ class RecuperarFragment : Fragment(){
 
                     binding.spinKitBottom.visibility = View.GONE
 
-                    goToNextFragment()
 
-//                    if (response.body()!=null){
-//                        val dataResponse = response.body()?.string()
-//                        if (!dataResponse.isNullOrEmpty()){
-//                            Log.d(TAG, "onResponse_success: $dataResponse")
-//                            val jsonResponse = JSONObject(dataResponse)
-//
-//
-//                            binding.spinKitBottom.visibility = View.GONE
-//
-//                            goToNextFragment()
-//                        }
-//                    }else{
-//                        binding.spinKitBottom.visibility = View.GONE
-//                        activateViews()
-//                    }
+                    if (response.body()!=null){
+
+                        try {
+                            val dataResponse = response.body()?.string()
+                            if (!dataResponse.isNullOrEmpty()){
+                                Log.d(TAG, "onResponse_success: $dataResponse")
+                                val jsonResponse = JSONObject(dataResponse)
+                                val mensagem = jsonResponse.get("mensagem")
+                                MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastSUCESS,mensagem.toString())
+
+
+                                Handler(Looper.getMainLooper()).postDelayed({
+                                    goToNextFragment()
+                                }, 5000)
+
+                            }
+                        }catch (e:IOException){
+
+                        }catch (e:JSONException){
+
+                        }
+
+                    }else{
+                        goToNextFragment()
+                    }
 
 
                 } else{
                     binding.spinKitBottom.visibility = View.GONE
                     activateViews()
-                    val responseBodyError = response.errorBody()?.string()
-                    if (!responseBodyError.isNullOrEmpty()){
-                        val jsonResponseBodyError = JSONObject(responseBodyError)
-                        val jsorError = jsonResponseBodyError.get("erro")
-                        val jsonBodyError = JSONObject(jsorError.toString())
-                        val errorMessage = jsonBodyError.get("mensagem")
-                        MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastERRO,errorMessage.toString())
+                    try {
+                        val responseBodyError = response.errorBody()?.string()
+                        if (!responseBodyError.isNullOrEmpty()){
+                            val jsonResponseBodyError = JSONObject(responseBodyError)
+                            val jsorError = jsonResponseBodyError.get("erro")
+                            val jsonBodyError = JSONObject(jsorError.toString())
+                            val errorMessage = jsonBodyError.get("mensagem")
+                            MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastERRO,errorMessage.toString())
+                        }
+                        Log.d(TAG, "onResponse_NOTsuccess: ${response.errorBody()?.string()}")
+                    }catch (e:IOException){
+
+                    }catch (e:JSONException){
+
                     }
-                    Log.d(TAG, "onResponse_NOTsuccess: ${response.errorBody()?.string()}")
                 }
             }
 
@@ -229,7 +252,12 @@ class RecuperarFragment : Fragment(){
     }
 
     private fun goToNextFragment() {
-        if (activity!=null){
+
+        binding.editEmail.error = null
+        val viewPager: ViewPager2? = SenhaActivity.getViewPager()
+        viewPager?.currentItem = 1
+        /*
+        *if (activity!=null){
             val fragmentManager = (activity as SenhaActivity).supportFragmentManager
             val transaction = fragmentManager.beginTransaction()
                 .setCustomAnimations(
@@ -240,7 +268,7 @@ class RecuperarFragment : Fragment(){
                 )
             transaction.replace(R.id.frame_layout_senha, InserirCodigoFragment.newInstance(email.toString()), null)
             transaction.commit()
-        }
+        }**/
     }
 
     private fun activateViews(){
@@ -253,6 +281,11 @@ class RecuperarFragment : Fragment(){
         binding.editEmail.isEnabled = false
         binding.btnContinuar.isEnabled = false
 
+    }
+
+    override fun onResume() {
+        binding.editEmail.error = null
+        super.onResume()
     }
 
     override fun onDestroyView() {

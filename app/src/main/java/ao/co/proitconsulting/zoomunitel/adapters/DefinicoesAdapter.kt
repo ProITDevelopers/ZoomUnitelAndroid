@@ -1,8 +1,5 @@
 package ao.co.proitconsulting.zoomunitel.adapters
 
-import android.app.Activity
-import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -11,10 +8,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import ao.co.proitconsulting.zoomunitel.R
-import ao.co.proitconsulting.zoomunitel.helpers.MetodosUsados
-import ao.co.proitconsulting.zoomunitel.localDB.AppPrefsSettings
 import ao.co.proitconsulting.zoomunitel.models.DefinicoesModel
-import ao.co.proitconsulting.zoomunitel.ui.SplashScreenActivity
 
 val TAG ="TAG_adapterData"
 class DefinicoesAdapter: RecyclerView.Adapter<DefinicoesAdapter.DefinicoesAdapterViewHolder>(){
@@ -22,8 +16,7 @@ class DefinicoesAdapter: RecyclerView.Adapter<DefinicoesAdapter.DefinicoesAdapte
     private val adapterData = mutableListOf<DefinicoesModel>()
 
 
-
-
+    var itemClickListener : ((view:View, item:DefinicoesModel,position:Int)->Unit)?=null
 
 
     //--------onCreateViewHolder: inflate layout with view holder-------
@@ -47,54 +40,12 @@ class DefinicoesAdapter: RecyclerView.Adapter<DefinicoesAdapter.DefinicoesAdapte
     //-----------onBindViewHolder: bind view with data model---------
     override fun onBindViewHolder(holder: DefinicoesAdapterViewHolder, position: Int) {
         holder.bind(adapterData[position])
-        holder.itemView.setOnClickListener {
-            goToOptionSelected(holder.itemView.context,position)
-        }
+        holder.itemClickListener = itemClickListener
 
 
     }
 
-    private fun goToOptionSelected(context: Context, position: Int) {
-        when(position){
-            //ZOOM
-            1->{
 
-            }
-            //VERSAO
-            2->{
-
-            }
-            //DESENVOLVEDOR
-            3->{
-
-            }
-            //FEEDBACK
-            4->{
-                MetodosUsados.sendFeedback(context)
-            }
-            //SHARE_APP_LINK
-            5->{
-                MetodosUsados.shareAppLink(context)
-            }
-            //RECUPERAR_SENHA
-            7->{
-
-            }
-            //LOGOUT
-            8->{
-                terminarSessao(context)
-
-            }
-        }
-    }
-
-    private fun terminarSessao(context: Context) {
-        AppPrefsSettings.getInstance().clearAppPrefs()
-        val intent = Intent(context, SplashScreenActivity::class.java)
-        intent.flags = (Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        context.startActivity(intent)
-        (context as Activity).finish()
-    }
 
 
     override fun getItemCount(): Int = adapterData.size
@@ -125,7 +76,7 @@ class DefinicoesAdapter: RecyclerView.Adapter<DefinicoesAdapter.DefinicoesAdapte
 
     class DefinicoesAdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
 
-
+        var itemClickListener : ((view:View, item:DefinicoesModel,position:Int)->Unit)?=null
 
         private fun bindAbout(item: DefinicoesModel.About) {
             //Do your view assignment here from the data model
@@ -134,7 +85,9 @@ class DefinicoesAdapter: RecyclerView.Adapter<DefinicoesAdapter.DefinicoesAdapte
             itemView.findViewById<TextView>(R.id.txtTitle)?.text = item.aboutTitle
             itemView.findViewById<TextView>(R.id.txtDesc)?.text = item.aboutDesc
 
-
+            itemView.setOnClickListener {
+                itemClickListener?.invoke(it,item,adapterPosition)
+            }
         }
 
         private fun bindSettings(item: DefinicoesModel.Settings) {
@@ -143,7 +96,9 @@ class DefinicoesAdapter: RecyclerView.Adapter<DefinicoesAdapter.DefinicoesAdapte
             itemView.findViewById<TextView>(R.id.txtTitle)?.text = item.settingsTitle
             itemView.findViewById<TextView>(R.id.txtDesc)?.visibility = View.GONE
 
-
+            itemView.setOnClickListener {
+                itemClickListener?.invoke(it,item,adapterPosition)
+            }
         }
 
 
@@ -153,6 +108,9 @@ class DefinicoesAdapter: RecyclerView.Adapter<DefinicoesAdapter.DefinicoesAdapte
             itemView.findViewById<ConstraintLayout>(R.id.clRoot)?.setBackgroundColor(Color.parseColor("#e6540f"))
             itemView.findViewById<TextView>(R.id.tvNameLabel)?.text = item.title
 
+            itemView.setOnClickListener {
+                itemClickListener?.invoke(it,item,adapterPosition)
+            }
 
         }
 
@@ -160,6 +118,7 @@ class DefinicoesAdapter: RecyclerView.Adapter<DefinicoesAdapter.DefinicoesAdapte
 
 
         fun bind(definicoesModel: DefinicoesModel) {
+
             when (definicoesModel) {
                 is DefinicoesModel.About -> bindAbout(definicoesModel)
                 is DefinicoesModel.Settings -> bindSettings(definicoesModel)

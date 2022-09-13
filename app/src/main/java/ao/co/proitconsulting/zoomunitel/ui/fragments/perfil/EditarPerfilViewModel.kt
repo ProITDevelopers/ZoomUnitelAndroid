@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import ao.co.proitconsulting.zoomunitel.localDB.AppPrefsSettings
 import ao.co.proitconsulting.zoomunitel.models.UsuarioModel
 
-class PerfilViewModel : ViewModel() {
+class EditarPerfilViewModel : ViewModel() {
 
 
     private val _usuario = MutableLiveData<UsuarioModel>().apply {

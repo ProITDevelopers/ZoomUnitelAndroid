@@ -1,6 +1,8 @@
 package ao.co.proitconsulting.zoomunitel.api
 
 import ao.co.proitconsulting.zoomunitel.helpers.Constants
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -17,6 +19,7 @@ class RetrofitInstance {
             val logging = HttpLoggingInterceptor()
             val tokenInterceptor = AddTokenInterceptor()
             logging.setLevel(HttpLoggingInterceptor.Level.BODY)
+
             val client = OkHttpClient.Builder()
                 .connectTimeout(Constants.REQUEST_TIMEOUT, TimeUnit.MILLISECONDS)
                 .readTimeout(Constants.REQUEST_TIMEOUT, TimeUnit.MILLISECONDS)
@@ -25,9 +28,10 @@ class RetrofitInstance {
                 .addInterceptor(tokenInterceptor)
                 .build()
 
+            val gson:Gson = GsonBuilder().setLenient().create()
             Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL_ZOOM_UNITEL)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(client)
                 .build()
         }
