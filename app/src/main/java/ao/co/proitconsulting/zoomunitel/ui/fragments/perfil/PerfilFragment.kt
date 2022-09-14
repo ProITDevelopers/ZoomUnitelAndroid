@@ -4,12 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import ao.co.proitconsulting.zoomunitel.R
 import ao.co.proitconsulting.zoomunitel.databinding.FragmentPerfilBinding
 import ao.co.proitconsulting.zoomunitel.helpers.Constants
 import ao.co.proitconsulting.zoomunitel.models.UsuarioModel
+import ao.co.proitconsulting.zoomunitel.ui.MainActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 
@@ -26,10 +29,26 @@ class PerfilFragment : Fragment() {
         val perfilViewModel =
             ViewModelProvider(this).get(PerfilViewModel::class.java)
 
+        val frameLayout = MainActivity.getFrameLayoutImgToolbar()
+        if (frameLayout != null)
+            frameLayout.visibility = View.GONE
+
         _binding = FragmentPerfilBinding.inflate(inflater, container, false)
         val root: View = binding.root
+        var bundle: Bundle? = null
+        val btnEditPerfil:Button = binding.btnEditPerfil
+        btnEditPerfil.setOnClickListener {
+            if (bundle!=null){
+                findNavController().navigate(
+                    R.id.action_nav_perfil_to_editarPerfilFragment,
+                    bundle
+                )
+            }
+        }
 
         perfilViewModel.getPerfil.observe(viewLifecycleOwner) { usuario ->
+            bundle = Bundle()
+            bundle?.putSerializable("usuario",usuario)
             carregarDadosLocal(usuario)
         }
         return root

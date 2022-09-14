@@ -22,10 +22,16 @@ import com.makeramen.roundedimageview.RoundedImageView
 
 class RevistasAdapter : RecyclerView.Adapter<RevistasAdapter.RevistaViewHolder>() {
 
+    var itemClickListener : ((revistaList: List<RevistaModel>, position:Int)->Unit)?=null
+
     inner class RevistaViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+
+
 
         val imageSlide:RoundedImageView = itemView.findViewById(R.id.imageSlide)
         val shimmerFrameLayout:ShimmerFrameLayout = itemView.findViewById(R.id.shimmerFrameLayout)
+
+
 
     }
 
@@ -54,6 +60,7 @@ class RevistasAdapter : RecyclerView.Adapter<RevistasAdapter.RevistaViewHolder>(
 
     override fun onBindViewHolder(holder: RevistaViewHolder, position: Int) {
         val revista = differ.currentList[position]
+
         holder.itemView.apply {
 
             Glide.with(this).asBitmap()
@@ -88,7 +95,17 @@ class RevistasAdapter : RecyclerView.Adapter<RevistasAdapter.RevistaViewHolder>(
 
 
         }
+
+        holder.imageSlide.setOnClickListener {
+            itemClickListener?.invoke(differ.currentList,position)
+        }
     }
+
+//    private var onItemClickListener: ((view:View,revistaList:List<RevistaModel>, position:Int) -> Unit)? = null
+//
+//    fun setOnItemClickListener(listener: (view:View,revistaList:List<RevistaModel>, position:Int) -> Unit) {
+//        onItemClickListener = listener
+//    }
 
     override fun getItemCount(): Int {
         return differ.currentList.size

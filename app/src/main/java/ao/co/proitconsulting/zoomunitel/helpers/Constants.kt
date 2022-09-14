@@ -9,6 +9,7 @@ class Constants {
         const val IMAGE_PATH = BASE_URL_ZOOM_UNITEL+"revista/image/"
         const val PDF_PATH = BASE_URL_ZOOM_UNITEL+"revista/view/"
         var SEND_EMAIL = "email"
+        const val SLIDE_TIME_DELAY:Long = 8000
         const val REQUEST_TIMEOUT:Long = 10000
 
         const val ToastSUCESS:Int = 0

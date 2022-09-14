@@ -1,12 +1,13 @@
 package ao.co.proitconsulting.zoomunitel.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -16,10 +17,7 @@ import ao.co.proitconsulting.zoomunitel.R
 import ao.co.proitconsulting.zoomunitel.databinding.ActivityMainBinding
 import ao.co.proitconsulting.zoomunitel.helpers.Constants
 import ao.co.proitconsulting.zoomunitel.localDB.AppPrefsSettings
-import ao.co.proitconsulting.zoomunitel.localDB.RevistaDatabase
 import ao.co.proitconsulting.zoomunitel.models.UsuarioModel
-import ao.co.proitconsulting.zoomunitel.ui.fragments.home.HomeViewModel
-import ao.co.proitconsulting.zoomunitel.ui.repository.RevistaRepository
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.navigation.NavigationView
@@ -36,13 +34,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var  txtUserName:TextView
     private lateinit var  txtUserEmail:TextView
 
-    //lateinit var viewModel: HomeViewModel
 
     companion object{
-        private var viewModel: HomeViewModel?=null
 
-        fun getViewModel(): HomeViewModel? {
-            return viewModel
+        @SuppressLint("StaticFieldLeak")
+        private var frameLayoutImgToolbar: FrameLayout?=null
+        fun getFrameLayoutImgToolbar() : FrameLayout? {
+            return frameLayoutImgToolbar
         }
     }
 
@@ -51,15 +49,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setSupportActionBar(binding.appBarMain.toolbar)
+        val toolbar = binding.appBarMain.toolbar
+        toolbar.title = ""
+        setSupportActionBar(toolbar)
 
-        val revistaRepository = RevistaRepository(RevistaDatabase(this))
-        val viewModelProviderFactory = RevistaViewModelProviderFactory(revistaRepository)
-
-        viewModel =
-            ViewModelProvider(this,viewModelProviderFactory)
-                .get(HomeViewModel::class.java)
-
+        frameLayoutImgToolbar = binding.appBarMain.frameLayoutImgToolbar
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         navView.itemIconTintList = null

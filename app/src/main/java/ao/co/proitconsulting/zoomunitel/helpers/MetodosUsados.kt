@@ -1,5 +1,6 @@
 package ao.co.proitconsulting.zoomunitel.helpers
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -21,6 +22,8 @@ import ao.co.proitconsulting.zoomunitel.R
 import com.google.android.material.snackbar.Snackbar
 import java.net.InetAddress
 import java.net.UnknownHostException
+import java.text.ParseException
+import java.text.SimpleDateFormat
 import java.util.concurrent.*
 import kotlin.random.Random
 
@@ -72,6 +75,23 @@ class MetodosUsados {
             val randomNumber = Random
             return randomNumber.nextInt((max - min) + 1) + min
         }
+
+        //===============================================================================================================
+        //===============================================================================================================
+
+        @SuppressLint("SimpleDateFormat")
+        fun getTimeStamp(timeStamp: String) : String{
+            val inputFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+            val outputFormatter = SimpleDateFormat("d MMM, yyyy")
+
+            try {
+                val date = inputFormatter.parse(timeStamp)
+                return outputFormatter.format(date!!)
+            } catch (e: ParseException) {
+            }
+            return ""
+        }
+
 
         //=====================================================================//
         //=====================================================================//

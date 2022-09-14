@@ -16,6 +16,7 @@ import ao.co.proitconsulting.zoomunitel.databinding.FragmentDefinicoesBinding
 import ao.co.proitconsulting.zoomunitel.helpers.MetodosUsados
 import ao.co.proitconsulting.zoomunitel.localDB.AppPrefsSettings
 import ao.co.proitconsulting.zoomunitel.models.DefinicoesModel
+import ao.co.proitconsulting.zoomunitel.ui.MainActivity
 import ao.co.proitconsulting.zoomunitel.ui.SplashScreenActivity
 
 val TAG = "TAG_DefinFrag"
@@ -36,6 +37,10 @@ class DefinicoesFragment : Fragment() {
     ): View {
         val definicoesViewModel =
             ViewModelProvider(this).get(DefinicoesViewModel::class.java)
+
+        val frameLayout = MainActivity.getFrameLayoutImgToolbar()
+        if (frameLayout != null)
+            frameLayout.visibility = View.GONE
 
         _binding = FragmentDefinicoesBinding.inflate(inflater, container, false)
         val root: View = binding.root

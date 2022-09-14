@@ -3,6 +3,7 @@ package ao.co.proitconsulting.zoomunitel.models
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 @Entity(
     tableName = "revistas"
@@ -32,4 +33,4 @@ data class RevistaModel(
     var created_at: String
 
 
-)
+): Serializable

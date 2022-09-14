@@ -24,7 +24,8 @@ class EditarPerfilViewModel : ViewModel() {
 
 
 
-    fun setUsuario(usuario: UsuarioModel?){
+    fun setUsuario(usuario: UsuarioModel){
         _usuario.value = usuario
+        AppPrefsSettings.getInstance().saveUser(usuario)
     }
 }
