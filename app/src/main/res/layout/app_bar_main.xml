@@ -16,7 +16,31 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/Theme.ZoomUnitel.PopupOverlay" />
+            app:popupTheme="@style/Theme.ZoomUnitel.PopupOverlay">
+
+            <FrameLayout
+                android:id="@+id/frameLayoutImgToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                >
+
+                <ImageView
+                    android:id="@+id/imgAppLogo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/logo_unitel_white"
+                    app:srcCompat="@drawable/zoom_unitel_logo"
+                    app:tint="@color/white"
+                    android:scaleX="2.2"
+                    android:scaleY="2.2"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="-20dp"
+                    />
+
+            </FrameLayout>
+
+        </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 
