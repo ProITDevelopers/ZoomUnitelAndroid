@@ -22,5 +22,4 @@ class EditarPerfilViewModel : ViewModel() {
             null
     }
 
-
 }

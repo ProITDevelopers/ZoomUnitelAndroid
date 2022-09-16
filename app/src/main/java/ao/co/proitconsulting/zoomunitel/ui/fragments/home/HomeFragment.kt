@@ -168,6 +168,7 @@ class HomeFragment : Fragment() {
 
     private fun showErrorScreen(msg:String){
 
+
         if (!isNetworkAvailable){
             imgErro.setImageResource(R.drawable.ic_baseline_wifi_off_24)
             txtErro.text = getString(R.string.msg_erro_internet)

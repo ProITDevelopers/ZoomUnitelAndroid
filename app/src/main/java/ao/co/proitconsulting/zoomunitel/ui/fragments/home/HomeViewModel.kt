@@ -5,7 +5,6 @@ import androidx.lifecycle.asLiveData
 import ao.co.proitconsulting.zoomunitel.ui.repository.RevistaRepository
 
 class HomeViewModel(revistaRepository: RevistaRepository) : ViewModel() {
-
     val home = revistaRepository.getRevistasHome().asLiveData()
 
 }

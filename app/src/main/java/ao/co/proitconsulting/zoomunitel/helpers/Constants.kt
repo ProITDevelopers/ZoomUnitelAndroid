@@ -16,5 +16,6 @@ class Constants {
         const val ToastSUCESS:Int = 0
         const val ToastALERTA:Int = 1
         const val ToastERRO:Int = 3
+
     }
 }

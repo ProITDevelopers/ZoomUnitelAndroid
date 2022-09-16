@@ -19,4 +19,5 @@ interface RevistaDAO {
     @Query("DELETE FROM revistas")
     suspend fun deleteRevistas()
 
+
 }

@@ -56,4 +56,5 @@ sealed class UsuarioRequest{
 
     ) : UsuarioRequest()
 
+
 }

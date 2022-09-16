@@ -41,6 +41,7 @@ class EditarPerfilFragment : Fragment() {
     lateinit var  telefone:String
     lateinit var  email:String
 
+
     lateinit var connectionLiveData: ConnectionLiveData
     private var isNetworkAvailable: Boolean = false
 

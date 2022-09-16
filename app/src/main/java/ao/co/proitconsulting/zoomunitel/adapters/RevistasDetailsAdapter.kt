@@ -33,7 +33,6 @@ class RevistasDetailsAdapter : RecyclerView.Adapter<RevistasDetailsAdapter.Revis
     val aDI = AccelerateDecelerateInterpolator()
     val generator = RandomTransitionGenerator(10000,aDI)
 
-
     inner class RevistaViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
 
         val progressBar:SpinKitView = itemView.findViewById(R.id.spin_kit_bottom)

@@ -20,7 +20,6 @@
         android:focusable="true"
         android:foreground="?android:attr/selectableItemBackground"/>
 
-
     <com.github.ybq.android.spinkit.SpinKitView
         android:id="@+id/spin_kit_bottom"
         style="@style/SpinKitView.FadingCircle"
