@@ -1,9 +1,8 @@
-package ao.co.proitconsulting.zoomunitel.ui
+package ao.co.proitconsulting.zoomunitel.ui.repository
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import ao.co.proitconsulting.zoomunitel.ui.fragments.home.HomeViewModel
-import ao.co.proitconsulting.zoomunitel.ui.repository.RevistaRepository
 
 class RevistaViewModelProviderFactory(
     val revistaRepository: RevistaRepository

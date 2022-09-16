@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
 import android.util.Log
@@ -231,6 +232,21 @@ class MetodosUsados {
 
         //=============================================================================
         //=============================================================================
+
+        fun hasInternetConnection(context: Context):Boolean {
+            val connectivityManager = context.getSystemService(
+                Context.CONNECTIVITY_SERVICE
+            ) as ConnectivityManager
+            connectivityManager.activeNetworkInfo?.run {
+                return when(type){
+                    ConnectivityManager.TYPE_WIFI -> true
+                    ConnectivityManager.TYPE_MOBILE -> true
+                    ConnectivityManager.TYPE_ETHERNET -> true
+                    else -> true
+                }
+            }
+            return false
+        }
 
         fun isConnected(timeOut:Long,TAG:String):Boolean{
             var inetAddress: InetAddress?=null

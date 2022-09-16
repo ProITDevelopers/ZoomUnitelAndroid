@@ -24,7 +24,12 @@
         android:id="@+id/nav_perfil"
         android:name="ao.co.proitconsulting.zoomunitel.ui.fragments.perfil.PerfilFragment"
         android:label="@string/menu_perfil"
-        tools:layout="@layout/fragment_perfil" >
+        tools:layout="@layout/fragment_perfil"
+        app:enterAnim="@anim/slide_in_right"
+        app:exitAnim="@anim/slide_out_left"
+        app:popEnterAnim="@anim/slide_in_left"
+        app:popExitAnim="@anim/slide_out_right"
+        >
         <action
             android:id="@+id/action_nav_perfil_to_editarPerfilFragment"
             app:destination="@id/editarPerfilFragment"
@@ -38,7 +43,13 @@
         android:id="@+id/nav_definicoes"
         android:name="ao.co.proitconsulting.zoomunitel.ui.fragments.definicoes.DefinicoesFragment"
         android:label="@string/menu_definicoes"
-        tools:layout="@layout/fragment_definicoes" />
+        tools:layout="@layout/fragment_definicoes"
+
+        app:enterAnim="@anim/slide_in_right"
+        app:exitAnim="@anim/slide_out_left"
+        app:popEnterAnim="@anim/slide_in_left"
+        app:popExitAnim="@anim/slide_out_right"
+        />
 
     <fragment
         android:id="@+id/editarPerfilFragment"

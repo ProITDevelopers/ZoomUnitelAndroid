@@ -1,6 +1,7 @@
 package ao.co.proitconsulting.zoomunitel.ui
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -14,14 +15,25 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import ao.co.proitconsulting.zoomunitel.R
+import ao.co.proitconsulting.zoomunitel.api.RetrofitInstance
 import ao.co.proitconsulting.zoomunitel.databinding.ActivityMainBinding
 import ao.co.proitconsulting.zoomunitel.helpers.Constants
+import ao.co.proitconsulting.zoomunitel.helpers.MetodosUsados
+import ao.co.proitconsulting.zoomunitel.helpers.network.ConnectionLiveData
 import ao.co.proitconsulting.zoomunitel.localDB.AppPrefsSettings
 import ao.co.proitconsulting.zoomunitel.models.UsuarioModel
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.navigation.NavigationView
 import de.hdodenhof.circleimageview.CircleImageView
+import okhttp3.ResponseBody
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,6 +45,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var  txtUserNameInitial:TextView
     private lateinit var  txtUserName:TextView
     private lateinit var  txtUserEmail:TextView
+
+    lateinit var connectionLiveData: ConnectionLiveData
+    private var isNetworkAvailable: Boolean = false
+
 
 
     companion object{
@@ -52,6 +68,8 @@ class MainActivity : AppCompatActivity() {
         val toolbar = binding.appBarMain.toolbar
         toolbar.title = ""
         setSupportActionBar(toolbar)
+
+
 
         frameLayoutImgToolbar = binding.appBarMain.frameLayoutImgToolbar
         val drawerLayout: DrawerLayout = binding.drawerLayout
@@ -79,12 +97,16 @@ class MainActivity : AppCompatActivity() {
 //        }
 
 
-
-
-
-
-
         carregarDadosLocal(AppPrefsSettings.getInstance().getUser())
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            connectionLiveData = ConnectionLiveData(this)
+            connectionLiveData.observe(this) { isNetwork ->
+                isNetworkAvailable = isNetwork
+            }
+        }else{
+            isNetworkAvailable = MetodosUsados.hasInternetConnection(this)
+        }
 
     }
 
@@ -139,6 +161,82 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        isNetworkAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            isNetworkAvailable
+        }else{
+            MetodosUsados.hasInternetConnection(this)
+        }
+
+        if (isNetworkAvailable)
+            carregarMeuPerfil()
+
+    }
+
+    private fun carregarMeuPerfil() {
+        val userUID = AppPrefsSettings.getInstance().getUser()!!.userId
+        val userId = userUID!!.toInt()
+        val retrofit = RetrofitInstance.api.userProfile(userId)
+        retrofit.enqueue(object :
+            Callback<ResponseBody> {
+
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    response.body().let { responseResult ->
+
+                        try {
+                            val body = responseResult?.string()
+                            if (!body.isNullOrEmpty()){
+                                val jsonArray = JSONArray(body)
+                                val jsonResponse = jsonArray.getJSONObject(0)
+                                val usuario = UsuarioModel(
+                                    jsonResponse.getLong("USERID"),
+                                    jsonResponse.getString("NOME"),
+                                    jsonResponse.getString("EMAIL"),
+                                    jsonResponse.getString("TELEFONE"),
+                                    jsonResponse.getString("FOTOKEY")
+                                )
+                                AppPrefsSettings.getInstance().saveUser(usuario)
+                                carregarDadosLocal(usuario)
+                            }
+                            Log.d(TAG, "onResponse_success: $body")
+                        } catch (e: Exception) {
+
+                        } catch (e:JSONException){
+
+                        }
+
+                    }
+                } else{
+
+                    try {
+                        val responseBodyError = response.errorBody()?.string()
+                        if (!responseBodyError.isNullOrEmpty()){
+                            val jsonResponseBodyError = JSONObject(responseBodyError)
+                            val jsorError = jsonResponseBodyError.get("erro")
+                            val jsonBodyError = JSONObject(jsorError.toString())
+                            val errorMessage = jsonBodyError.get("mensagem")
+
+                        }
+                        Log.d(TAG, "onResponse_NOTsuccess: ${response.errorBody()?.string()}")
+                    }catch (e: IOException){
+
+                    }catch (e: JSONException){
+
+                    }
+                }
+            }
+
+
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+
+            }
+
+        })
+    }
 
 
     override fun onSupportNavigateUp(): Boolean {

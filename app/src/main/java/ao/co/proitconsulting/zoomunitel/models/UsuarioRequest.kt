@@ -43,4 +43,18 @@ sealed class UsuarioRequest{
         @SerializedName("novapassword")
         val novapassword: String
     ) : UsuarioRequest()
+
+    data class UsuarioUpdateRequest(
+        @SerializedName("nome")
+        val userNome:String?,
+
+        @SerializedName("telefone")
+        val userPhone:String?,
+
+        @SerializedName("email")
+        val userEmail:String?
+
+    ) : UsuarioRequest()
+
+
 }

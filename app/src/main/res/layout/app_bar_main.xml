@@ -35,7 +35,7 @@
                     android:scaleX="2.2"
                     android:scaleY="2.2"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="-20dp"
+                    android:layout_marginLeft="-24dp"
                     />
 
             </FrameLayout>

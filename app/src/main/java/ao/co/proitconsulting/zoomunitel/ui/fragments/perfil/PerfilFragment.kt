@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import ao.co.proitconsulting.zoomunitel.R
 import ao.co.proitconsulting.zoomunitel.databinding.FragmentPerfilBinding
 import ao.co.proitconsulting.zoomunitel.helpers.Constants
+import ao.co.proitconsulting.zoomunitel.localDB.AppPrefsSettings
 import ao.co.proitconsulting.zoomunitel.models.UsuarioModel
 import ao.co.proitconsulting.zoomunitel.ui.MainActivity
 import com.bumptech.glide.Glide
@@ -21,12 +22,14 @@ class PerfilFragment : Fragment() {
     private var _binding: FragmentPerfilBinding? = null
     private val binding get() = _binding!!
 
+    lateinit var perfilViewModel:PerfilViewModel
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val perfilViewModel =
+        perfilViewModel =
             ViewModelProvider(this).get(PerfilViewModel::class.java)
 
         val frameLayout = MainActivity.getFrameLayoutImgToolbar()
@@ -105,6 +108,11 @@ class PerfilFragment : Fragment() {
             binding.txtUserEmail.text = ""
             binding.txtUserTelefone.text = ""
         }
+    }
+
+    override fun onResume() {
+        perfilViewModel.setUsuario(AppPrefsSettings.getInstance().getUser())
+        super.onResume()
     }
 
     override fun onDestroyView() {

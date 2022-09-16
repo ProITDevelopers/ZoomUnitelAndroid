@@ -1,8 +1,10 @@
 package ao.co.proitconsulting.zoomunitel.adapters
 
+import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -13,8 +15,14 @@ import ao.co.proitconsulting.zoomunitel.helpers.Constants
 import ao.co.proitconsulting.zoomunitel.helpers.MetodosUsados
 import ao.co.proitconsulting.zoomunitel.models.RevistaModel
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.flaviofaria.kenburnsview.KenBurnsView
+import com.flaviofaria.kenburnsview.RandomTransitionGenerator
+import com.github.ybq.android.spinkit.SpinKitView
 import com.makeramen.roundedimageview.RoundedImageView
 
 
@@ -22,7 +30,14 @@ class RevistasDetailsAdapter : RecyclerView.Adapter<RevistasDetailsAdapter.Revis
 
     var itemClickListener : ((revistaList: List<RevistaModel>, position:Int)->Unit)?=null
 
+    val aDI = AccelerateDecelerateInterpolator()
+    val generator = RandomTransitionGenerator(10000,aDI)
+
+
     inner class RevistaViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+
+
+        val progressBar:SpinKitView = itemView.findViewById(R.id.spin_kit_bottom)
 
         val rvImgBackgnd:KenBurnsView = itemView.findViewById(R.id.rvImgBackgnd)
         val rvImg:RoundedImageView = itemView.findViewById(R.id.rvImg)
@@ -62,14 +77,38 @@ class RevistasDetailsAdapter : RecyclerView.Adapter<RevistasDetailsAdapter.Revis
         val revista = differ.currentList[position]
         holder.itemView.apply {
 
-            Glide.with(this)
+            Glide.with(this).asBitmap()
                 .load(Constants.IMAGE_PATH + revista.imgUrl)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.rvImgBackgnd)
 
-            Glide.with(this)
+            Glide.with(this).asBitmap()
                 .load(Constants.IMAGE_PATH + revista.imgUrl)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .placeholder(R.drawable.magazine_placeholder)
+                .listener(object : RequestListener<Bitmap> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Bitmap>?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        holder.progressBar.visibility = View.INVISIBLE
+                        return false
+                    }
+
+                    override fun onResourceReady(
+                        resource: Bitmap?,
+                        model: Any?,
+                        target: Target<Bitmap>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        holder.progressBar.visibility = View.GONE
+                        return false
+                    }
+
+                })
                 .into(holder.rvImg)
 
             holder.txtRvTitle.text = revista.title
@@ -81,6 +120,11 @@ class RevistasDetailsAdapter : RecyclerView.Adapter<RevistasDetailsAdapter.Revis
 
         }
 
+        holder.rvImgBackgnd.setTransitionGenerator(generator)
+
+        holder.rvImg.setOnClickListener {
+            itemClickListener?.invoke(differ.currentList,position)
+        }
         holder.btnVermais.setOnClickListener {
             itemClickListener?.invoke(differ.currentList,position)
         }

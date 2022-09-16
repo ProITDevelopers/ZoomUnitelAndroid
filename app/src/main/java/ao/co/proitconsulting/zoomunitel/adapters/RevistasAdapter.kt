@@ -16,7 +16,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.facebook.shimmer.ShimmerFrameLayout
+import com.github.ybq.android.spinkit.SpinKitView
 import com.makeramen.roundedimageview.RoundedImageView
 
 
@@ -29,7 +29,7 @@ class RevistasAdapter : RecyclerView.Adapter<RevistasAdapter.RevistaViewHolder>(
 
 
         val imageSlide:RoundedImageView = itemView.findViewById(R.id.imageSlide)
-        val shimmerFrameLayout:ShimmerFrameLayout = itemView.findViewById(R.id.shimmerFrameLayout)
+        val progressBar: SpinKitView = itemView.findViewById(R.id.spin_kit_bottom)
 
 
 
@@ -74,7 +74,7 @@ class RevistasAdapter : RecyclerView.Adapter<RevistasAdapter.RevistaViewHolder>(
                         target: Target<Bitmap>?,
                         isFirstResource: Boolean
                     ): Boolean {
-                        holder.shimmerFrameLayout.stopShimmer()
+                        holder.progressBar.visibility = View.INVISIBLE
                         return false
                     }
 
@@ -85,7 +85,7 @@ class RevistasAdapter : RecyclerView.Adapter<RevistasAdapter.RevistaViewHolder>(
                         dataSource: DataSource?,
                         isFirstResource: Boolean
                     ): Boolean {
-                        holder.shimmerFrameLayout.visibility = View.GONE
+                        holder.progressBar.visibility = View.GONE
                         return false
                     }
 

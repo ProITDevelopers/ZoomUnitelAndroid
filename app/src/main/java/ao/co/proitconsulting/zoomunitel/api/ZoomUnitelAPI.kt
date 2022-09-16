@@ -2,13 +2,10 @@ package ao.co.proitconsulting.zoomunitel.api
 
 
 
-import ao.co.proitconsulting.zoomunitel.models.RevistaResponse
+import ao.co.proitconsulting.zoomunitel.models.RevistaModel
 import ao.co.proitconsulting.zoomunitel.models.UsuarioRequest
 import okhttp3.ResponseBody
-import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface ZoomUnitelAPI {
 
@@ -39,6 +36,18 @@ interface ZoomUnitelAPI {
         @Body passSendNewPass: UsuarioRequest.PassSendNewPass?
     ) : retrofit2.Call<ResponseBody>
 
+    @GET("/user/{id}")
+    fun userProfile(
+        @Path("id") userId: Int
+    ) : retrofit2.Call<ResponseBody>
+
+    @PUT("/user")
+    fun userProfileUpdate(
+        @Body userUpdateRequest: UsuarioRequest.UsuarioUpdateRequest?
+    ) : retrofit2.Call<ResponseBody>
+
+
+
     @GET("/revista")
-    suspend fun getTodasRevistas() : Response<RevistaResponse>
+    suspend fun getTodasRevistas() : List<RevistaModel>
 }

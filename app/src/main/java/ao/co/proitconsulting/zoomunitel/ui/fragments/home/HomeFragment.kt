@@ -1,14 +1,19 @@
 package ao.co.proitconsulting.zoomunitel.ui.fragments.home
 
 import android.graphics.Bitmap
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.ImageView
+import android.widget.RelativeLayout
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -21,10 +26,11 @@ import ao.co.proitconsulting.zoomunitel.databinding.FragmentHomeBinding
 import ao.co.proitconsulting.zoomunitel.helpers.Constants
 import ao.co.proitconsulting.zoomunitel.helpers.MetodosUsados
 import ao.co.proitconsulting.zoomunitel.helpers.Resource
+import ao.co.proitconsulting.zoomunitel.helpers.network.ConnectionLiveData
 import ao.co.proitconsulting.zoomunitel.localDB.RevistaDatabase
 import ao.co.proitconsulting.zoomunitel.ui.MainActivity
-import ao.co.proitconsulting.zoomunitel.ui.RevistaViewModelProviderFactory
 import ao.co.proitconsulting.zoomunitel.ui.repository.RevistaRepository
+import ao.co.proitconsulting.zoomunitel.ui.repository.RevistaViewModelProviderFactory
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.SimpleTarget
@@ -49,6 +55,27 @@ class HomeFragment : Fragment() {
 
     val slideHandler = Handler()
 
+    lateinit var coordinatorLayout: ConstraintLayout
+    lateinit var errorLayout: RelativeLayout
+    lateinit var imgErro: ImageView
+    lateinit var txtErro: TextView
+
+
+    lateinit var connectionLiveData: ConnectionLiveData
+    private var isNetworkAvailable: Boolean = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            connectionLiveData = ConnectionLiveData(requireContext())
+            connectionLiveData.observe(this) { isNetwork ->
+                isNetworkAvailable = isNetwork
+            }
+        }else{
+            isNetworkAvailable = MetodosUsados.isConnected(Constants.REQUEST_TIMEOUT,TAG)
+        }
+        super.onCreate(savedInstanceState)
+    }
 
 
 
@@ -60,6 +87,7 @@ class HomeFragment : Fragment() {
     ): View {
 
         val revistaRepository = RevistaRepository(RevistaDatabase(requireContext()))
+
         val viewModelProviderFactory = RevistaViewModelProviderFactory(revistaRepository)
 
         val viewModel =
@@ -72,9 +100,13 @@ class HomeFragment : Fragment() {
 
 
 
-
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        coordinatorLayout = root.findViewById(R.id.coordinatorLayout)
+        errorLayout = root.findViewById(R.id.erroLayout)
+        imgErro = root.findViewById(R.id.imgErro)
+        txtErro = root.findViewById(R.id.txtErro)
 
         imgBackgnd = binding.imgBackgnd
         mViewPager = binding.viewPagerImageSlider
@@ -99,48 +131,60 @@ class HomeFragment : Fragment() {
         }
 
 
-        viewModel.home.observe(viewLifecycleOwner, Observer { response ->
-            when(response){
-                is Resource.Success -> {
-                    hideProgressBar()
-                    response.data?.let {
-                            revistaResponse ->
 
-                        revistasAdapter.differ.submitList(revistaResponse)
+        viewModel.home.observe(viewLifecycleOwner){ result ->
+
+            revistasAdapter.differ.submitList(result.data)
+            hideProgressBar()
 
 
-                    }
-                }
-                is Resource.Error -> {
-                    hideProgressBar()
-                    response.message?.let {
-                            message ->
-                        MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastALERTA,message)
-                    }
-                }
-                is Resource.Loading -> {
-                    showProgressBar()
-
-
-                }
-
+            if (result is Resource.Loading && result.data.isNullOrEmpty()){
+                showProgressBar()
             }
 
-        })
+            else if (result is Resource.Error && result.data.isNullOrEmpty()){
+                hideProgressBar()
+                val message = result.message?.localizedMessage
+                if (message != null) {
+                    Log.d(TAG, "onCreateView: $message")
+                    showErrorScreen(message)
+                }
+            }
+        }
+
 
         return root
     }
 
 
     private fun hideProgressBar() {
-        binding.spinKitBottom.visibility = View.INVISIBLE
         binding.shimmerFrameLayout.visibility = View.GONE
     }
 
     private fun showProgressBar() {
-        binding.spinKitBottom.visibility = View.VISIBLE
         binding.shimmerFrameLayout.visibility = View.VISIBLE
         binding.shimmerFrameLayout.startShimmer()
+    }
+
+    private fun showErrorScreen(msg:String){
+
+        if (!isNetworkAvailable){
+            imgErro.setImageResource(R.drawable.ic_baseline_wifi_off_24)
+            txtErro.text = getString(R.string.msg_erro_internet)
+
+        }else if (msg.contains("timeout")){
+            imgErro.setImageResource(R.drawable.ic_baseline_error_outline_24)
+            txtErro.text = getString(R.string.msg_erro_internet_timeout)
+
+        }else{
+            imgErro.setImageResource(R.drawable.ic_baseline_error_outline_24)
+            txtErro.text = getString(R.string.msg_erro_servidor)
+        }
+
+        if (errorLayout.visibility == View.GONE){
+            errorLayout.visibility = View.VISIBLE
+            coordinatorLayout.visibility = View.GONE
+        }
     }
 
     private fun setViewPager(){
@@ -168,11 +212,7 @@ class HomeFragment : Fragment() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
 
-//                Glide.with(requireContext())
-//                    .load(Constants.IMAGE_PATH + revistasAdapter.differ.currentList[position].imgUrl)
-//                    .dontAnimate()
-//                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                    .into(imgBackgnd)
+
 
                 context?.let{
                     Glide
@@ -183,6 +223,8 @@ class HomeFragment : Fragment() {
                         .dontAnimate()
                         .into(object : SimpleTarget<Bitmap>() {
 
+
+
                             override fun onResourceReady(
                                 resource: Bitmap,
                                 transition: Transition<in Bitmap>?
@@ -191,7 +233,11 @@ class HomeFragment : Fragment() {
                             }
 
 
+
+
                         })
+
+
                 }
 
 

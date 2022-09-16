@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
+        android:background="@null"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -17,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="450dp"
             android:fitsSystemWindows="true"
-            app:contentScrim="#0e0d0e"
+            app:contentScrim="@color/orange_unitel"
             app:expandedTitleTextAppearance="@android:color/transparent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             >
@@ -50,6 +51,8 @@
                     android:src="@color/transparentBlack"
                     />
 
+
+
                 <com.makeramen.roundedimageview.RoundedImageView
                     android:id="@+id/rvImg"
                     android:layout_width="match_parent"
@@ -66,6 +69,15 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?android:attr/selectableItemBackground"
+                    />
+
+                <com.github.ybq.android.spinkit.SpinKitView
+                    android:id="@+id/spin_kit_bottom"
+                    style="@style/SpinKitView.FadingCircle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:SpinKit_Color="@color/spinKitView_color"
+                   android:layout_gravity="center"
                     />
 
             </FrameLayout>
