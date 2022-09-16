@@ -23,7 +23,6 @@ data class UsuarioModel(
     val userPhoto:String?
 
 
-
 ) : Serializable {
     override fun toString(): String {
         return "Usuario(userId=$userId, userNome=$userNome, userEmail=$userEmail, userPhone=$userPhone, userPhoto=$userPhoto)"

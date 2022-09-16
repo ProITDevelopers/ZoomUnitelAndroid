@@ -36,7 +36,6 @@ class RevistasDetailsAdapter : RecyclerView.Adapter<RevistasDetailsAdapter.Revis
 
     inner class RevistaViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
 
-
         val progressBar:SpinKitView = itemView.findViewById(R.id.spin_kit_bottom)
 
         val rvImgBackgnd:KenBurnsView = itemView.findViewById(R.id.rvImgBackgnd)

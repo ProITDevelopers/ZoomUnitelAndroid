@@ -47,7 +47,6 @@ interface ZoomUnitelAPI {
     ) : retrofit2.Call<ResponseBody>
 
 
-
     @GET("/revista")
     suspend fun getTodasRevistas() : List<RevistaModel>
 }

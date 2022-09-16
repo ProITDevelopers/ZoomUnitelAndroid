@@ -32,5 +32,4 @@ data class RevistaModel(
     @SerializedName("CREATEAT")
     var created_at: String
 
-
 ): Serializable

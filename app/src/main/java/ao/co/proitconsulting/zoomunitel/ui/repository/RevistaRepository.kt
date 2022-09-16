@@ -26,6 +26,4 @@ class RevistaRepository(val db:RevistaDatabase) {
         }
     )
 
-//    suspend fun getRevistasHome() =
-//        RetrofitInstance.api.getTodasRevistas()
 }

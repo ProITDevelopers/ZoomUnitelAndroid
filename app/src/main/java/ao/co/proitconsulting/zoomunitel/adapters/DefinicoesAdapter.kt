@@ -15,7 +15,6 @@ class DefinicoesAdapter: RecyclerView.Adapter<DefinicoesAdapter.DefinicoesAdapte
 
     private val adapterData = mutableListOf<DefinicoesModel>()
 
-
     var itemClickListener : ((view:View, item:DefinicoesModel,position:Int)->Unit)?=null
 
 

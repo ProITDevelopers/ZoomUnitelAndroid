@@ -105,7 +105,6 @@ class RevistasLerDownloadAdapter : RecyclerView.Adapter<RevistasLerDownloadAdapt
 
 
 
-
         }
 
         holder.btnLer.setOnClickListener {

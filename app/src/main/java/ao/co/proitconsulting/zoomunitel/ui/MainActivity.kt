@@ -70,7 +70,6 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
 
-
         frameLayoutImgToolbar = binding.appBarMain.frameLayoutImgToolbar
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView

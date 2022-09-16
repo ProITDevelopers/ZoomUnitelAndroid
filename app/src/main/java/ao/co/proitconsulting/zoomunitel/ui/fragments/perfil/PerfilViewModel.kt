@@ -23,7 +23,6 @@ class PerfilViewModel : ViewModel() {
     }
 
 
-
     fun setUsuario(usuario: UsuarioModel?){
         _usuario.value = usuario
     }

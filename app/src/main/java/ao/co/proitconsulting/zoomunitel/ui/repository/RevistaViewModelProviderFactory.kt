@@ -11,5 +11,4 @@ class RevistaViewModelProviderFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return HomeViewModel(revistaRepository) as T
     }
-
 }

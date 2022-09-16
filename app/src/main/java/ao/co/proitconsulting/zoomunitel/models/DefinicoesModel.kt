@@ -2,6 +2,7 @@ package ao.co.proitconsulting.zoomunitel.models
 
 
 sealed class DefinicoesModel {
+
     data class Header(
         val title: String
     ) : DefinicoesModel()

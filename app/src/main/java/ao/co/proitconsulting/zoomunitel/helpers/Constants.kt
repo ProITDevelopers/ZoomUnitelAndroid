@@ -3,6 +3,7 @@ package ao.co.proitconsulting.zoomunitel.helpers
 class Constants {
 
     companion object{
+
         const val SHARE_URL_PLAYSTORE = "https://play.google.com/store/apps/details?id="
         const val BASE_URL_ZOOM_UNITEL = "http://41.78.18.144:3000/"
         const val USER_IMAGE_PATH = BASE_URL_ZOOM_UNITEL+"user/image/"

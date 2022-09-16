@@ -13,7 +13,6 @@ class ViewPagerFragmentsAdapter(fa: FragmentActivity): FragmentStateAdapter(fa) 
     val mFragmentTitleList: MutableList<String> = ArrayList()
 
 
-
     fun addFrag(fragment: Fragment, title: String){
         mFragmentList.add(fragment)
         mFragmentTitleList.add(title)

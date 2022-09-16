@@ -93,7 +93,6 @@ class RevistasAdapter : RecyclerView.Adapter<RevistasAdapter.RevistaViewHolder>(
                 .into(holder.imageSlide)
 
 
-
         }
 
         holder.imageSlide.setOnClickListener {
