@@ -3,8 +3,6 @@ package ao.co.proitconsulting.zoomunitel.ui.fragments.senha
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
@@ -26,7 +24,7 @@ import ao.co.proitconsulting.zoomunitel.helpers.Constants
 import ao.co.proitconsulting.zoomunitel.helpers.MetodosUsados
 import ao.co.proitconsulting.zoomunitel.helpers.network.ConnectionLiveData
 import ao.co.proitconsulting.zoomunitel.models.UsuarioRequest
-import ao.co.proitconsulting.zoomunitel.ui.SenhaActivity
+import ao.co.proitconsulting.zoomunitel.ui.activities.SenhaActivity
 import okhttp3.ResponseBody
 import org.json.JSONException
 import org.json.JSONObject

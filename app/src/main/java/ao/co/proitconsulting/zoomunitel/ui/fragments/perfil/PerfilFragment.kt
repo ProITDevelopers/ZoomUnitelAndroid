@@ -13,7 +13,7 @@ import ao.co.proitconsulting.zoomunitel.databinding.FragmentPerfilBinding
 import ao.co.proitconsulting.zoomunitel.helpers.Constants
 import ao.co.proitconsulting.zoomunitel.localDB.AppPrefsSettings
 import ao.co.proitconsulting.zoomunitel.models.UsuarioModel
-import ao.co.proitconsulting.zoomunitel.ui.MainActivity
+import ao.co.proitconsulting.zoomunitel.ui.activities.MainActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 

@@ -85,6 +85,9 @@ dependencies {
     //IMAGE_CROP
     implementation 'com.github.yalantis:ucrop:2.2.2'
 
+    //FILE-COMPRESSOR
+    implementation 'id.zelory:compressor:3.0.1'
+
     //CIRCULAR IMAGEVIEW
     implementation 'de.hdodenhof:circleimageview:3.0.1'
 

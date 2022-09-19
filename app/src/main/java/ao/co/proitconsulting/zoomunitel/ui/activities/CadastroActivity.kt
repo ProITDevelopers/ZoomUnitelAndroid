@@ -1,4 +1,4 @@
-package ao.co.proitconsulting.zoomunitel.ui
+package ao.co.proitconsulting.zoomunitel.ui.activities
 
 
 import android.os.Bundle

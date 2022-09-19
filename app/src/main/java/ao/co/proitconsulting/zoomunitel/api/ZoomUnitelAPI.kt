@@ -4,6 +4,7 @@ package ao.co.proitconsulting.zoomunitel.api
 
 import ao.co.proitconsulting.zoomunitel.models.RevistaModel
 import ao.co.proitconsulting.zoomunitel.models.UsuarioRequest
+import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.http.*
 
@@ -44,6 +45,12 @@ interface ZoomUnitelAPI {
     @PUT("/user")
     fun userProfileUpdate(
         @Body userUpdateRequest: UsuarioRequest.UsuarioUpdateRequest?
+    ) : retrofit2.Call<ResponseBody>
+
+    @Multipart
+    @PUT("/user/image")
+    fun userPhotoUpdate(
+        @Part photo: MultipartBody.Part
     ) : retrofit2.Call<ResponseBody>
 
     @GET("/revista")

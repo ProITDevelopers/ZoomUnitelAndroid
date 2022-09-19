@@ -28,7 +28,7 @@ import ao.co.proitconsulting.zoomunitel.helpers.MetodosUsados
 import ao.co.proitconsulting.zoomunitel.helpers.Resource
 import ao.co.proitconsulting.zoomunitel.helpers.network.ConnectionLiveData
 import ao.co.proitconsulting.zoomunitel.localDB.RevistaDatabase
-import ao.co.proitconsulting.zoomunitel.ui.MainActivity
+import ao.co.proitconsulting.zoomunitel.ui.activities.MainActivity
 import ao.co.proitconsulting.zoomunitel.ui.repository.RevistaRepository
 import ao.co.proitconsulting.zoomunitel.ui.repository.RevistaViewModelProviderFactory
 import com.bumptech.glide.Glide

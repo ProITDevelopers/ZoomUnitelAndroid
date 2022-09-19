@@ -16,8 +16,8 @@ import ao.co.proitconsulting.zoomunitel.databinding.FragmentDefinicoesBinding
 import ao.co.proitconsulting.zoomunitel.helpers.MetodosUsados
 import ao.co.proitconsulting.zoomunitel.localDB.AppPrefsSettings
 import ao.co.proitconsulting.zoomunitel.models.DefinicoesModel
-import ao.co.proitconsulting.zoomunitel.ui.MainActivity
-import ao.co.proitconsulting.zoomunitel.ui.SplashScreenActivity
+import ao.co.proitconsulting.zoomunitel.ui.activities.MainActivity
+import ao.co.proitconsulting.zoomunitel.ui.activities.SplashScreenActivity
 
 val TAG = "TAG_DefinFrag"
 class DefinicoesFragment : Fragment() {

@@ -1,4 +1,4 @@
-package ao.co.proitconsulting.zoomunitel.ui
+package ao.co.proitconsulting.zoomunitel.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -34,7 +34,7 @@ class SplashScreenActivity : AppCompatActivity() {
                 if(AppPrefsSettings.getInstance().getAuthToken()!=null){
                     launchHomeScreen()
                 }else{
-                    val intent = Intent(this,CadastroActivity::class.java)
+                    val intent = Intent(this, CadastroActivity::class.java)
                     intent.flags = (Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     startActivity(intent)
                     finish()
@@ -46,7 +46,7 @@ class SplashScreenActivity : AppCompatActivity() {
     }
 
     private fun launchHomeScreen() {
-        val intent = Intent(this,MainActivity::class.java)
+        val intent = Intent(this, MainActivity::class.java)
         intent.flags = (Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         startActivity(intent)
         finish()

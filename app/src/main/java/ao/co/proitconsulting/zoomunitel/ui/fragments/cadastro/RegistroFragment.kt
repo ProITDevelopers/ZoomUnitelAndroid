@@ -31,8 +31,8 @@ import ao.co.proitconsulting.zoomunitel.helpers.network.ConnectionLiveData
 import ao.co.proitconsulting.zoomunitel.localDB.AppPrefsSettings
 import ao.co.proitconsulting.zoomunitel.models.UsuarioModel
 import ao.co.proitconsulting.zoomunitel.models.UsuarioRequest
-import ao.co.proitconsulting.zoomunitel.ui.CadastroActivity
-import ao.co.proitconsulting.zoomunitel.ui.MainActivity
+import ao.co.proitconsulting.zoomunitel.ui.activities.CadastroActivity
+import ao.co.proitconsulting.zoomunitel.ui.activities.MainActivity
 import okhttp3.ResponseBody
 import org.json.JSONException
 import org.json.JSONObject
@@ -575,7 +575,7 @@ class RegistroFragment : Fragment() {
 
     private fun launchHomescreen() {
         if (activity!=null){
-            val intent = Intent(activity,MainActivity::class.java)
+            val intent = Intent(activity, MainActivity::class.java)
             intent.flags = (Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(intent)
             activity?.finish()

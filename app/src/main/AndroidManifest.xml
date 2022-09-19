@@ -14,18 +14,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ZoomUnitel">
         <activity
-            android:name=".ui.SenhaActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.ZoomUnitel.NoActionBar"
-            />
+            android:name=".ui.activities.imagePicker.ImagePickerActivity"
+            android:exported="false" />
         <activity
-            android:name=".ui.CadastroActivity"
+            android:name=".ui.activities.SenhaActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.ZoomUnitel.NoActionBar" />
         <activity
-            android:name=".ui.SplashScreenActivity"
+            android:name=".ui.activities.CadastroActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.ZoomUnitel.NoActionBar" />
+        <activity
+            android:name=".ui.activities.SplashScreenActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.ZoomUnitel.NoActionBar">
@@ -39,14 +41,13 @@
             android:name="com.yalantis.ucrop.UCropActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" /> <!-- <activity -->
-        <!-- android:name=".activities.imagePicker.ImagePickerActivity" -->
-        <!-- android:exported="false"/> -->
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
         <!-- Photo cache directory file provider paths -->
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.activities.MainActivity"
             android:exported="false"
-            android:theme="@style/Theme.ZoomUnitel.NoActionBar"></activity> <!-- Photo cache directory file provider paths -->
+            android:theme="@style/Theme.ZoomUnitel.NoActionBar" /> <!-- Photo cache directory file provider paths -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -57,8 +58,9 @@
                 android:resource="@xml/file_paths" />
         </provider>
     </application>
-    <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.autofocus" /> <!-- <uses-permission android:name="android.permission.WAKE_LOCK" /> -->
+    <uses-feature android:name="android.hardware.camera" /> <!-- <uses-permission android:name="android.permission.WAKE_LOCK" /> -->
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
     <uses-feature android:name="android.hardware.camera.flash" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

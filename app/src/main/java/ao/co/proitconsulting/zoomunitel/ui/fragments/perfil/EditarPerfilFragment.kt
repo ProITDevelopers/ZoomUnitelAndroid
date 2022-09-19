@@ -1,16 +1,24 @@
 package ao.co.proitconsulting.zoomunitel.ui.fragments.perfil
 
+import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
+import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -23,13 +31,36 @@ import ao.co.proitconsulting.zoomunitel.helpers.network.ConnectionLiveData
 import ao.co.proitconsulting.zoomunitel.localDB.AppPrefsSettings
 import ao.co.proitconsulting.zoomunitel.models.UsuarioModel
 import ao.co.proitconsulting.zoomunitel.models.UsuarioRequest
-import ao.co.proitconsulting.zoomunitel.ui.MainActivity
+import ao.co.proitconsulting.zoomunitel.ui.activities.MainActivity
+import ao.co.proitconsulting.zoomunitel.ui.activities.imagePicker.ImagePickerActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import id.zelory.compressor.Compressor
+import id.zelory.compressor.constraint.destination
+import id.zelory.compressor.constraint.format
+import id.zelory.compressor.constraint.quality
+import id.zelory.compressor.constraint.resolution
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.ResponseBody
+import org.json.JSONArray
+import org.json.JSONException
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
+import java.io.IOException
 
 class EditarPerfilFragment : Fragment() {
 
@@ -40,7 +71,12 @@ class EditarPerfilFragment : Fragment() {
     lateinit var  nome:String
     lateinit var  telefone:String
     lateinit var  email:String
-
+    private val permissionsArray = arrayOf(
+        Manifest.permission.CAMERA,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    var REQUEST_IMAGE:Int = 100
+    private var selectedImage: Uri?=null
+    private var postPath:String?=null
 
     lateinit var connectionLiveData: ConnectionLiveData
     private var isNetworkAvailable: Boolean = false
@@ -77,6 +113,11 @@ class EditarPerfilFragment : Fragment() {
 
         editarPerfilViewModel.getPerfil.observe(viewLifecycleOwner) { usuario ->
             carregarDadosLocal(usuario)
+        }
+
+        binding.userPhoto.setOnClickListener {
+
+            verificarPermissaoFotoCameraGaleria()
         }
 
         binding.editNome.addTextChangedListener(object : TextWatcher {
@@ -145,6 +186,72 @@ class EditarPerfilFragment : Fragment() {
         }
 
         return root
+    }
+
+    private fun verificarPermissaoFotoCameraGaleria() {
+        Dexter.withContext(requireContext())
+            .withPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            .withListener(object: MultiplePermissionsListener {
+                override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                    report?.let {
+                        if(report.areAllPermissionsGranted()){
+                            showImagePickerOptions()
+                        }
+                        if (report.isAnyPermissionPermanentlyDenied) {
+                            //showSettingsDialog()
+                        }
+                    }
+                }
+                override fun onPermissionRationaleShouldBeShown(
+                    permissions: MutableList<PermissionRequest>?,
+                    token: PermissionToken?
+                ) {
+                    // Remember to invoke this method when the custom rationale is closed
+                    // or just by default if you don't want to use any custom rationale.
+                    token?.continuePermissionRequest()
+                }
+            }).check()
+    }
+
+    private fun showImagePickerOptions() {
+        ImagePickerActivity.showImagePickerOptions(requireContext(), object : ImagePickerActivity.PickerOptionListener{
+
+            override fun onTakeCameraSelected() {
+                launchCameraIntent()
+            }
+
+            override fun onChooseGallerySelected() {
+                launchGalleryIntent()
+            }
+        })
+    }
+
+    private fun launchCameraIntent() {
+        val intent = Intent(requireContext(), ImagePickerActivity::class.java)
+        intent.putExtra(ImagePickerActivity.INTENT_IMAGE_PICKER_OPTION, ImagePickerActivity.REQUEST_IMAGE_CAPTURE)
+
+        // setting aspect ratio
+        intent.putExtra(ImagePickerActivity.INTENT_LOCK_ASPECT_RATIO, true);
+        intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_X, 1) // 16x9, 1x1, 3:4, 3:2
+        intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_Y, 1)
+
+        // setting maximum bitmap width and height
+        intent.putExtra(ImagePickerActivity.INTENT_SET_BITMAP_MAX_WIDTH_HEIGHT, true)
+        intent.putExtra(ImagePickerActivity.INTENT_BITMAP_MAX_WIDTH, 1000)
+        intent.putExtra(ImagePickerActivity.INTENT_BITMAP_MAX_HEIGHT, 1000)
+
+        startActivityForResult(intent, REQUEST_IMAGE)
+    }
+
+    private fun launchGalleryIntent() {
+        val intent = Intent(getContext(), ImagePickerActivity::class.java)
+        intent.putExtra(ImagePickerActivity.INTENT_IMAGE_PICKER_OPTION, ImagePickerActivity.REQUEST_GALLERY_IMAGE)
+
+        // setting aspect ratio
+        intent.putExtra(ImagePickerActivity.INTENT_LOCK_ASPECT_RATIO, true)
+        intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_X, 1) // 16x9, 1x1, 3:4, 3:2
+        intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_Y, 1)
+        startActivityForResult(intent, REQUEST_IMAGE)
     }
 
     private fun actualizarPerfil() {
@@ -418,11 +525,190 @@ class EditarPerfilFragment : Fragment() {
 
     }
 
+
     override fun onResume() {
         binding.editNome.error = null
         binding.editTelefone.error = null
         binding.editEmail.error = null
         super.onResume()
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_IMAGE) {
+            if (resultCode == Activity.RESULT_OK) {
+                val uri:Uri? = data?.getParcelableExtra("path")
+                try {
+                    // You can update this bitmap to your server
+                    val bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, uri)
+
+
+
+                    selectedImage = uri
+                    postPath = selectedImage?.path
+
+                    Log.d(TAG, "Image Get Uri path: " + uri?.path)
+                    Log.d(TAG, "Image Get Uri toString(): " + uri.toString())
+
+                    val job = Job()
+                    val uiScope = CoroutineScope(Dispatchers.IO + job)
+
+                    uiScope.launch {
+                        val compressedImageFile = Compressor.compress(requireContext(), File(selectedImage?.path!!)){
+                            resolution(1080,720)
+                            quality(80) // combine with compressor constraint
+                            format(Bitmap.CompressFormat.JPEG)
+                            destination(File(postPath!!))
+                        }
+                        val resultUri = Uri.fromFile(compressedImageFile)
+
+                        requireActivity().runOnUiThread {
+                            resultUri?.let {
+                                //set image here
+                                selectedImage = it
+
+                                isNetworkAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                    isNetworkAvailable
+                                }else{
+                                    MetodosUsados.hasInternetConnection(requireContext())
+                                }
+
+                                if (isNetworkAvailable){
+                                    upLoadProfilePhoto(selectedImage)
+
+                                }else{
+                                    MetodosUsados.showCustomSnackBar(view,activity, Constants.ToastALERTA,getString(R.string.msg_erro_internet))
+                                }
+                            }
+                        }
+                    }
+
+
+
+                    //verificarConecxaoInternetFOTO()
+                } catch ( e: IOException) {
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
+
+    private fun upLoadProfilePhoto(selectedImage: Uri?) {
+        deActivateViews()
+        binding.spinKitBottom.visibility = View.VISIBLE
+        postPath = selectedImage?.path
+        val imageFile = selectedImage?.toFile()
+        val fileName = selectedImage?.toFile()?.name
+        val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), imageFile!!)
+        val photo = MultipartBody.Part.createFormData("image",fileName,requestFile)
+
+        val retrofit = RetrofitInstance.api.userPhotoUpdate(photo)
+        retrofit.enqueue(object :
+            Callback<ResponseBody> {
+
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+
+                    binding.spinKitBottom.visibility = View.GONE
+
+                    MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastSUCESS,getString(R.string.foto_atualizada_sucesso))
+                    carregarMeuPerfil()
+
+                } else{
+                    binding.spinKitBottom.visibility = View.GONE
+                    MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastALERTA,getString(R.string.msg_erro_servidor))
+                }
+                activateViews()
+            }
+
+
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                binding.spinKitBottom.visibility = View.GONE
+                activateViews()
+                isNetworkAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    isNetworkAvailable
+                }else{
+                    MetodosUsados.isConnected(Constants.REQUEST_TIMEOUT,TAG)
+                }
+
+                if (!isNetworkAvailable){
+                    MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastALERTA,getString(R.string.msg_erro_internet))
+                }else if (!t.message.isNullOrEmpty() && t.message!!.contains("timeout")){
+                    MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastALERTA,getString(R.string.msg_erro_internet_timeout))
+                }else{
+                    MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastALERTA,getString(R.string.msg_erro_servidor))
+                }
+            }
+
+        })
+
+    }
+
+    private fun carregarMeuPerfil() {
+        val userUID = AppPrefsSettings.getInstance().getUser()!!.userId
+        val userId = userUID!!.toInt()
+        val retrofit = RetrofitInstance.api.userProfile(userId)
+        retrofit.enqueue(object :
+            Callback<ResponseBody> {
+
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    response.body().let { responseResult ->
+
+                        try {
+                            val body = responseResult?.string()
+                            if (!body.isNullOrEmpty()){
+                                val jsonArray = JSONArray(body)
+                                val jsonResponse = jsonArray.getJSONObject(0)
+                                val usuario = UsuarioModel(
+                                    jsonResponse.getLong("USERID"),
+                                    jsonResponse.getString("NOME"),
+                                    jsonResponse.getString("EMAIL"),
+                                    jsonResponse.getString("TELEFONE"),
+                                    jsonResponse.getString("FOTOKEY")
+                                )
+                                AppPrefsSettings.getInstance().saveUser(usuario)
+                                carregarDadosLocal(usuario)
+
+
+                            }
+                            Log.d(TAG, "onResponse_success: $body")
+                        } catch (e: Exception) {
+
+                        } catch (e: JSONException){
+
+                        }
+
+                    }
+                } else{
+
+                    try {
+                        val responseBodyError = response.errorBody()?.string()
+                        if (!responseBodyError.isNullOrEmpty()){
+                            val jsonResponseBodyError = JSONObject(responseBodyError)
+                            val jsorError = jsonResponseBodyError.get("erro")
+                            val jsonBodyError = JSONObject(jsorError.toString())
+                            val errorMessage = jsonBodyError.get("mensagem")
+
+                        }
+                        Log.d(TAG, "onResponse_NOTsuccess: ${response.errorBody()?.string()}")
+                    }catch (e: IOException){
+
+                    }catch (e: JSONException){
+
+                    }
+                }
+            }
+
+
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+
+            }
+
+        })
     }
 
     override fun onDestroyView() {
