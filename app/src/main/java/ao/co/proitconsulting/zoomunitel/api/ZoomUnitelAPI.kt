@@ -31,7 +31,7 @@ interface ZoomUnitelAPI {
         @Body passSendCode: UsuarioRequest.PassSendCode?
     ) : retrofit2.Call<ResponseBody>
 
-    @POST("/resetPassWord")
+    @PUT("/resetPassWord")
     fun resetPassWord(
         @Body passSendNewPass: UsuarioRequest.PassSendNewPass?
     ) : retrofit2.Call<ResponseBody>

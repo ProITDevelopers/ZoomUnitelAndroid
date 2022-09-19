@@ -6,10 +6,10 @@ sealed class UsuarioRequest{
 
     data class LoginRequest(
         @SerializedName("email")
-        var email_Telefone: String,
+        var email_Telefone: String?,
 
         @SerializedName("password")
-        val password: String
+        val password: String?
     ) : UsuarioRequest()
 
     data class RegisterRequest(
@@ -41,7 +41,7 @@ sealed class UsuarioRequest{
 
     data class PassSendNewPass(
         @SerializedName("novapassword")
-        val novapassword: String
+        val novapassword: String?
     ) : UsuarioRequest()
 
     data class UsuarioUpdateRequest(

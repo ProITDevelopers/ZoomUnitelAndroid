@@ -3,6 +3,8 @@ package ao.co.proitconsulting.zoomunitel.ui.fragments.senha
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
@@ -69,6 +71,7 @@ class InserirCodigoFragment : Fragment() {
         arguments?.let {
             email = it.getString(ARG_PARAM1)
 
+
             Log.d(TAG, "onCreate: ${email.toString()}")
 
         }
@@ -93,7 +96,17 @@ class InserirCodigoFragment : Fragment() {
         spannableStringCode.setSpan(StyleSpan(Typeface.BOLD),13,24, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         txtReenviarCode.text = spannableStringCode
         txtReenviarCode.setOnClickListener {
-            MetodosUsados.showCustomSnackBar(view,activity, Constants.ToastALERTA,txtReenviarCode.text.toString())
+            isNetworkAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                isNetworkAvailable
+            }else{
+                MetodosUsados.isConnected(Constants.REQUEST_TIMEOUT,TAG)
+            }
+
+            if (isNetworkAvailable){
+                reenviarEmail()
+            }else{
+                MetodosUsados.showCustomSnackBar(view,activity, Constants.ToastALERTA,getString(R.string.msg_erro_internet))
+            }
         }
 
         val btnContinuar : Button = binding.btnContinuar
@@ -116,10 +129,94 @@ class InserirCodigoFragment : Fragment() {
         return root
     }
 
+    private fun reenviarEmail() {
+        deActivateViews()
+        binding.spinKitBottom.visibility = View.VISIBLE
+        email = email.toString().trim()
+        val passSendEmail = UsuarioRequest.PassSendEmail(email.toString())
+
+        val retrofit = RetrofitInstance.api.sendUserEmail(passSendEmail)
+        retrofit.enqueue(object :
+            Callback<ResponseBody> {
+
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+
+                    binding.spinKitBottom.visibility = View.GONE
+                    activateViews()
+
+                    if (response.body()!=null){
+
+                        try {
+                            val dataResponse = response.body()?.string()
+                            if (!dataResponse.isNullOrEmpty()){
+                                Log.d(TAG, "onResponse_success: $dataResponse")
+                                val jsonResponse = JSONObject(dataResponse)
+                                val mensagem = jsonResponse.get("mensagem")
+                                MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastSUCESS,mensagem.toString())
+
+                            }
+                        }catch (e:IOException){
+
+                        }catch (e:JSONException){
+
+                        }
+
+                    }else{
+                        MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastSUCESS,"Enviado com sucesso")
+                    }
+
+
+                } else{
+                    binding.spinKitBottom.visibility = View.GONE
+                    activateViews()
+                    try {
+                        val responseBodyError = response.errorBody()?.string()
+                        if (!responseBodyError.isNullOrEmpty()){
+                            val jsonResponseBodyError = JSONObject(responseBodyError)
+                            val jsorError = jsonResponseBodyError.get("erro")
+                            val jsonBodyError = JSONObject(jsorError.toString())
+                            val errorMessage = jsonBodyError.get("mensagem")
+                            MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastERRO,errorMessage.toString())
+                        }
+                        Log.d(TAG, "onResponse_NOTsuccess: ${response.errorBody()?.string()}")
+                    }catch (e:IOException){
+
+                    }catch (e:JSONException){
+
+                    }
+                }
+            }
+
+
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                binding.spinKitBottom.visibility = View.GONE
+                activateViews()
+                isNetworkAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    isNetworkAvailable
+                }else{
+                    MetodosUsados.isConnected(Constants.REQUEST_TIMEOUT,TAG)
+                }
+
+                if (!isNetworkAvailable){
+                    MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastALERTA,getString(R.string.msg_erro_internet))
+                }else if (!t.message.isNullOrEmpty() && t.message!!.contains("timeout")){
+                    MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastALERTA,getString(R.string.msg_erro_internet_timeout))
+                }else{
+                    MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastALERTA,getString(R.string.msg_erro_servidor))
+                }
+            }
+
+        })
+    }
+
     private fun enviarCodigo() {
         deActivateViews()
         binding.spinKitBottom.visibility = View.VISIBLE
         val passSendCode = UsuarioRequest.PassSendCode(email.toString(),codigo.toString())
+
+
 
         val retrofit = RetrofitInstance.api.sendVerificationCode(passSendCode)
         retrofit.enqueue(object :
@@ -131,22 +228,6 @@ class InserirCodigoFragment : Fragment() {
                     binding.spinKitBottom.visibility = View.GONE
 
                     goToNextFragment()
-//                    if (response.body()!=null){
-//                        val dataResponse = response.body()?.string()
-//                        if (!dataResponse.isNullOrEmpty()){
-//                            Log.d(TAG, "onResponse_success: $dataResponse")
-//                            val jsonResponse = JSONObject(dataResponse)
-//
-//
-//                            binding.spinKitBottom.visibility = View.GONE
-//
-//                            goToNextFragment()
-//                        }
-//                    }else{
-//                        binding.spinKitBottom.visibility = View.GONE
-//                        activateViews()
-//                    }
-
 
                 } else{
                     binding.spinKitBottom.visibility = View.GONE
@@ -154,10 +235,6 @@ class InserirCodigoFragment : Fragment() {
                     try {
                         val responseBodyError = response.errorBody()?.string()
                         if (!responseBodyError.isNullOrEmpty()){
-//                            val jsonResponseBodyError = JSONObject(responseBodyError)
-//                            val jsorError = jsonResponseBodyError.get("erro")
-//                            val jsonBodyError = JSONObject(jsorError.toString())
-//                            val errorMessage = jsonBodyError.get("mensagem")
 
                             val jsonResponseBodyError = JSONObject(responseBodyError)
                             val errorMessage = jsonResponseBodyError.get("mensagem")

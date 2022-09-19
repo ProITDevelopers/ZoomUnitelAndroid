@@ -33,8 +33,8 @@ class NovaPassFragment : Fragment() {
     private var _binding: FragmentNovaPassBinding?=null
     private val binding get() = _binding!!
 
-    lateinit var  senha:String
-    lateinit var  confirmSenha:String
+    var senha:String?=null
+    var confirmSenha:String?=null
 
     lateinit var connectionLiveData: ConnectionLiveData
     private var isNetworkAvailable: Boolean = false
@@ -155,21 +155,21 @@ class NovaPassFragment : Fragment() {
         senha = binding.editPassword.text.toString().trim()
         confirmSenha = binding.editConfirmPassword.text.toString().trim()
 
-        if (senha.isEmpty()) {
+        if (senha.isNullOrEmpty()) {
             MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastALERTA,getString(R.string.msg_erro_campo_vazio))
             binding.editPassword.requestFocus()
             binding.editPassword.error = ""
             return false
         }
 
-        if (senha.length <=5){
+        if (senha!!.length <=5){
             MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastALERTA,getString(R.string.msg_erro_password_fraca))
             binding.editPassword.requestFocus()
             binding.editPassword.error = ""
             return false
         }
 
-        if (confirmSenha.isEmpty()) {
+        if (confirmSenha!!.isNullOrEmpty()) {
             MetodosUsados.showCustomSnackBar(view,activity, Constants.ToastALERTA,getString(R.string.msg_erro_campo_vazio))
             binding.editConfirmPassword.requestFocus()
             binding.editConfirmPassword.error = ""

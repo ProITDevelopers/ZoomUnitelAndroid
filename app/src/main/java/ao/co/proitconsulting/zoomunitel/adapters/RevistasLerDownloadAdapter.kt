@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -21,6 +22,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.flaviofaria.kenburnsview.KenBurnsView
+import com.flaviofaria.kenburnsview.RandomTransitionGenerator
 import com.github.ybq.android.spinkit.SpinKitView
 import com.makeramen.roundedimageview.RoundedImageView
 
@@ -28,6 +30,9 @@ import com.makeramen.roundedimageview.RoundedImageView
 class RevistasLerDownloadAdapter : RecyclerView.Adapter<RevistasLerDownloadAdapter.RevistaViewHolder>() {
 
     var itemClickListener : ((revista: RevistaModel)->Unit)?=null
+
+    val aDI = AccelerateDecelerateInterpolator()
+    val generator = RandomTransitionGenerator(10000,aDI)
 
     inner class RevistaViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
 
@@ -106,6 +111,7 @@ class RevistasLerDownloadAdapter : RecyclerView.Adapter<RevistasLerDownloadAdapt
 
         }
 
+        holder.rvImgBackgnd.setTransitionGenerator(generator)
         holder.btnLer.setOnClickListener {
             itemClickListener?.invoke(revista)
         }

@@ -47,11 +47,11 @@ class RegistroFragment : Fragment() {
     private var _binding: FragmentRegistroBinding? = null
     private val binding get() = _binding!!
 
-    lateinit var  nome:String
-    lateinit var  telefone:String
-    lateinit var  email:String
-    lateinit var  senha:String
-    lateinit var  confirmSenha:String
+    var nome:String?=null
+    var telefone:String?=null
+    var email:String?=null
+    var senha:String?=null
+    var confirmSenha:String?=null
 
     lateinit var connectionLiveData: ConnectionLiveData
     private var isNetworkAvailable: Boolean = false
@@ -446,13 +446,13 @@ class RegistroFragment : Fragment() {
             return
         }
 
-
         if (confirmSenha != senha){
             binding.editConfirmPass.requestFocus()
             binding.editConfirmPass.error = getString(R.string.msg_erro_password_diferentes)
 
             return
         }
+
 
 
 
@@ -468,28 +468,28 @@ class RegistroFragment : Fragment() {
         senha = binding.editPass.text.toString().trim()
         confirmSenha = binding.editConfirmPass.text.toString().trim()
 
-        if (nome.isEmpty()){
+        if (nome.isNullOrEmpty()){
             MetodosUsados.showCustomSnackBar(view,activity, Constants.ToastALERTA,getString(R.string.msg_erro_campo_vazio))
             binding.editNome.requestFocus()
             binding.editNome.error = ""
             return false
         }
 
-        if (nome.matches(".*\\d.*".toRegex())){
+        if (nome!!.matches(".*\\d.*".toRegex())){
             MetodosUsados.showCustomSnackBar(view,activity, Constants.ToastALERTA,getString(R.string.msg_erro_campo_com_letras))
             binding.editNome.requestFocus()
             binding.editNome.error = ""
             return false
         }
 
-        if (nome.length<2){
+        if (nome!!.length<2){
             MetodosUsados.showCustomSnackBar(view,activity, Constants.ToastALERTA,getString(R.string.msg_erro_min_duas_letras))
             binding.editNome.requestFocus()
             binding.editNome.error = ""
             return false
         }
 
-        if (telefone.isEmpty()){
+        if (telefone.isNullOrEmpty()){
             MetodosUsados.showCustomSnackBar(view,activity, Constants.ToastALERTA,getString(R.string.msg_erro_campo_vazio))
             binding.editTelefone.requestFocus()
             binding.editTelefone.error =""
@@ -497,13 +497,13 @@ class RegistroFragment : Fragment() {
         }
 
 
-        if (!telefone.matches("^[0-9]*$".toRegex())){
+        if (!telefone!!.matches("^[0-9]*$".toRegex())){
             MetodosUsados.showCustomSnackBar(view,activity, Constants.ToastALERTA,getString(R.string.msg_erro_num_telefone_invalido))
             binding.editTelefone.requestFocus()
             binding.editTelefone.error = ""
             return false
         }else{
-            if (telefone.length<9){
+            if (telefone!!.length<9){
                 MetodosUsados.showCustomSnackBar(view,activity, Constants.ToastALERTA,getString(R.string.msg_erro_num_telefone_invalido))
                 binding.editEmail.requestFocus()
                 binding.editEmail.error = ""
@@ -511,7 +511,7 @@ class RegistroFragment : Fragment() {
             }
         }
 
-        if (email.isEmpty()){
+        if (email.isNullOrEmpty()){
             MetodosUsados.showCustomSnackBar(view,activity, Constants.ToastALERTA,getString(R.string.msg_erro_campo_vazio))
             binding.editEmail.requestFocus()
             binding.editEmail.error = ""
@@ -519,31 +519,31 @@ class RegistroFragment : Fragment() {
             return false
         }
 
-        if (!MetodosUsados.validarEmail(email)) {
+        if (!MetodosUsados.validarEmail(email!!)) {
             MetodosUsados.showCustomSnackBar(view,activity, Constants.ToastALERTA,getString(R.string.msg_erro_email_invalido))
             binding.editEmail.requestFocus()
             binding.editEmail.error = ""
             return false
         }else{
-            email = email.lowercase()
+            email = email!!.lowercase()
 
         }
 
-        if (senha.isEmpty()) {
+        if (senha.isNullOrEmpty()) {
             MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastALERTA,getString(R.string.msg_erro_campo_vazio))
             binding.editPass.requestFocus()
             binding.editPass.error = ""
             return false
         }
 
-        if (senha.length <=5){
+        if (senha!!.length <=5){
             MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastALERTA,getString(R.string.msg_erro_password_fraca))
             binding.editPass.requestFocus()
             binding.editPass.error = ""
             return false
         }
 
-        if (confirmSenha.isEmpty()) {
+        if (confirmSenha.isNullOrEmpty()) {
             MetodosUsados.showCustomSnackBar(view,activity, Constants.ToastALERTA,getString(R.string.msg_erro_campo_vazio))
             binding.editConfirmPass.requestFocus()
             binding.editConfirmPass.error = ""

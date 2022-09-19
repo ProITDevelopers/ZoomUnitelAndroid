@@ -168,7 +168,7 @@ class RecuperarFragment : Fragment(){
         val passSendEmail = UsuarioRequest.PassSendEmail(email.toString())
 
         Constants.SEND_EMAIL = email.toString()
-        Log.d(TAG, "enviarEmail: $passSendEmail")
+
 
         val retrofit = RetrofitInstance.api.sendUserEmail(passSendEmail)
         retrofit.enqueue(object :
@@ -178,7 +178,7 @@ class RecuperarFragment : Fragment(){
                 if (response.isSuccessful) {
 
                     binding.spinKitBottom.visibility = View.GONE
-
+                    activateViews()
 
                     if (response.body()!=null){
 
