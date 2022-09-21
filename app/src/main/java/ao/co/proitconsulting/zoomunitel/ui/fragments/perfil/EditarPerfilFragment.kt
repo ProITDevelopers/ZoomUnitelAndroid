@@ -71,9 +71,7 @@ class EditarPerfilFragment : Fragment() {
     lateinit var  nome:String
     lateinit var  telefone:String
     lateinit var  email:String
-    private val permissionsArray = arrayOf(
-        Manifest.permission.CAMERA,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
     var REQUEST_IMAGE:Int = 100
     private var selectedImage: Uri?=null
     private var postPath:String?=null

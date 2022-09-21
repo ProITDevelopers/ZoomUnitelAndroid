@@ -77,5 +77,22 @@
     <fragment
         android:id="@+id/revistaLerDownloadFragment"
         android:name="ao.co.proitconsulting.zoomunitel.ui.fragments.revistadetail.RevistaLerDownloadFragment"
-        tools:layout="@layout/fragment_revista_detail_ler_download" />
+        tools:layout="@layout/fragment_revista_detail_ler_download" >
+        <action
+            android:id="@+id/action_revistaLerDownloadFragment_to_previewPdfFragment"
+            app:destination="@id/previewPdfFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/previewPdfFragment"
+        android:name="ao.co.proitconsulting.zoomunitel.ui.fragments.pdfviewer.PreviewPdfFragment"
+        tools:layout="@layout/fragment_preview_pdf" >
+        <argument
+            android:name="revista"
+            app:argType="ao.co.proitconsulting.zoomunitel.models.RevistaModel" />
+    </fragment>
 </navigation>

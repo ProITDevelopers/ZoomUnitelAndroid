@@ -88,12 +88,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:textColor="@color/edittext_text_color"
-                    android:textCursorDrawable="@drawable/edittext_cursor_color"
                     android:hint="@string/numero_telefone"
                     android:inputType="phone"
                     android:maxLength="21"
-                    android:padding="15dp" />
+                    android:padding="15dp"
+                    android:textColor="@color/edittext_text_color"
+                    android:textCursorDrawable="@drawable/edittext_cursor_color" />
 
             </RelativeLayout>
 

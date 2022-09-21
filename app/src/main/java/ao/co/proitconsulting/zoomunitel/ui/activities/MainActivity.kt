@@ -101,10 +101,10 @@ class MainActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             connectionLiveData = ConnectionLiveData(this)
             connectionLiveData.observe(this) { isNetwork ->
-                isNetworkAvailable = isNetwork
+                Constants.isNetworkAvailable = isNetwork
             }
         }else{
-            isNetworkAvailable = MetodosUsados.hasInternetConnection(this)
+            Constants.isNetworkAvailable = MetodosUsados.hasInternetConnection(this)
         }
 
     }

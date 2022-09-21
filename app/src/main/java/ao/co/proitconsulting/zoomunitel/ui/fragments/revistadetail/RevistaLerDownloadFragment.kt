@@ -1,16 +1,18 @@
 package ao.co.proitconsulting.zoomunitel.ui.fragments.revistadetail
 
 
+import android.os.AsyncTask
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
+import ao.co.proitconsulting.zoomunitel.R
 import ao.co.proitconsulting.zoomunitel.adapters.RevistasLerDownloadAdapter
 import ao.co.proitconsulting.zoomunitel.databinding.FragmentRevistaDetailLerDownloadBinding
 import ao.co.proitconsulting.zoomunitel.models.RevistaModel
@@ -25,7 +27,20 @@ class RevistaLerDownloadFragment : Fragment() {
     lateinit var revistaList: List<RevistaModel>
     var currentPosition: Int = 0
     lateinit var revistasDetailAdapter: RevistasLerDownloadAdapter
+    private var myAsyncTasks = arrayListOf<AsyncTask<*, *, *>>()
 
+    fun cancelRunningTasks() {
+        for ( myAsyncTask in myAsyncTasks) {
+            if (myAsyncTask.status.equals(AsyncTask.Status.RUNNING)) {
+                myAsyncTask.cancel(true)
+            }
+        }
+        myAsyncTasks.clear()
+    }
+
+    fun addRunningTask(task: AsyncTask<*, *, *>) {
+        myAsyncTasks.add(task)
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,11 +106,17 @@ class RevistaLerDownloadFragment : Fragment() {
 
         revistasDetailAdapter.itemClickListener = {revista ->
 
-            context?.let {
-                Toast.makeText(it, "Ler revista "+revista.title, Toast.LENGTH_SHORT).show()
-            }
+           val bundle = Bundle().apply {
+               putSerializable("revista",revista)
+           }
+            findNavController().navigate(
+                R.id.action_revistaLerDownloadFragment_to_previewPdfFragment,
+                bundle
+            )
 
         }
+
+
 
     }
 

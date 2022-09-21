@@ -17,6 +17,7 @@ import ao.co.proitconsulting.zoomunitel.helpers.MetodosUsados
 import ao.co.proitconsulting.zoomunitel.localDB.AppPrefsSettings
 import ao.co.proitconsulting.zoomunitel.models.DefinicoesModel
 import ao.co.proitconsulting.zoomunitel.ui.activities.MainActivity
+import ao.co.proitconsulting.zoomunitel.ui.activities.SenhaActivity
 import ao.co.proitconsulting.zoomunitel.ui.activities.SplashScreenActivity
 
 val TAG = "TAG_DefinFrag"
@@ -98,7 +99,7 @@ class DefinicoesFragment : Fragment() {
             }
             //RECUPERAR_SENHA
             7->{
-
+                startActivity(Intent(activity, SenhaActivity::class.java))
             }
             //LOGOUT
             8->{

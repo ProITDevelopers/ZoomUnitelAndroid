@@ -12,7 +12,6 @@ import android.os.Build
 import android.util.Log
 import android.util.Patterns
 import android.view.View
-import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageView
@@ -23,6 +22,7 @@ import ao.co.proitconsulting.zoomunitel.R
 import com.google.android.material.snackbar.Snackbar
 import java.net.InetAddress
 import java.net.UnknownHostException
+import java.text.Normalizer
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.concurrent.*
@@ -106,6 +106,11 @@ class MetodosUsados {
         }
 
 
+        fun removeAcentos(text:String):String {
+            val temp = Normalizer.normalize(text, Normalizer.Form.NFD).replace("\\p{InCombiningDiacriticalMarks}+".toRegex(), "")
+            return temp
+        }
+
         fun showCustomSnackBar(view: View?,activity: Activity?, type: Int, message: String) {
 
             // Create the Snackbar
@@ -144,34 +149,7 @@ class MetodosUsados {
 
         }
 
-        fun showCustomToast(activity: Activity?, type: Int, message: String) {
 
-            val viewGroup: ViewGroup? = activity?.findViewById(R.id.container_toast)
-            val view:View = activity?.layoutInflater!!.inflate(R.layout.toast_layout,viewGroup)
-            val txtToast:TextView = view.findViewById(R.id.txtToast)
-            val imgToast:ImageView = view.findViewById(R.id.imgToast)
-            txtToast.text = message
-            when (type){
-                0 -> {
-                    imgToast.setImageResource(R.drawable.ic_baseline_check_circle_24)
-                }
-                1 ->{
-                    imgToast.setImageResource(R.drawable.ic_baseline_circle_info_24)
-                }
-                3 ->{
-                    imgToast.setImageResource(R.drawable.ic_baseline_circle_close_24)
-                }
-            }
-
-
-
-            val toast = Toast(activity)
-            toast.view = view
-            toast.duration = Toast.LENGTH_SHORT
-            toast.show()
-
-
-        }
 
 
         //=======================================================================//
