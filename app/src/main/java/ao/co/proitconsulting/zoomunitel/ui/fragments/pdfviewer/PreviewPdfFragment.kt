@@ -28,6 +28,7 @@ import ao.co.proitconsulting.zoomunitel.databinding.FragmentPreviewPdfBinding
 import ao.co.proitconsulting.zoomunitel.helpers.Constants
 import ao.co.proitconsulting.zoomunitel.helpers.MetodosUsados
 import ao.co.proitconsulting.zoomunitel.models.RevistaModel
+import ao.co.proitconsulting.zoomunitel.ui.activities.MainActivity
 import com.github.barteksc.pdfviewer.PDFView
 import com.github.barteksc.pdfviewer.listener.*
 import com.github.ybq.android.spinkit.SpinKitView
@@ -63,6 +64,7 @@ class PreviewPdfFragment : Fragment() {
     lateinit var progressBar: SpinKitView
     lateinit var txtProgress: TextView
 
+    lateinit var linearPageSectios: ConstraintLayout
     lateinit var txtPosition: TextView
     lateinit var imgFirstPage: ImageView
     lateinit var imgPreviousPage: ImageView
@@ -141,6 +143,7 @@ class PreviewPdfFragment : Fragment() {
         progressBar = binding.spinKitBottom
         txtProgress = binding.txtProgress
 
+        linearPageSectios = binding.linearPageSectios
         txtPosition = binding.txtPosition
         imgFirstPage = binding.imgFirstPage
         imgPreviousPage = binding.imgPreviousPage
@@ -212,20 +215,62 @@ class PreviewPdfFragment : Fragment() {
         }
 
         imgPreviousPage.setOnClickListener {
-            pdfView.jumpTo(currentPageNumber-1)
+            pdfView.jumpTo(currentPageNumber-1,true)
         }
 
         imgNextPage.setOnClickListener {
-            pdfView.jumpTo(currentPageNumber+1)
+            pdfView.jumpTo(currentPageNumber+1,true)
+
         }
 
         imgLastPage.setOnClickListener {
             pdfView.jumpTo(lastPageNumber-1)
         }
 
+        pdfView.setOnClickListener {
+            showAndHideViews()
+        }
+
+//        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+//            override fun handleOnBackPressed() {
+//                // in here you can do logic when backPress is clicked
+//                try {
+//                    if (((activity as MainActivity)).supportActionBar != null){
+//                        if (!((activity as MainActivity)).supportActionBar!!.isShowing){
+//                            ((activity as MainActivity)).supportActionBar!!.show()
+//                            linearPageSectios.visibility = View.VISIBLE
+//
+//                        }else{
+//                            findNavController().navigateUp()
+//                        }
+//                    }
+//                } catch (e: Exception) {
+//
+//                }
+//
+//
+//
+//            }
+//        })
+
+
+
         checkForStoragePermission()
 
         return root
+    }
+
+    private fun showAndHideViews() {
+        if (((activity as MainActivity)).supportActionBar != null){
+            if (((activity as MainActivity)).supportActionBar!!.isShowing){
+                ((activity as MainActivity)).supportActionBar!!.hide()
+                linearPageSectios.visibility = View.GONE
+            }else{
+                ((activity as MainActivity)).supportActionBar!!.show()
+                linearPageSectios.visibility = View.VISIBLE
+            }
+
+        }
     }
 
     private fun checkForStoragePermission() {
@@ -807,9 +852,16 @@ class PreviewPdfFragment : Fragment() {
 
 
 
-    override fun onDestroyView() {
 
+
+
+    override fun onDestroyView() {
         cancelRunningTasks()
+        if (((activity as MainActivity)).supportActionBar != null){
+            if (!((activity as MainActivity)).supportActionBar!!.isShowing){
+                ((activity as MainActivity)).supportActionBar!!.show()
+            }
+        }
         super.onDestroyView()
         _binding = null
     }

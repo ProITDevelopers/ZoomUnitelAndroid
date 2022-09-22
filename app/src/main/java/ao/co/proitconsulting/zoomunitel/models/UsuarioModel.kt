@@ -7,19 +7,19 @@ import java.io.Serializable
 
 data class UsuarioModel(
 
-    @SerializedName("userid")
-    val userId:Long?,
+    @SerializedName("USERID")
+    val userId:Int?,
 
-    @SerializedName("nome")
+    @SerializedName("NOME")
     val userNome:String?,
 
-    @SerializedName("email")
+    @SerializedName("EMAIL")
     val userEmail:String?,
 
-    @SerializedName("telefone")
+    @SerializedName("TELEFONE")
     val userPhone:String?,
 
-    @SerializedName("imagem")
+    @SerializedName("FOTOKEY")
     val userPhoto:String?
 
 

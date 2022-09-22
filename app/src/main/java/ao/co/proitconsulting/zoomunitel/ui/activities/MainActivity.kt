@@ -191,7 +191,7 @@ class MainActivity : AppCompatActivity() {
                                 val jsonArray = JSONArray(body)
                                 val jsonResponse = jsonArray.getJSONObject(0)
                                 val usuario = UsuarioModel(
-                                    jsonResponse.getLong("USERID"),
+                                    jsonResponse.getInt("USERID"),
                                     jsonResponse.getString("NOME"),
                                     jsonResponse.getString("EMAIL"),
                                     jsonResponse.getString("TELEFONE"),

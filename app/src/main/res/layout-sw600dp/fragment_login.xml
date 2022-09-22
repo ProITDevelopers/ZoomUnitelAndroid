@@ -23,23 +23,25 @@
                 android:id="@+id/guideline_left"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintGuide_begin="@dimen/guidelines_dimens"
                 android:orientation="vertical"
+                app:layout_constraintGuide_begin="@dimen/guidelines_dimens_large"
+                android:layout_marginStart="@dimen/guidelines_dimens_large"
+                android:layout_marginLeft="@dimen/guidelines_dimens_large"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="@dimen/guidelines_dimens"
-                android:layout_marginLeft="@dimen/guidelines_dimens"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent"
+                />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline_right"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_end="@dimen/guidelines_dimens"
-                android:layout_marginRight="@dimen/guidelines_dimens"
-                android:layout_marginEnd="@dimen/guidelines_dimens"
+                app:layout_constraintGuide_end="@dimen/guidelines_dimens_large"
+                android:layout_marginRight="@dimen/guidelines_dimens_large"
+                android:layout_marginEnd="@dimen/guidelines_dimens_large"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent"
+                />
 
 
             <ImageView
@@ -48,9 +50,10 @@
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/logo_unitel_blue"
                 app:srcCompat="@drawable/zoom_unitel_logo"
-                android:clickable="true"
-                android:focusable="true"
-                android:layout_marginTop="85dp"
+                android:layout_marginTop="170dp"
+                android:scaleX="1.5"
+                android:scaleY="1.5"
+                android:padding="20dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -139,8 +142,8 @@
                 android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
                 android:layout_marginTop="8dp"
-                app:layout_constraintEnd_toStartOf="@+id/guideline_right"
                 app:layout_constraintTop_toBottomOf="@+id/relative_pass"
+                app:layout_constraintEnd_toStartOf="@+id/guideline_right"
                 />
 
             <android.widget.Button

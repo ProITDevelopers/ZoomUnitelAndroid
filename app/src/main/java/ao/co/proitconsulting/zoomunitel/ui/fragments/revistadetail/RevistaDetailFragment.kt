@@ -91,7 +91,10 @@ class RevistaDetailFragment : Fragment() {
             }
         })
 
-        revistasDetailAdapter.itemClickListener = {revistaList, position ->
+
+
+        revistasDetailAdapter.itemClickListener = {v,revistaList, position ->
+            v.setOnClickListener(null)
             val bundle = Bundle().apply {
                 putSerializable("revistaList",revistaList as Serializable)
                 putInt("position",position)
@@ -101,6 +104,7 @@ class RevistaDetailFragment : Fragment() {
                 R.id.action_revistaDetailFragment_to_revistaLerDownloadFragment,
                 bundle
             )
+
         }
 
     }

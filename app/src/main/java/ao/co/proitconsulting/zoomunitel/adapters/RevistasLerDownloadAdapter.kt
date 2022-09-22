@@ -48,7 +48,7 @@ import java.lang.ref.WeakReference
 
 class RevistasLerDownloadAdapter : RecyclerView.Adapter<RevistasLerDownloadAdapter.RevistaViewHolder>() {
 
-    var itemClickListener : ((revista: RevistaModel)->Unit)?=null
+    var itemClickListener : ((view: View,revista: RevistaModel)->Unit)?=null
 
 
     val aDI = AccelerateDecelerateInterpolator()
@@ -138,15 +138,15 @@ class RevistasLerDownloadAdapter : RecyclerView.Adapter<RevistasLerDownloadAdapt
         holder.rvImgBackgnd.setTransitionGenerator(generator)
 
         holder.rvImg.setOnClickListener {
-            itemClickListener?.invoke(revista)
+            itemClickListener?.invoke(it,revista)
         }
 
         holder.btnLer.setOnClickListener {
-            itemClickListener?.invoke(revista)
+            itemClickListener?.invoke(it,revista)
         }
 
         holder.btnDownload.setOnClickListener {
-
+            it.isEnabled = false
             verificarPermissaoArmazenamento(it.context,revista,holder)
 //            Toast.makeText(it.context, ""+holder.btnDownload.text +" "+revista.title, Toast.LENGTH_SHORT).show()
         }
@@ -168,7 +168,7 @@ class RevistasLerDownloadAdapter : RecyclerView.Adapter<RevistasLerDownloadAdapt
                             verificarConnecxaoDOWNLOAD(context,revista,holder)
                         }else {
                             Toast.makeText(context, ""+context.getString(R.string.msg_permissao_armazenamento_continuar), Toast.LENGTH_SHORT).show()
-
+                            holder.btnDownload.isEnabled = true
                         }
 
                     }
@@ -206,20 +206,21 @@ class RevistasLerDownloadAdapter : RecyclerView.Adapter<RevistasLerDownloadAdapt
         if (fileSavedDoc.isFile) {
             holder.progressbar.visibility = View.GONE
             Toast.makeText(context, "Guardado em\n $storageDir", Toast.LENGTH_SHORT).show()
-
+            holder.btnDownload.isEnabled = true
         } else {
 
             if (Constants.isNetworkAvailable){
-                downLoadPDF(context,revista,holder)
+                downLoadPDF(revista,holder)
 
             }else{
                 Toast.makeText(context, context.getString(R.string.msg_erro_internet), Toast.LENGTH_SHORT).show()
+                holder.btnDownload.isEnabled = true
 
             }
         }
     }
 
-    private fun downLoadPDF(context: Context,revista: RevistaModel,holder: RevistaViewHolder) {
+    private fun downLoadPDF(revista: RevistaModel,holder: RevistaViewHolder) {
         val pdfUrl = Uri.parse(Constants.PDF_PATH + revista.pdfLink)
         val downloadTask = DownloadRetrofitTask(holder)
         downloadTask.execute(pdfUrl.toString())
@@ -368,7 +369,7 @@ class RevistasLerDownloadAdapter : RecyclerView.Adapter<RevistasLerDownloadAdapt
 
             holder.progressbar.visibility = View.GONE
             holder.txtProgress.visibility = View.GONE
-
+            holder.btnDownload.isEnabled = true
             super.onPostExecute(result)
 
         }

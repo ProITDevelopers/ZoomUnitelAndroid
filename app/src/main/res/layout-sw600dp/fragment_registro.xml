@@ -1,0 +1,246 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragments.cadastro.RegistroFragment">
+
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_marginStart="@dimen/guidelines_dimens_large"
+            android:layout_marginLeft="@dimen/guidelines_dimens_large"
+            android:layout_marginRight="@dimen/guidelines_dimens_large"
+            android:layout_marginEnd="@dimen/guidelines_dimens_large"
+            android:paddingBottom="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            >
+
+
+
+
+            <TextView
+                android:id="@+id/txtRecuperar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/registro"
+                android:textSize="@dimen/text_title_size"
+                android:textStyle="bold"
+                android:padding="5dp"
+                android:gravity="center"
+                android:textColor="@color/orange_unitel"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+
+            <RelativeLayout
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@+id/txtRecuperar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:id="@+id/hint_nome"
+                android:baselineAligned="false"
+                android:background="@drawable/box_border_grey"
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/editNome"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:hint="@string/primeiro_nome"
+                    android:inputType="textCapWords"
+                    android:maxLength="20"
+                    android:maxLines="1"
+                    android:padding="15dp"
+                    android:textColor="@color/edittext_text_color"
+                    android:textCursorDrawable="@drawable/edittext_cursor_color" />
+
+
+
+
+            </RelativeLayout>
+
+
+
+            <RelativeLayout
+                app:layout_constraintTop_toBottomOf="@+id/hint_nome"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/box_border_grey"
+                android:layout_marginTop="20dp"
+                android:id="@+id/hint_telefone">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/editTelefone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:hint="@string/numero_telefone"
+                    android:inputType="phone"
+                    android:maxLength="21"
+                    android:padding="15dp"
+                    android:textColor="@color/edittext_text_color"
+                    android:textCursorDrawable="@drawable/edittext_cursor_color" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                app:layout_constraintTop_toBottomOf="@+id/hint_telefone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/box_border_grey"
+                android:layout_marginTop="20dp"
+                android:id="@+id/hint_email">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/editEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_email"
+                    android:textColor="@color/edittext_text_color"
+                    android:textCursorDrawable="@drawable/edittext_cursor_color"
+                    android:maxLines="1"
+                    android:inputType="textEmailAddress"
+                    android:background="@android:color/transparent"
+                    android:padding="15dp"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                app:layout_constraintTop_toBottomOf="@+id/hint_email"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/box_border_grey"
+                android:layout_marginTop="20dp"
+                android:id="@+id/hint_pass">
+
+                <com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText
+                    android:id="@+id/editPass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_password"
+                    android:textColor="@color/edittext_text_color"
+                    android:textCursorDrawable="@drawable/edittext_cursor_color"
+                    android:maxLines="1"
+                    android:inputType="textPassword"
+                    android:background="@android:color/transparent"
+                    android:padding="15dp"
+                    app:tint_color="@color/orange_unitel"
+                    />
+
+            </RelativeLayout>
+
+
+
+            <RelativeLayout
+                app:layout_constraintTop_toBottomOf="@+id/hint_pass"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/box_border_grey"
+                android:layout_marginTop="20dp"
+                android:id="@+id/hint_genero">
+
+                <com.scottyab.showhidepasswordedittext.ShowHidePasswordEditText
+                    android:id="@+id/editConfirmPass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:hint="@string/hint_confirm_password"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:padding="15dp"
+                    android:textColor="@color/edittext_text_color"
+                    android:textCursorDrawable="@drawable/edittext_cursor_color"
+                    app:tint_color="@color/orange_unitel" />
+
+            </RelativeLayout>
+
+
+
+
+
+
+
+
+            <android.widget.Button
+                android:id="@+id/btnRegistro"
+                app:layout_constraintTop_toBottomOf="@+id/hint_genero"
+                app:layout_constraintStart_toStartOf="@+id/hint_genero"
+                app:layout_constraintEnd_toEndOf="@+id/hint_genero"
+                android:text="@string/btn_registar_text"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:background="@drawable/button_background"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="30dp"
+                android:paddingLeft="100dp"
+                android:paddingRight="100dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+            <TextView
+                android:id="@+id/txtLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ja_possui_conta_login"
+                android:textColor="@color/txt_color_alterar_pass"
+                android:padding="5dp"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:textSize="15sp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:layout_marginTop="12dp"
+                app:layout_constraintTop_toBottomOf="@+id/btnRegistro"
+                app:layout_constraintStart_toStartOf="@+id/btnRegistro"
+                app:layout_constraintEnd_toEndOf="@+id/btnRegistro"
+                android:gravity="center"
+                />
+
+
+
+            <com.github.ybq.android.spinkit.SpinKitView
+                android:id="@+id/spin_kit_bottom"
+                style="@style/SpinKitView.ThreeBounce"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:SpinKit_Color="@color/spinKitView_color"
+                android:visibility="gone"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="20dp"
+                app:layout_constraintTop_toBottomOf="@+id/txtLogin"
+                app:layout_constraintStart_toStartOf="@+id/txtLogin"
+                app:layout_constraintEnd_toEndOf="@+id/txtLogin"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

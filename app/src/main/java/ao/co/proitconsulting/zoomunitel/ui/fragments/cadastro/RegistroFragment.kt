@@ -308,7 +308,7 @@ class RegistroFragment : Fragment() {
                                 Log.d(TAG, "onResponse_success: $userData")
                                 val jsonResponse = JSONObject(userData)
                                 val usuario = UsuarioModel(
-                                    jsonResponse.getLong("userid"),
+                                    jsonResponse.getInt("userid"),
                                     jsonResponse.getString("nome"),
                                     jsonResponse.getString("email"),
                                     jsonResponse.getString("telefone"),

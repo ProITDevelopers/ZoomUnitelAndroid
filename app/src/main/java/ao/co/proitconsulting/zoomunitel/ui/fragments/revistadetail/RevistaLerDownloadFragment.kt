@@ -104,8 +104,9 @@ class RevistaLerDownloadFragment : Fragment() {
             }
         })
 
-        revistasDetailAdapter.itemClickListener = {revista ->
 
+        revistasDetailAdapter.itemClickListener = {v,revista ->
+            v.setOnTouchListener(null)
            val bundle = Bundle().apply {
                putSerializable("revista",revista)
            }

@@ -9,4 +9,5 @@
     <dimen name="text_title_size">24sp</dimen>
     <dimen name="text_normal_size">16sp</dimen>
     <dimen name="guidelines_dimens">24dp</dimen>
+    <dimen name="guidelines_dimens_large">124dp</dimen>
 </resources>

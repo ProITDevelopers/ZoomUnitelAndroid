@@ -7,8 +7,6 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
@@ -21,7 +19,6 @@ import android.widget.Button
 import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import ao.co.proitconsulting.zoomunitel.R
 import ao.co.proitconsulting.zoomunitel.api.RetrofitInstance
 import ao.co.proitconsulting.zoomunitel.databinding.FragmentEditarPerfilBinding
@@ -270,9 +267,7 @@ class EditarPerfilFragment : Fragment() {
                     )
                     AppPrefsSettings.getInstance().saveUser(userUpdated)
                     MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastSUCESS,getString(R.string.perfil_atualizado_sucesso))
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        findNavController().navigateUp()
-                    }, 5000)
+
 
                 } else{
                     binding.spinKitBottom.visibility = View.GONE
@@ -661,7 +656,7 @@ class EditarPerfilFragment : Fragment() {
                                 val jsonArray = JSONArray(body)
                                 val jsonResponse = jsonArray.getJSONObject(0)
                                 val usuario = UsuarioModel(
-                                    jsonResponse.getLong("USERID"),
+                                    jsonResponse.getInt("USERID"),
                                     jsonResponse.getString("NOME"),
                                     jsonResponse.getString("EMAIL"),
                                     jsonResponse.getString("TELEFONE"),

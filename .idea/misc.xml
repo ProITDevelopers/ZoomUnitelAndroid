@@ -17,11 +17,29 @@
         <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/drawable/side_nav_bar_custom.xml" value="0.18" />
         <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/drawable/toast_background.xml" value="0.1015" />
         <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/drawable/view_load_bkg.xml" value="0.1205" />
+        <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/layout-land/fragment_revista_detail.xml" value="0.1" />
+        <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/layout-land/fragment_revista_detail_ler_download.xml" value="0.1" />
+        <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/layout-land/revista_item_detail.xml" value="0.20943562610229277" />
+        <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/layout-land/revista_item_detail_ler_down.xml" value="0.1" />
+        <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/layout-land/revista_slide_item.xml" value="0.1" />
+        <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/layout-sw600dp/activity_cadastro.xml" value="0.27305825242718446" />
+        <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/layout-sw600dp/activity_splash_screen.xml" value="0.18" />
+        <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/layout-sw600dp/fragment_editar_perfil.xml" value="0.1" />
+        <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/layout-sw600dp/fragment_home.xml" value="0.1" />
+        <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/layout-sw600dp/fragment_inserir_codigo.xml" value="0.1" />
+        <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/layout-sw600dp/fragment_login.xml" value="0.1" />
+        <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/layout-sw600dp/fragment_nova_pass.xml" value="0.1" />
+        <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/layout-sw600dp/fragment_perfil.xml" value="0.1" />
+        <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/layout-sw600dp/fragment_recuperar.xml" value="0.1" />
+        <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/layout-sw600dp/fragment_registro.xml" value="0.1" />
+        <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/layout-sw600dp/revista_item_detail.xml" value="0.1" />
+        <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/layout-sw600dp/revista_item_detail_ler_down.xml" value="0.1" />
+        <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/layout-sw600dp/revista_slide_item.xml" value="0.1" />
         <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/layout/activity_cadastro.xml" value="0.12817028985507245" />
         <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/layout/activity_image_picker.xml" value="0.19927536231884058" />
         <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/layout/activity_senha.xml" value="0.2078804347826087" />
-        <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/layout/activity_splash_screen.xml" value="0.109375" />
+        <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/layout/activity_splash_screen.xml" value="0.24739583333333334" />
         <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/layout/app_bar_home.xml" value="0.12001811594202899" />
         <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/layout/app_bar_main.xml" value="0.12135416666666667" />
         <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/layout/content_main.xml" value="0.12001811594202899" />
@@ -52,6 +70,7 @@
         <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/layout/toast_layout.xml" value="0.1" />
         <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/menu/activity_main_drawer.xml" value="0.1" />
         <entry key="..\:/Users/Gproit5/AndroidStudioProjects/ZoomUnitel/app/src/main/res/menu/main_menu.xml" value="0.1" />
+        <entry key="..\:/Users/Gproit5/AppData/Local/Android/Sdk/platforms/android-32/data/res/layout-sw600dp/activity_splash_screen.xml" value="0.1" />
       </map>
     </option>
   </component>

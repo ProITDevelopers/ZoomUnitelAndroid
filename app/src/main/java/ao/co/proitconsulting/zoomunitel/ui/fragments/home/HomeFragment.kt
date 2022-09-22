@@ -118,7 +118,8 @@ class HomeFragment : Fragment() {
         setViewPager()
 
 
-        revistasAdapter.itemClickListener = { revistaList, position->
+        revistasAdapter.itemClickListener = {v, revistaList, position->
+            v.setOnClickListener(null)
             val bundle = Bundle().apply {
                 putSerializable("revistaList",revistaList as Serializable)
                 putInt("position",position)
@@ -128,6 +129,7 @@ class HomeFragment : Fragment() {
                 R.id.action_nav_home_to_revistaDetailFragment,
                 bundle
             )
+
         }
 
 

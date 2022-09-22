@@ -22,7 +22,7 @@ import com.makeramen.roundedimageview.RoundedImageView
 
 class RevistasAdapter : RecyclerView.Adapter<RevistasAdapter.RevistaViewHolder>() {
 
-    var itemClickListener : ((revistaList: List<RevistaModel>, position:Int)->Unit)?=null
+    var itemClickListener : ((view: View,revistaList: List<RevistaModel>, position:Int)->Unit)?=null
 
     inner class RevistaViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
 
@@ -95,7 +95,7 @@ class RevistasAdapter : RecyclerView.Adapter<RevistasAdapter.RevistaViewHolder>(
         }
 
         holder.imageSlide.setOnClickListener {
-            itemClickListener?.invoke(differ.currentList,position)
+            itemClickListener?.invoke(it,differ.currentList,position)
         }
     }
 

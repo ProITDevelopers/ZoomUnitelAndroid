@@ -28,7 +28,7 @@ import com.makeramen.roundedimageview.RoundedImageView
 
 class RevistasDetailsAdapter : RecyclerView.Adapter<RevistasDetailsAdapter.RevistaViewHolder>() {
 
-    var itemClickListener : ((revistaList: List<RevistaModel>, position:Int)->Unit)?=null
+    var itemClickListener : ((view: View,revistaList: List<RevistaModel>, position:Int)->Unit)?=null
 
     val aDI = AccelerateDecelerateInterpolator()
     val generator = RandomTransitionGenerator(10000,aDI)
@@ -121,10 +121,10 @@ class RevistasDetailsAdapter : RecyclerView.Adapter<RevistasDetailsAdapter.Revis
         holder.rvImgBackgnd.setTransitionGenerator(generator)
 
         holder.rvImg.setOnClickListener {
-            itemClickListener?.invoke(differ.currentList,position)
+            itemClickListener?.invoke(it,differ.currentList,position)
         }
         holder.btnVermais.setOnClickListener {
-            itemClickListener?.invoke(differ.currentList,position)
+            itemClickListener?.invoke(it,differ.currentList,position)
         }
     }
 

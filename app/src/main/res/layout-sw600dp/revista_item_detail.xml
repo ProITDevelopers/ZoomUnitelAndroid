@@ -2,10 +2,8 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar_layout"
@@ -18,7 +16,7 @@
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsing"
             android:layout_width="match_parent"
-            android:layout_height="450dp"
+            android:layout_height="800dp"
             android:fitsSystemWindows="true"
             app:contentScrim="@color/orange_unitel"
             app:expandedTitleTextAppearance="@android:color/transparent"
@@ -53,6 +51,8 @@
                     android:src="@color/transparentBlack"
                     />
 
+
+
                 <com.makeramen.roundedimageview.RoundedImageView
                     android:id="@+id/rvImg"
                     android:layout_width="match_parent"
@@ -61,7 +61,7 @@
                     android:scaleType="fitCenter"
                     android:src="@drawable/magazine_placeholder"
                     app:riv_corner_radius="12dp"
-                    android:paddingTop="25dp"
+                    android:paddingTop="50dp"
                     android:paddingBottom="25dp"
                     android:layout_marginLeft="25dp"
                     android:layout_marginRight="25dp"
@@ -77,7 +77,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:SpinKit_Color="@color/spinKitView_color"
-                    android:layout_gravity="center"
+                   android:layout_gravity="center"
                     />
 
             </FrameLayout>
@@ -87,7 +87,6 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
-
 
 
     <androidx.core.widget.NestedScrollView
@@ -104,88 +103,83 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginTop="15dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginEnd="40dp"
             android:paddingBottom="40dp"
             >
 
-            <LinearLayout
-                android:orientation="horizontal"
+            <TextView
+                android:id="@+id/txtRvTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:weightSum="2"
-                android:gravity="center_vertical"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
-                >
-
-                <ProgressBar
-                    android:id="@+id/progressbar"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_weight="1.70"
-                    android:maxHeight="5dp"
-                    android:minHeight="5dp"
-                    android:progressDrawable="@drawable/progressbar_color"
-                    android:visibility="gone"
-                    />
-
-                <TextView
-                    android:id="@+id/txtProgress"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="0%"
-                    android:layout_weight="0.30"
-                    android:gravity="center"
-                    android:textColor="@color/orange_unitel"
-                    android:visibility="gone"
-                    />
-
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/formatos_dispon_veis"
-                android:textColor="@color/colorPrimary"
-                android:textSize="17sp"
+                android:textColor="@color/orange_unitel"
                 android:textStyle="bold"
+                android:gravity="center"
+                android:textSize="@dimen/text_title_size"
+                android:padding="5dp"
+                />
+
+
+
+            <LinearLayout
+                android:id="@+id/layout_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:layout_marginTop="15dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginEnd="5dp"
-                />
+                android:layout_marginEnd="5dp">
+
+                <TextView
+                    android:id="@+id/txtDetalhe"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/detalhes"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/text_normal_size"
+                    android:textStyle="bold"
+                    android:layout_weight="1"
+
+                    />
+
+                <TextView
+                    android:id="@+id/txtData"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textColor="@color/orange_unitel"
+                    android:visibility="invisible"
+                    />
+
+
+
+            </LinearLayout>
 
             <TextView
-                android:text="@string/digital"
-                android:padding="5dp"
-                android:textSize="17sp"
-                android:textColor="@color/orange_unitel"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:layout_marginTop="25dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:text="@string/leia_o_texto_digitais"
-                android:padding="5dp"
-                android:gravity="center"
+                android:id="@+id/txtDescricao"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="25dp"
+                android:textSize="@dimen/text_normal_size"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:layout_marginStart="12dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginEnd="12dp"
+                />
+
 
             <android.widget.Button
-                android:id="@+id/btnLer"
+                android:id="@+id/btnVermais"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_background"
-                android:text="@string/ler_revista"
+                android:text="@string/ver_mais"
                 android:textColor="@color/white"
                 android:clickable="true"
                 android:focusable="true"
@@ -196,44 +190,6 @@
                 android:textAllCaps="false"
                 android:layout_gravity="center"
                 />
-
-            <TextView
-                android:text="@string/revista"
-                android:padding="5dp"
-                android:textSize="17sp"
-                android:textColor="@color/orange_unitel"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:layout_marginTop="15dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:text="@string/leia_o_texto"
-                android:padding="5dp"
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="15sp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
-
-            <android.widget.Button
-                android:id="@+id/btnDownload"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/baixar_revista"
-                android:textColor="@color/white"
-                android:background="@drawable/button_background"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:layout_marginTop="15dp"
-                android:paddingLeft="100dp"
-                android:paddingRight="100dp"
-                android:textAllCaps="false"
-                android:layout_gravity="center"
-                />
-
 
 
 
@@ -242,8 +198,5 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
-
-
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

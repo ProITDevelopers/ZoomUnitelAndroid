@@ -169,12 +169,6 @@ val TAG = "TAG_LoginFrag"
             return
         }
 
-        if (password.length <=5){
-
-            binding.editPassword.requestFocus()
-            binding.editPassword.error = getString(R.string.msg_erro_password_fraca)
-            return
-        }
 
 
         this.password = password
@@ -255,12 +249,6 @@ val TAG = "TAG_LoginFrag"
             return false
         }
 
-        if (password.length <=5){
-            MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastALERTA,getString(R.string.msg_erro_password_fraca))
-            binding.editPassword.requestFocus()
-            binding.editPassword.error = ""
-            return false
-        }
 
 
 
@@ -295,7 +283,7 @@ val TAG = "TAG_LoginFrag"
                                 Log.d(TAG, "onResponse_success: $userData")
                                 val jsonResponse = JSONObject(userData)
                                 val usuario = UsuarioModel(
-                                    jsonResponse.getLong("userid"),
+                                    jsonResponse.getInt("userid"),
                                     jsonResponse.getString("nome"),
                                     jsonResponse.getString("email"),
                                     jsonResponse.getString("telefone"),
