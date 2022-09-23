@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import ao.co.proitconsulting.zoomunitel.ui.fragments.home.HomeViewModel
 
 class RevistaViewModelProviderFactory(
-    val revistaRepository: RevistaRepository
+    private val revistaRepository: RevistaRepository
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="ao.co.proitconsulting.zoomunitel">
 
     <application
@@ -13,19 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ZoomUnitel">
-        <activity
-            android:name=".ui.activities.imagePicker.ImagePickerActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.activities.SenhaActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.ZoomUnitel.NoActionBar" />
-        <activity
-            android:name=".ui.activities.CadastroActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.ZoomUnitel.NoActionBar" />
+
         <activity
             android:name=".ui.activities.SplashScreenActivity"
             android:exported="true"
@@ -36,7 +23,30 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- FOTO_CROP_ACTIVITY -->
+        </activity>
+
+        <activity
+            android:name=".ui.activities.SenhaActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.ZoomUnitel.NoActionBar" />
+
+        <activity
+            android:name=".ui.activities.CadastroActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.ZoomUnitel.NoActionBar" />
+
+        <activity
+            android:name=".ui.activities.MainActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ZoomUnitel.NoActionBar" />
+
+        <!-- FOTO_CROP_ACTIVITY -->
+        <activity
+            android:name=".ui.activities.imagePicker.ImagePickerActivity"
+            android:exported="false" />
+
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:exported="false"
@@ -44,10 +54,6 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <!-- Photo cache directory file provider paths -->
-        <activity
-            android:name=".ui.activities.MainActivity"
-            android:exported="false"
-            android:theme="@style/Theme.ZoomUnitel.NoActionBar" /> <!-- Photo cache directory file provider paths -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -57,17 +63,20 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-    </application>
-    <uses-feature android:name="android.hardware.camera" /> <!-- <uses-permission android:name="android.permission.WAKE_LOCK" /> -->
-    <uses-feature android:name="android.hardware.camera.autofocus" />
+        <!-- Photo cache directory file provider paths -->
 
-    <uses-feature android:name="android.hardware.camera.flash" />
+    </application>
+
+
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.flash" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
 </manifest>

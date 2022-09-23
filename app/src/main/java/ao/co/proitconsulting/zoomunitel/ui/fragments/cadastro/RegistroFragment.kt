@@ -2,7 +2,6 @@ package ao.co.proitconsulting.zoomunitel.ui.fragments.cadastro
 
 import android.content.Intent
 import android.graphics.Typeface
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -27,7 +26,6 @@ import ao.co.proitconsulting.zoomunitel.api.RetrofitInstance
 import ao.co.proitconsulting.zoomunitel.databinding.FragmentRegistroBinding
 import ao.co.proitconsulting.zoomunitel.helpers.Constants
 import ao.co.proitconsulting.zoomunitel.helpers.MetodosUsados
-import ao.co.proitconsulting.zoomunitel.helpers.network.ConnectionLiveData
 import ao.co.proitconsulting.zoomunitel.localDB.AppPrefsSettings
 import ao.co.proitconsulting.zoomunitel.models.UsuarioModel
 import ao.co.proitconsulting.zoomunitel.models.UsuarioRequest
@@ -47,27 +45,15 @@ class RegistroFragment : Fragment() {
     private var _binding: FragmentRegistroBinding? = null
     private val binding get() = _binding!!
 
-    var nome:String?=null
-    var telefone:String?=null
-    var email:String?=null
-    var senha:String?=null
-    var confirmSenha:String?=null
+    private var nome:String?=null
+    private var telefone:String?=null
+    private var email:String?=null
+    private var senha:String?=null
+    private var confirmSenha:String?=null
 
-    lateinit var connectionLiveData: ConnectionLiveData
-    private var isNetworkAvailable: Boolean = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            connectionLiveData = ConnectionLiveData(requireContext())
-            connectionLiveData.observe(this) { isNetwork ->
-                isNetworkAvailable = isNetwork
-            }
-        }else{
-            isNetworkAvailable = MetodosUsados.isConnected(Constants.REQUEST_TIMEOUT,TAG)
-        }
-        super.onCreate(savedInstanceState)
-    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -160,13 +146,7 @@ class RegistroFragment : Fragment() {
         btnRegistro.setOnClickListener {
             if (verificarCampos()){
 
-                isNetworkAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    isNetworkAvailable
-                }else{
-                    MetodosUsados.isConnected(Constants.REQUEST_TIMEOUT,TAG)
-                }
-
-                if (isNetworkAvailable){
+                if (Constants.isNetworkAvailable){
                     registrar()
                 }else{
                     MetodosUsados.showCustomSnackBar(view,activity, Constants.ToastALERTA,getString(R.string.msg_erro_internet))
@@ -229,7 +209,7 @@ class RegistroFragment : Fragment() {
                         }
 
 
-                        Log.d(TAG,"ResponseBody: "+mensagem)
+                        Log.d(TAG, "ResponseBody: $mensagem")
                     }catch (e: IOException){
 
                     }catch (e:JSONException){
@@ -263,13 +243,9 @@ class RegistroFragment : Fragment() {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 binding.spinKitBottom.visibility = View.GONE
                 activateViews()
-                isNetworkAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    isNetworkAvailable
-                }else{
-                    MetodosUsados.isConnected(Constants.REQUEST_TIMEOUT,TAG)
-                }
 
-                if (!isNetworkAvailable){
+
+                if (!Constants.isNetworkAvailable){
                     MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastALERTA,getString(R.string.msg_erro_internet))
                 }else if (!t.message.isNullOrEmpty() && t.message!!.contains("timeout")){
                     MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastALERTA,getString(R.string.msg_erro_internet_timeout))

@@ -23,10 +23,10 @@ class RevistaDetailFragment : Fragment() {
     private var _binding: FragmentRevistaDetailBinding? = null
     private val binding get() = _binding!!
 
-    lateinit var mViewPager: ViewPager2
-    lateinit var revistaList: List<RevistaModel>
-    var currentPosition: Int = 0
-    lateinit var revistasDetailAdapter: RevistasDetailsAdapter
+    private lateinit var mViewPager: ViewPager2
+    private lateinit var revistaList: List<RevistaModel>
+    private var currentPosition: Int = 0
+    private lateinit var revistasDetailAdapter: RevistasDetailsAdapter
 
 
 

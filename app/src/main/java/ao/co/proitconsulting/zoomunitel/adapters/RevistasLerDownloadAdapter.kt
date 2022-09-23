@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package ao.co.proitconsulting.zoomunitel.adapters
 
 import android.Manifest
@@ -46,14 +48,29 @@ import java.io.InputStream
 import java.lang.ref.WeakReference
 
 
+@Suppress("DEPRECATION")
 class RevistasLerDownloadAdapter : RecyclerView.Adapter<RevistasLerDownloadAdapter.RevistaViewHolder>() {
 
+    private val TAG = "TAG_RevistDown"
     var itemClickListener : ((view: View,revista: RevistaModel)->Unit)?=null
 
 
-    val aDI = AccelerateDecelerateInterpolator()
-    val generator = RandomTransitionGenerator(10000,aDI)
+    private val aDI = AccelerateDecelerateInterpolator()
+    private val generator = RandomTransitionGenerator(10000,aDI)
+    private var myAsyncTasks = arrayListOf<AsyncTask<*, *, *>>()
 
+    fun cancelRunningTasks() {
+        for ( myAsyncTask in myAsyncTasks) {
+            if (myAsyncTask.status.equals(AsyncTask.Status.RUNNING)) {
+                myAsyncTask.cancel(true)
+            }
+        }
+        myAsyncTasks.clear()
+    }
+
+    private fun addRunningTask(task: AsyncTask<*, *, *>) {
+        myAsyncTasks.add(task)
+    }
 
 
     inner class RevistaViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
@@ -224,7 +241,7 @@ class RevistasLerDownloadAdapter : RecyclerView.Adapter<RevistasLerDownloadAdapt
         val pdfUrl = Uri.parse(Constants.PDF_PATH + revista.pdfLink)
         val downloadTask = DownloadRetrofitTask(holder)
         downloadTask.execute(pdfUrl.toString())
-//        addRunningTask(downloadTask)
+        addRunningTask(downloadTask)
     }
 
 
@@ -247,7 +264,7 @@ class RevistasLerDownloadAdapter : RecyclerView.Adapter<RevistasLerDownloadAdapt
         @Deprecated("Deprecated in Java")
         override fun onPreExecute() {
             val holder: RevistaViewHolder? = activityWeakReference?.get()
-            if (holder == null){
+            if (holder?.itemView == null){
                 return
             }
             holder.progressbar.visibility = View.VISIBLE
@@ -291,8 +308,8 @@ class RevistasLerDownloadAdapter : RecyclerView.Adapter<RevistasLerDownloadAdapt
 
                     val data = ByteArray(1024 * 4)
                     var total: Long = 0
-                    var count :Int=0
-                    var progressResult:Long =0
+                    var count :Int
+                    var progressResult:Long
 
 
 
@@ -341,7 +358,7 @@ class RevistasLerDownloadAdapter : RecyclerView.Adapter<RevistasLerDownloadAdapt
         @Deprecated("Deprecated in Java")
         override fun onProgressUpdate(vararg progress: Int?) {
             val holder: RevistaViewHolder? = activityWeakReference?.get()
-            if (holder == null){
+            if (holder?.itemView == null){
                 return
             }
             holder.progressbar.isIndeterminate = false
@@ -359,7 +376,7 @@ class RevistasLerDownloadAdapter : RecyclerView.Adapter<RevistasLerDownloadAdapt
         @Deprecated("Deprecated in Java")
         override fun onPostExecute(result: String?) {
             val holder: RevistaViewHolder? = activityWeakReference?.get()
-            if (holder == null){
+            if (holder?.itemView == null){
                 return
             }
             if (result != null)

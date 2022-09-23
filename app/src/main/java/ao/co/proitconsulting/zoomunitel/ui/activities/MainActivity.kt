@@ -29,7 +29,6 @@ import de.hdodenhof.circleimageview.CircleImageView
 import okhttp3.ResponseBody
 import org.json.JSONArray
 import org.json.JSONException
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -46,8 +45,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var  txtUserName:TextView
     private lateinit var  txtUserEmail:TextView
 
-    lateinit var connectionLiveData: ConnectionLiveData
-    private var isNetworkAvailable: Boolean = false
+    private lateinit var connectionLiveData: ConnectionLiveData
+
 
 
 
@@ -68,6 +67,15 @@ class MainActivity : AppCompatActivity() {
         val toolbar = binding.appBarMain.toolbar
         toolbar.title = ""
         setSupportActionBar(toolbar)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            connectionLiveData = ConnectionLiveData(this)
+            connectionLiveData.observe(this) { isNetwork ->
+                Constants.isNetworkAvailable = isNetwork
+            }
+        }else{
+            Constants.isNetworkAvailable = MetodosUsados.hasInternetConnection(this)
+        }
 
 
         frameLayoutImgToolbar = binding.appBarMain.frameLayoutImgToolbar
@@ -98,14 +106,7 @@ class MainActivity : AppCompatActivity() {
 
         carregarDadosLocal(AppPrefsSettings.getInstance().getUser())
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            connectionLiveData = ConnectionLiveData(this)
-            connectionLiveData.observe(this) { isNetwork ->
-                Constants.isNetworkAvailable = isNetwork
-            }
-        }else{
-            Constants.isNetworkAvailable = MetodosUsados.hasInternetConnection(this)
-        }
+
 
     }
 
@@ -114,7 +115,7 @@ class MainActivity : AppCompatActivity() {
         if (usuario!=null){
             txtUserName.text = usuario.userNome
             txtUserEmail.text = usuario.userEmail
-            if (usuario.userPhoto.isNullOrEmpty()){
+            if (usuario.userPhoto.isNullOrEmpty() || usuario.userPhoto == "null"){
                 txtUserNameInitial.visibility = View.VISIBLE
                 if (!usuario.userNome.isNullOrEmpty()){
 
@@ -163,14 +164,9 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        isNetworkAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            isNetworkAvailable
-        }else{
-            MetodosUsados.hasInternetConnection(this)
-        }
-
-        if (isNetworkAvailable)
+        if (Constants.isNetworkAvailable)
             carregarMeuPerfil()
+
 
     }
 
@@ -211,14 +207,14 @@ class MainActivity : AppCompatActivity() {
                 } else{
 
                     try {
-                        val responseBodyError = response.errorBody()?.string()
-                        if (!responseBodyError.isNullOrEmpty()){
-                            val jsonResponseBodyError = JSONObject(responseBodyError)
-                            val jsorError = jsonResponseBodyError.get("erro")
-                            val jsonBodyError = JSONObject(jsorError.toString())
-                            val errorMessage = jsonBodyError.get("mensagem")
-
-                        }
+//                        val responseBodyError = response.errorBody()?.string()
+//                        if (!responseBodyError.isNullOrEmpty()){
+//                            val jsonResponseBodyError = JSONObject(responseBodyError)
+//                            val jsorError = jsonResponseBodyError.get("erro")
+//                            val jsonBodyError = JSONObject(jsorError.toString())
+//                            val errorMessage = jsonBodyError.get("mensagem")
+//
+//                        }
                         Log.d(TAG, "onResponse_NOTsuccess: ${response.errorBody()?.string()}")
                     }catch (e: IOException){
 

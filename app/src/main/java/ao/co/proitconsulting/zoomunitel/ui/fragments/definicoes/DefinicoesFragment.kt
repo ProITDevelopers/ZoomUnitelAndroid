@@ -20,8 +20,9 @@ import ao.co.proitconsulting.zoomunitel.ui.activities.MainActivity
 import ao.co.proitconsulting.zoomunitel.ui.activities.SenhaActivity
 import ao.co.proitconsulting.zoomunitel.ui.activities.SplashScreenActivity
 
-val TAG = "TAG_DefinFrag"
 class DefinicoesFragment : Fragment() {
+
+
 
     private var _binding: FragmentDefinicoesBinding? = null
     private val binding get() = _binding!!
@@ -37,7 +38,7 @@ class DefinicoesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val definicoesViewModel =
-            ViewModelProvider(this).get(DefinicoesViewModel::class.java)
+            ViewModelProvider(this)[DefinicoesViewModel::class.java]
 
         val frameLayout = MainActivity.getFrameLayoutImgToolbar()
         if (frameLayout != null)

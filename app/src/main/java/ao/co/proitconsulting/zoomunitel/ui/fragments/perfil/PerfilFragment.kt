@@ -22,7 +22,7 @@ class PerfilFragment : Fragment() {
     private var _binding: FragmentPerfilBinding? = null
     private val binding get() = _binding!!
 
-    lateinit var perfilViewModel:PerfilViewModel
+    private lateinit var perfilViewModel:PerfilViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,7 +30,7 @@ class PerfilFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         perfilViewModel =
-            ViewModelProvider(this).get(PerfilViewModel::class.java)
+            ViewModelProvider(this)[PerfilViewModel::class.java]
 
         val frameLayout = MainActivity.getFrameLayoutImgToolbar()
         if (frameLayout != null)
@@ -63,7 +63,7 @@ class PerfilFragment : Fragment() {
             binding.txtUserName.text = usuario.userNome
             binding.txtUserEmail.text = usuario.userEmail
             binding.txtUserTelefone.text = usuario.userPhone
-            if (usuario.userPhoto.isNullOrEmpty()){
+            if (usuario.userPhoto.isNullOrEmpty()|| usuario.userPhoto == "null"){
                 binding.txtUserNameInitial.visibility = View.VISIBLE
                 if (!usuario.userNome.isNullOrEmpty()){
 

@@ -9,8 +9,8 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 class ViewPagerFragmentsAdapter(fa: FragmentActivity): FragmentStateAdapter(fa) {
 
 
-    val mFragmentList: MutableList<Fragment> = ArrayList()
-    val mFragmentTitleList: MutableList<String> = ArrayList()
+    private val mFragmentList: MutableList<Fragment> = ArrayList()
+    private val mFragmentTitleList: MutableList<String> = ArrayList()
 
 
     fun addFrag(fragment: Fragment, title: String){
@@ -18,10 +18,9 @@ class ViewPagerFragmentsAdapter(fa: FragmentActivity): FragmentStateAdapter(fa) 
         mFragmentTitleList.add(title)
     }
 
-    fun updateFrag(fragment: Fragment, position: Int){
-        mFragmentList[position] = fragment
-
-    }
+//    fun updateFrag(fragment: Fragment, position: Int){
+//        mFragmentList[position] = fragment
+//    }
 
     override fun getItemCount(): Int {
         return mFragmentList.size

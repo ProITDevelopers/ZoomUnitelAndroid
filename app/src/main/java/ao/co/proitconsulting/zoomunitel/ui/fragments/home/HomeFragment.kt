@@ -1,9 +1,9 @@
 package ao.co.proitconsulting.zoomunitel.ui.fragments.home
 
 import android.graphics.Bitmap
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -24,9 +24,7 @@ import ao.co.proitconsulting.zoomunitel.R
 import ao.co.proitconsulting.zoomunitel.adapters.RevistasAdapter
 import ao.co.proitconsulting.zoomunitel.databinding.FragmentHomeBinding
 import ao.co.proitconsulting.zoomunitel.helpers.Constants
-import ao.co.proitconsulting.zoomunitel.helpers.MetodosUsados
 import ao.co.proitconsulting.zoomunitel.helpers.Resource
-import ao.co.proitconsulting.zoomunitel.helpers.network.ConnectionLiveData
 import ao.co.proitconsulting.zoomunitel.localDB.RevistaDatabase
 import ao.co.proitconsulting.zoomunitel.ui.activities.MainActivity
 import ao.co.proitconsulting.zoomunitel.ui.repository.RevistaRepository
@@ -48,35 +46,17 @@ class HomeFragment : Fragment() {
 
 
 
-    lateinit var imgBackgnd: KenBurnsView
-    lateinit var mViewPager: ViewPager2
-    lateinit var revistasAdapter: RevistasAdapter
+    private lateinit var imgBackgnd: KenBurnsView
+    private lateinit var mViewPager: ViewPager2
+    private lateinit var revistasAdapter: RevistasAdapter
 
 
-    val slideHandler = Handler()
+    private val slideHandler = Handler(Looper.getMainLooper())
 
-    lateinit var coordinatorLayout: ConstraintLayout
-    lateinit var errorLayout: RelativeLayout
-    lateinit var imgErro: ImageView
-    lateinit var txtErro: TextView
-
-
-    lateinit var connectionLiveData: ConnectionLiveData
-    private var isNetworkAvailable: Boolean = false
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            connectionLiveData = ConnectionLiveData(requireContext())
-            connectionLiveData.observe(this) { isNetwork ->
-                isNetworkAvailable = isNetwork
-            }
-        }else{
-            isNetworkAvailable = MetodosUsados.isConnected(Constants.REQUEST_TIMEOUT,TAG)
-        }
-        super.onCreate(savedInstanceState)
-    }
-
+    private lateinit var coordinatorLayout: ConstraintLayout
+    private lateinit var errorLayout: RelativeLayout
+    private lateinit var imgErro: ImageView
+    private lateinit var txtErro: TextView
 
 
 
@@ -91,8 +71,7 @@ class HomeFragment : Fragment() {
         val viewModelProviderFactory = RevistaViewModelProviderFactory(revistaRepository)
 
         val viewModel =
-            ViewModelProvider(this,viewModelProviderFactory)
-                .get(HomeViewModel::class.java)
+            ViewModelProvider(this,viewModelProviderFactory)[HomeViewModel::class.java]
 
         val frameLayout = MainActivity.getFrameLayoutImgToolbar()
         if (frameLayout != null)
@@ -171,7 +150,7 @@ class HomeFragment : Fragment() {
     private fun showErrorScreen(msg:String){
 
 
-        if (!isNetworkAvailable){
+        if (!Constants.isNetworkAvailable){
             imgErro.setImageResource(R.drawable.ic_baseline_wifi_off_24)
             txtErro.text = getString(R.string.msg_erro_internet)
 

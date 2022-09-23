@@ -2,7 +2,6 @@ package ao.co.proitconsulting.zoomunitel.ui.fragments.cadastro
 
 import android.content.Intent
 import android.graphics.Typeface
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.SpannableString
@@ -25,7 +24,6 @@ import ao.co.proitconsulting.zoomunitel.api.RetrofitInstance
 import ao.co.proitconsulting.zoomunitel.databinding.FragmentLoginBinding
 import ao.co.proitconsulting.zoomunitel.helpers.Constants
 import ao.co.proitconsulting.zoomunitel.helpers.MetodosUsados
-import ao.co.proitconsulting.zoomunitel.helpers.network.ConnectionLiveData
 import ao.co.proitconsulting.zoomunitel.localDB.AppPrefsSettings
 import ao.co.proitconsulting.zoomunitel.models.UsuarioModel
 import ao.co.proitconsulting.zoomunitel.models.UsuarioRequest
@@ -49,25 +47,10 @@ val TAG = "TAG_LoginFrag"
 
 
 
-    lateinit var emailTelefone :String
-    lateinit var password :String
+    private lateinit var emailTelefone :String
+    private lateinit var password :String
 
 
-    lateinit var connectionLiveData: ConnectionLiveData
-    private var isNetworkAvailable: Boolean = false
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            connectionLiveData = ConnectionLiveData(requireContext())
-            connectionLiveData.observe(this) { isNetwork ->
-               isNetworkAvailable = isNetwork
-            }
-        }else{
-            isNetworkAvailable = MetodosUsados.isConnected(Constants.REQUEST_TIMEOUT,TAG)
-        }
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -113,14 +96,9 @@ val TAG = "TAG_LoginFrag"
         btnLogin.setOnClickListener {
             if (verificarCampos()){
 
-                isNetworkAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    isNetworkAvailable
-                }else{
-                    MetodosUsados.isConnected(Constants.REQUEST_TIMEOUT,TAG)
-                }
 
-                if (isNetworkAvailable){
 
+                if (Constants.isNetworkAvailable){
                     autenticar()
                 }else{
                     MetodosUsados.showCustomSnackBar(view,activity, Constants.ToastALERTA,getString(R.string.msg_erro_internet))
@@ -230,15 +208,15 @@ val TAG = "TAG_LoginFrag"
 
 
         }else {
-            if (emailTelefone.matches("^[0-9]*$".toRegex())){
+            return if (emailTelefone.matches("^[0-9]*$".toRegex())){
                 emailTelefone = emailTelefone
-                return true
+                true
             } else {
                 MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastALERTA,getString(R.string.msg_erro_campo_com_email_telefone))
                 binding.editEmail.requestFocus()
                 binding.editEmail.error = ""
                 binding.editPassword.error = null
-                return false
+                false
             }
         }
 
@@ -267,7 +245,7 @@ val TAG = "TAG_LoginFrag"
         binding.spinKitBottom.visibility = View.VISIBLE
         val loginRequest = UsuarioRequest.LoginRequest(emailTelefone,password)
 
-        Log.d(TAG, "autenticar: ${loginRequest.toString()}")
+        Log.d(TAG, "autenticar: $loginRequest")
 
         val retrofit = RetrofitInstance.api.userLogin(loginRequest)
         retrofit.enqueue(object :
@@ -335,13 +313,8 @@ val TAG = "TAG_LoginFrag"
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 binding.spinKitBottom.visibility = View.GONE
                 activateViews()
-                isNetworkAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    isNetworkAvailable
-                }else{
-                    MetodosUsados.isConnected(Constants.REQUEST_TIMEOUT,TAG)
-                }
 
-                if (!isNetworkAvailable){
+                if (!Constants.isNetworkAvailable){
                     MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastALERTA,getString(R.string.msg_erro_internet))
                 }else if (!t.message.isNullOrEmpty() && t.message!!.contains("timeout")){
                     MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastALERTA,getString(R.string.msg_erro_internet_timeout))

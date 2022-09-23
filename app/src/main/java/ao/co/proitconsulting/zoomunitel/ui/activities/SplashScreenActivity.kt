@@ -3,6 +3,7 @@ package ao.co.proitconsulting.zoomunitel.ui.activities
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import ao.co.proitconsulting.zoomunitel.databinding.ActivitySplashScreenBinding
 import ao.co.proitconsulting.zoomunitel.helpers.MetodosUsados
@@ -26,7 +27,7 @@ class SplashScreenActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        mainHandler = Handler()
+        mainHandler = Handler(Looper.getMainLooper())
         mainRunnable = Runnable {
 
 

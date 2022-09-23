@@ -1,6 +1,5 @@
 package ao.co.proitconsulting.zoomunitel.ui.fragments.senha
 
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -18,7 +17,6 @@ import ao.co.proitconsulting.zoomunitel.api.RetrofitInstance
 import ao.co.proitconsulting.zoomunitel.databinding.FragmentRecuperarBinding
 import ao.co.proitconsulting.zoomunitel.helpers.Constants
 import ao.co.proitconsulting.zoomunitel.helpers.MetodosUsados
-import ao.co.proitconsulting.zoomunitel.helpers.network.ConnectionLiveData
 import ao.co.proitconsulting.zoomunitel.models.UsuarioRequest
 import ao.co.proitconsulting.zoomunitel.ui.activities.SenhaActivity
 import okhttp3.ResponseBody
@@ -30,41 +28,17 @@ import retrofit2.Response
 import java.io.IOException
 
 
-private const val ARG_PARAM1 = "email"
 class RecuperarFragment : Fragment(){
 
-    val TAG = "TAG_RecupFrag"
+    private val TAG = "TAG_RecupFrag"
     private var _binding: FragmentRecuperarBinding?=null
     private val binding get() = _binding!!
 
     private var email: String? = null
-    lateinit var connectionLiveData: ConnectionLiveData
-    private var isNetworkAvailable: Boolean = false
 
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String) =
-            RecuperarFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                }
-            }
-    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            connectionLiveData = ConnectionLiveData(requireContext())
-            connectionLiveData.observe(this) { isNetwork ->
-                isNetworkAvailable = isNetwork
-            }
-        }else{
-            isNetworkAvailable = MetodosUsados.isConnected(Constants.REQUEST_TIMEOUT, TAG)
-        }
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            email = it.getString(ARG_PARAM1)
-        }
-    }
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -95,13 +69,7 @@ class RecuperarFragment : Fragment(){
 
             if (verificarCampos()){
 
-                isNetworkAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    isNetworkAvailable
-                }else{
-                    MetodosUsados.isConnected(Constants.REQUEST_TIMEOUT,TAG)
-                }
-
-                if (isNetworkAvailable){
+                if (Constants.isNetworkAvailable){
                     enviarEmail()
                 }else{
                     MetodosUsados.showCustomSnackBar(view,activity, Constants.ToastALERTA,getString(R.string.msg_erro_internet))
@@ -233,13 +201,9 @@ class RecuperarFragment : Fragment(){
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 binding.spinKitBottom.visibility = View.GONE
                 activateViews()
-                isNetworkAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    isNetworkAvailable
-                }else{
-                    MetodosUsados.isConnected(Constants.REQUEST_TIMEOUT,TAG)
-                }
 
-                if (!isNetworkAvailable){
+
+                if (!Constants.isNetworkAvailable){
                     MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastALERTA,getString(R.string.msg_erro_internet))
                 }else if (!t.message.isNullOrEmpty() && t.message!!.contains("timeout")){
                     MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastALERTA,getString(R.string.msg_erro_internet_timeout))
@@ -256,19 +220,7 @@ class RecuperarFragment : Fragment(){
         binding.editEmail.error = null
         val viewPager: ViewPager2? = SenhaActivity.getViewPager()
         viewPager?.currentItem = 1
-        /*
-        *if (activity!=null){
-            val fragmentManager = (activity as SenhaActivity).supportFragmentManager
-            val transaction = fragmentManager.beginTransaction()
-                .setCustomAnimations(
-                    R.anim.slide_in_right,
-                    R.anim.slide_out_left,
-                    R.anim.slide_in_left,
-                    R.anim.slide_out_right
-                )
-            transaction.replace(R.id.frame_layout_senha, InserirCodigoFragment.newInstance(email.toString()), null)
-            transaction.commit()
-        }**/
+
     }
 
     private fun activateViews(){

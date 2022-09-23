@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ao.co.proitconsulting.zoomunitel.R
 import ao.co.proitconsulting.zoomunitel.models.DefinicoesModel
 
-val TAG ="TAG_adapterData"
+
 class DefinicoesAdapter: RecyclerView.Adapter<DefinicoesAdapter.DefinicoesAdapterViewHolder>(){
 
     private val adapterData = mutableListOf<DefinicoesModel>()
@@ -61,7 +61,6 @@ class DefinicoesAdapter: RecyclerView.Adapter<DefinicoesAdapter.DefinicoesAdapte
         adapterData.apply {
             clear()
             addAll(data)
-            notifyDataSetChanged()
         }
     }
 

@@ -1,7 +1,6 @@
 package ao.co.proitconsulting.zoomunitel.ui.fragments.senha
 
 import android.graphics.Typeface
-import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
@@ -22,7 +21,6 @@ import ao.co.proitconsulting.zoomunitel.api.RetrofitInstance
 import ao.co.proitconsulting.zoomunitel.databinding.FragmentInserirCodigoBinding
 import ao.co.proitconsulting.zoomunitel.helpers.Constants
 import ao.co.proitconsulting.zoomunitel.helpers.MetodosUsados
-import ao.co.proitconsulting.zoomunitel.helpers.network.ConnectionLiveData
 import ao.co.proitconsulting.zoomunitel.models.UsuarioRequest
 import ao.co.proitconsulting.zoomunitel.ui.activities.SenhaActivity
 import okhttp3.ResponseBody
@@ -33,46 +31,23 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
-private const val ARG_PARAM1 = "email"
+
 class InserirCodigoFragment : Fragment() {
 
-    val TAG="TAG_CodigoFrag"
+    private val TAG="TAG_CodigoFrag"
     private var _binding: FragmentInserirCodigoBinding?=null
     private val binding get() = _binding!!
 
     private var email: String? = null
     private var codigo: String? = null
-    lateinit var connectionLiveData: ConnectionLiveData
-    private var isNetworkAvailable: Boolean = false
 
-    companion object {
 
-        @JvmStatic
-        fun newInstance(param1: String) =
-            InserirCodigoFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                }
-            }
-    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            connectionLiveData = ConnectionLiveData(requireContext())
-            connectionLiveData.observe(this) { isNetwork ->
-                isNetworkAvailable = isNetwork
-            }
-        }else{
-            isNetworkAvailable = MetodosUsados.isConnected(Constants.REQUEST_TIMEOUT, TAG)
-        }
+        email = Constants.SEND_EMAIL
+        Log.d(TAG, "onCreate: ${email.toString()}")
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            email = it.getString(ARG_PARAM1)
-
-
-            Log.d(TAG, "onCreate: ${email.toString()}")
-
-        }
     }
 
     override fun onCreateView(
@@ -94,13 +69,9 @@ class InserirCodigoFragment : Fragment() {
         spannableStringCode.setSpan(StyleSpan(Typeface.BOLD),13,24, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         txtReenviarCode.text = spannableStringCode
         txtReenviarCode.setOnClickListener {
-            isNetworkAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                isNetworkAvailable
-            }else{
-                MetodosUsados.isConnected(Constants.REQUEST_TIMEOUT,TAG)
-            }
 
-            if (isNetworkAvailable){
+
+            if (Constants.isNetworkAvailable){
                 reenviarEmail()
             }else{
                 MetodosUsados.showCustomSnackBar(view,activity, Constants.ToastALERTA,getString(R.string.msg_erro_internet))
@@ -110,13 +81,8 @@ class InserirCodigoFragment : Fragment() {
         val btnContinuar : Button = binding.btnContinuar
         btnContinuar.setOnClickListener {
             if (verificarCampos()){
-                isNetworkAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    isNetworkAvailable
-                }else{
-                    MetodosUsados.isConnected(Constants.REQUEST_TIMEOUT,TAG)
-                }
 
-                if (isNetworkAvailable){
+                if (Constants.isNetworkAvailable){
                     enviarCodigo()
                 }else{
                     MetodosUsados.showCustomSnackBar(view,activity, Constants.ToastALERTA,getString(R.string.msg_erro_internet))
@@ -191,13 +157,8 @@ class InserirCodigoFragment : Fragment() {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 binding.spinKitBottom.visibility = View.GONE
                 activateViews()
-                isNetworkAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    isNetworkAvailable
-                }else{
-                    MetodosUsados.isConnected(Constants.REQUEST_TIMEOUT,TAG)
-                }
 
-                if (!isNetworkAvailable){
+                if (!Constants.isNetworkAvailable){
                     MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastALERTA,getString(R.string.msg_erro_internet))
                 }else if (!t.message.isNullOrEmpty() && t.message!!.contains("timeout")){
                     MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastALERTA,getString(R.string.msg_erro_internet_timeout))
@@ -252,13 +213,8 @@ class InserirCodigoFragment : Fragment() {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 binding.spinKitBottom.visibility = View.GONE
                 activateViews()
-                isNetworkAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    isNetworkAvailable
-                }else{
-                    MetodosUsados.isConnected(Constants.REQUEST_TIMEOUT,TAG)
-                }
 
-                if (!isNetworkAvailable){
+                if (!Constants.isNetworkAvailable){
                     MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastALERTA,getString(R.string.msg_erro_internet))
                 }else if (!t.message.isNullOrEmpty() && t.message!!.contains("timeout")){
                     MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastALERTA,getString(R.string.msg_erro_internet_timeout))

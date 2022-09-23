@@ -13,16 +13,16 @@ class AppPrefsSettings {
 
     companion object {
 
-        val APP_SHARED_PREF_NAME : String = "ZM_UNITEL_REF"
-        val KEY_USER : String = "ZM_USER_KEY"
-        val KEY_AUTH_TOKEN : String = "ZM_AUTH_TOKEN"
-        val KEY_CHANGE_VIEW : String = "ZM_CHANGE_VIEW"
+        private const val APP_SHARED_PREF_NAME : String = "ZM_UNITEL_REF"
+        private const val KEY_USER : String = "ZM_USER_KEY"
+        private const val KEY_AUTH_TOKEN : String = "ZM_AUTH_TOKEN"
 
-       lateinit var sharedPreferences: SharedPreferences
-        lateinit var editor: SharedPreferences.Editor
-        lateinit var gson: Gson
 
-        var mInstance :AppPrefsSettings?= null
+        private lateinit var sharedPreferences: SharedPreferences
+        private lateinit var editor: SharedPreferences.Editor
+        private lateinit var gson: Gson
+
+        private var mInstance :AppPrefsSettings?= null
 
         @Synchronized fun getInstance():AppPrefsSettings {
             if(mInstance == null){

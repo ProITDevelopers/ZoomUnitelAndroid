@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.Activity
 import android.content.ContentResolver
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -50,7 +49,7 @@ class ImagePickerActivity : AppCompatActivity() {
         @JvmStatic
         fun showImagePickerOptions(context: Context, listener: PickerOptionListener){
 
-            val title: SpannableString = SpannableString(context.getString(R.string.lbl_set_profile_photo))
+            val title = SpannableString(context.getString(R.string.lbl_set_profile_photo))
             title.setSpan(
                 ForegroundColorSpan(context.resources.getColor(R.color.white)),
                 0, title.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -62,19 +61,17 @@ class ImagePickerActivity : AppCompatActivity() {
             // add a list
             val options = arrayOf(context.getString(R.string.lbl_take_camera_picture), context.getString(R.string.lbl_choose_from_gallery))
 
-            builder.setItems(options, object : DialogInterface.OnClickListener{
-
-                override fun onClick(dialog: DialogInterface?, which: Int) {
-                    when(which){
-                        0 -> {
-                            listener.onTakeCameraSelected()
-                        }
-                        1 -> {
-                            listener.onChooseGallerySelected()
-                        }
+            builder.setItems(options
+            ) { dialog, which ->
+                when (which) {
+                    0 -> {
+                        listener.onTakeCameraSelected()
+                    }
+                    1 -> {
+                        listener.onChooseGallerySelected()
                     }
                 }
-            })
+            }
 
 
             // create and show the alert dialog
@@ -94,9 +91,7 @@ class ImagePickerActivity : AppCompatActivity() {
 
     private lateinit var fileName: String
 
-    private val permissionsArray = arrayOf(
-        Manifest.permission.CAMERA,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
 
     interface PickerOptionListener {
         fun onTakeCameraSelected()
@@ -122,8 +117,8 @@ class ImagePickerActivity : AppCompatActivity() {
         IMAGE_COMPRESSION = intent.getIntExtra(INTENT_IMAGE_COMPRESSION_QUALITY, IMAGE_COMPRESSION)
         lockAspectRatio = intent.getBooleanExtra(INTENT_LOCK_ASPECT_RATIO, false)
         setBitmapMaxWidthHeight = intent.getBooleanExtra(INTENT_SET_BITMAP_MAX_WIDTH_HEIGHT, false)
-        bitmapMaxWidth = intent.getIntExtra(INTENT_BITMAP_MAX_WIDTH, bitmapMaxWidth);
-        bitmapMaxHeight = intent.getIntExtra(INTENT_BITMAP_MAX_HEIGHT, bitmapMaxHeight);
+        bitmapMaxWidth = intent.getIntExtra(INTENT_BITMAP_MAX_WIDTH, bitmapMaxWidth)
+        bitmapMaxHeight = intent.getIntExtra(INTENT_BITMAP_MAX_HEIGHT, bitmapMaxHeight)
 
         val requestCode = intent.getIntExtra(INTENT_IMAGE_PICKER_OPTION, -1)
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
@@ -135,7 +130,7 @@ class ImagePickerActivity : AppCompatActivity() {
 
 
 
-    fun takeCameraImage(){
+    private fun takeCameraImage(){
 
 
         Dexter.withContext(this@ImagePickerActivity)
@@ -174,7 +169,7 @@ class ImagePickerActivity : AppCompatActivity() {
     }
 
 
-    fun chooseImageFromGallery(){
+    private fun chooseImageFromGallery(){
 
         Dexter.withContext(this@ImagePickerActivity)
             .withPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -183,7 +178,7 @@ class ImagePickerActivity : AppCompatActivity() {
                     report?.let {
                         if(report.areAllPermissionsGranted()){
                             val pickPhoto = Intent(Intent.ACTION_PICK,
-                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                                MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                             startActivityForResult(pickPhoto, REQUEST_GALLERY_IMAGE)
                         }else {
                             MetodosUsados.showCustomSnackBar(
@@ -257,7 +252,7 @@ class ImagePickerActivity : AppCompatActivity() {
             options.withAspectRatio(ASPECT_RATIO_X.toFloat(), ASPECT_RATIO_Y.toFloat())
 
         if (setBitmapMaxWidthHeight)
-            options.withMaxResultSize(bitmapMaxWidth, bitmapMaxHeight);
+            options.withMaxResultSize(bitmapMaxWidth, bitmapMaxHeight)
 
         UCrop.of(sourceUri, destinationUri)
             .withOptions(options)
@@ -292,7 +287,7 @@ class ImagePickerActivity : AppCompatActivity() {
         val imageFile = File(path, fileName)
 
 
-        return getUriForFile(this, packageName + ".provider", imageFile)
+        return getUriForFile(this, "$packageName.provider", imageFile)
 
     }
 

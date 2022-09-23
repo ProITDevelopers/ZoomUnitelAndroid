@@ -30,8 +30,8 @@ class RevistasDetailsAdapter : RecyclerView.Adapter<RevistasDetailsAdapter.Revis
 
     var itemClickListener : ((view: View,revistaList: List<RevistaModel>, position:Int)->Unit)?=null
 
-    val aDI = AccelerateDecelerateInterpolator()
-    val generator = RandomTransitionGenerator(10000,aDI)
+    private val aDI = AccelerateDecelerateInterpolator()
+    private val generator = RandomTransitionGenerator(10000,aDI)
 
     inner class RevistaViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
 

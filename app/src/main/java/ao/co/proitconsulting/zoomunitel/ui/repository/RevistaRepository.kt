@@ -5,7 +5,7 @@ import ao.co.proitconsulting.zoomunitel.api.RetrofitInstance
 import ao.co.proitconsulting.zoomunitel.helpers.networkBoundResource
 import ao.co.proitconsulting.zoomunitel.localDB.RevistaDatabase
 
-class RevistaRepository(val db:RevistaDatabase) {
+class RevistaRepository(private val db:RevistaDatabase) {
 
     private val revistaDAO = db.getRevistaDAO()
 

@@ -15,11 +15,7 @@ class EditarPerfilViewModel : ViewModel() {
     val getPerfil: LiveData<UsuarioModel> = _usuario
 
     private fun getUsuario(): UsuarioModel? {
-        val usuario = AppPrefsSettings.getInstance().getUser()
-        return if (usuario!=null)
-            usuario
-        else
-            null
+        return AppPrefsSettings.getInstance().getUser()
     }
 
 }

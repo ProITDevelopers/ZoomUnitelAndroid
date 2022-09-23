@@ -1,8 +1,9 @@
+@file:Suppress("DEPRECATION")
+
 package ao.co.proitconsulting.zoomunitel.ui.fragments.pdfviewer
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.graphics.Canvas
 import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -11,7 +12,6 @@ import android.os.Bundle
 import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -30,7 +30,6 @@ import ao.co.proitconsulting.zoomunitel.helpers.MetodosUsados
 import ao.co.proitconsulting.zoomunitel.models.RevistaModel
 import ao.co.proitconsulting.zoomunitel.ui.activities.MainActivity
 import com.github.barteksc.pdfviewer.PDFView
-import com.github.barteksc.pdfviewer.listener.*
 import com.github.ybq.android.spinkit.SpinKitView
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
@@ -47,48 +46,48 @@ import java.lang.ref.WeakReference
 
 class PreviewPdfFragment : Fragment() {
 
-    val TAG = "TAG_Pdf"
+    private val TAG = "TAG_Pdf"
     private var _binding: FragmentPreviewPdfBinding? = null
     private val binding get() = _binding!!
 
-    val args: PreviewPdfFragmentArgs by navArgs()
+    private val args: PreviewPdfFragmentArgs by navArgs()
 
 
-    lateinit var coordinatorLayout: ConstraintLayout
-    lateinit var errorLayout: RelativeLayout
-    lateinit var imgErro: ImageView
-    lateinit var txtErro: TextView
+    private lateinit var coordinatorLayout: ConstraintLayout
+    private lateinit var errorLayout: RelativeLayout
+    private lateinit var imgErro: ImageView
+    private lateinit var txtErro: TextView
 
-    lateinit var revista: RevistaModel
-    lateinit var pdfView: PDFView
-    lateinit var progressBar: SpinKitView
-    lateinit var txtProgress: TextView
+    private lateinit var revista: RevistaModel
+    private lateinit var pdfView: PDFView
+    private lateinit var progressBar: SpinKitView
+    private lateinit var txtProgress: TextView
 
-    lateinit var linearPageSectios: ConstraintLayout
-    lateinit var txtPosition: TextView
-    lateinit var imgFirstPage: ImageView
-    lateinit var imgPreviousPage: ImageView
-    lateinit var imgNextPage: ImageView
-    lateinit var imgLastPage: ImageView
+    private lateinit var linearPageSectios: ConstraintLayout
+    private lateinit var txtPosition: TextView
+    private lateinit var imgFirstPage: ImageView
+    private lateinit var imgPreviousPage: ImageView
+    private lateinit var imgNextPage: ImageView
+    private lateinit var imgLastPage: ImageView
 
     //NORMAL_DRAWABLE_COLORS
-    lateinit var firstPageDrawable: Drawable
-    lateinit var previousPageDrawable: Drawable
-    lateinit var nextPageDrawable: Drawable
-    lateinit var lastPageDrawable: Drawable
+    private lateinit var firstPageDrawable: Drawable
+    private lateinit var previousPageDrawable: Drawable
+    private lateinit var nextPageDrawable: Drawable
+    private lateinit var lastPageDrawable: Drawable
 
     //GRAY_DRAWABLE_COLORS
-    lateinit var firstPageDrawableGray: Drawable
-    lateinit var previousPageDrawableGray: Drawable
-    lateinit var nextPageDrawableGray: Drawable
-    lateinit var lastPageDrawableGray: Drawable
+    private lateinit var firstPageDrawableGray: Drawable
+    private lateinit var previousPageDrawableGray: Drawable
+    private lateinit var nextPageDrawableGray: Drawable
+    private lateinit var lastPageDrawableGray: Drawable
 
 
     private var currentPageNumber:Int=0
     private var lastPageNumber:Int=0
     private var myAsyncTasks = arrayListOf<AsyncTask<*,*,*>>()
 
-    fun cancelRunningTasks() {
+    private fun cancelRunningTasks() {
         for ( myAsyncTask in myAsyncTasks) {
             if (myAsyncTask.status.equals(AsyncTask.Status.RUNNING)) {
                 myAsyncTask.cancel(true)
@@ -97,7 +96,7 @@ class PreviewPdfFragment : Fragment() {
         myAsyncTasks.clear()
     }
 
-    fun addRunningTask(task:AsyncTask<*,*,*>) {
+    private fun addRunningTask(task:AsyncTask<*,*,*>) {
         myAsyncTasks.add(task)
     }
 
@@ -204,10 +203,10 @@ class PreviewPdfFragment : Fragment() {
         imgPreviousPage.setImageDrawable(previousPageDrawableGray)
         imgPreviousPage.isEnabled = false
 
-        imgNextPage.setImageDrawable(nextPageDrawable);
+        imgNextPage.setImageDrawable(nextPageDrawable)
         imgNextPage.isEnabled = true
 
-        imgLastPage.setImageDrawable(lastPageDrawable);
+        imgLastPage.setImageDrawable(lastPageDrawable)
         imgLastPage.isEnabled = true
 
         imgFirstPage.setOnClickListener {
@@ -325,12 +324,7 @@ class PreviewPdfFragment : Fragment() {
             progressBar.visibility = View.GONE
             showPDfViewer(fileSavedDoc)
         } else {
-//            isNetworkAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                isNetworkAvailable
-//            }else{
-//                MetodosUsados.hasInternetConnection(requireContext())
-//            }
-            Log.d(TAG, "isNetworkAvailable: ${Constants.isNetworkAvailable}")
+
             if (Constants.isNetworkAvailable){
                 carregarPDF()
 
@@ -636,8 +630,8 @@ class PreviewPdfFragment : Fragment() {
 
                     val data = ByteArray(1024 * 4)
                     var total: Long = 0
-                    var count :Int=0
-                    var progressResult:Long =0
+                    var count :Int
+                    var progressResult:Long
 
 
 
@@ -737,65 +731,27 @@ class PreviewPdfFragment : Fragment() {
             .autoSpacing(true)
             .pageFling(true)
             .enableDoubletap(true) // Double tap to zoom
-            .onDraw(object : OnDrawListener {
+            .onDraw { canvas, pageWidth, pageHeight, displayedPage -> }
+            .onDrawAll { canvas, pageWidth, pageHeight, displayedPage -> }
+            .onPageError { page, t ->
+                Toast.makeText(
+                    requireContext(),
+                    "Erro ao abrir a página $page",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            .onPageChange { page, pageCount ->
+                currentPageNumber = page
+                Log.d("TAG_Pdf", "onPageChanged: page/pageCount: $page/$pageCount")
+                txtPosition.text = (String.format("%s / %s", page + 1, pageCount))
 
-                override fun onLayerDrawn(
-                    canvas: Canvas?,
-                    pageWidth: Float,
-                    pageHeight: Float,
-                    displayedPage: Int
-                ) {
-
-                }
-
-
-            })
-            .onDrawAll(object : OnDrawListener {
-
-                override fun onLayerDrawn(
-                    canvas: Canvas?,
-                    pageWidth: Float,
-                    pageHeight: Float,
-                    displayedPage: Int
-                ) {
-
-                }
-            })
-            .onPageError(object : OnPageErrorListener {
-                override fun onPageError(page: Int, t: Throwable?) {
-                    Toast.makeText(requireContext(), "Erro ao abrir a página "+page, Toast.LENGTH_SHORT).show()
-                }
-            })
-            .onPageChange(object : OnPageChangeListener {
-
-                override fun onPageChanged(page: Int, pageCount: Int) {
-                    currentPageNumber = page
-                    Log.d("TAG_Pdf", "onPageChanged: "+"page/pageCount: "+page+"/"+pageCount)
-                    txtPosition.text = (String.format("%s / %s", page + 1, pageCount))
-
-                    changePageListener()
-                }
-
-
-            })
-            .onTap(object : OnTapListener {
-
-                override fun onTap(e: MotionEvent?): Boolean {
-                    return true
-                }
-
-
-            })
-            .onRender(object : OnRenderListener {
-
-                override fun onInitiallyRendered(nbPages: Int) {
-                    lastPageNumber = nbPages
-                }
-
-            })
+                changePageListener()
+            }
+            .onTap { true }
+            .onRender { nbPages -> lastPageNumber = nbPages }
             .enableAnnotationRendering(true)
 //                .invalidPageColor(Color.WHITE)
-            .load();
+            .load()
 
         txtPosition.visibility = (View.VISIBLE)
     }

@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
@@ -24,7 +23,6 @@ import ao.co.proitconsulting.zoomunitel.api.RetrofitInstance
 import ao.co.proitconsulting.zoomunitel.databinding.FragmentEditarPerfilBinding
 import ao.co.proitconsulting.zoomunitel.helpers.Constants
 import ao.co.proitconsulting.zoomunitel.helpers.MetodosUsados
-import ao.co.proitconsulting.zoomunitel.helpers.network.ConnectionLiveData
 import ao.co.proitconsulting.zoomunitel.localDB.AppPrefsSettings
 import ao.co.proitconsulting.zoomunitel.models.UsuarioModel
 import ao.co.proitconsulting.zoomunitel.models.UsuarioRequest
@@ -48,7 +46,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.ResponseBody
 import org.json.JSONArray
 import org.json.JSONException
@@ -65,29 +63,14 @@ class EditarPerfilFragment : Fragment() {
     private var _binding: FragmentEditarPerfilBinding? = null
     private val binding get() = _binding!!
 
-    lateinit var  nome:String
-    lateinit var  telefone:String
-    lateinit var  email:String
+    private lateinit var  nome:String
+    private lateinit var  telefone:String
+    private lateinit var  email:String
 
-    var REQUEST_IMAGE:Int = 100
+    private var REQUEST_IMAGE:Int = 100
     private var selectedImage: Uri?=null
     private var postPath:String?=null
 
-    lateinit var connectionLiveData: ConnectionLiveData
-    private var isNetworkAvailable: Boolean = false
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            connectionLiveData = ConnectionLiveData(requireContext())
-            connectionLiveData.observe(this) { isNetwork ->
-                isNetworkAvailable = isNetwork
-            }
-        }else{
-            isNetworkAvailable = MetodosUsados.hasInternetConnection(requireContext())
-        }
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -95,7 +78,7 @@ class EditarPerfilFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val editarPerfilViewModel =
-            ViewModelProvider(this).get(EditarPerfilViewModel::class.java)
+            ViewModelProvider(this)[EditarPerfilViewModel::class.java]
 
 
 
@@ -164,13 +147,7 @@ class EditarPerfilFragment : Fragment() {
         btnSalvarPerfil.setOnClickListener {
             if (verificarCampos()){
 
-                isNetworkAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    isNetworkAvailable
-                }else{
-                    MetodosUsados.hasInternetConnection(requireContext())
-                }
-
-                if (isNetworkAvailable){
+                if (Constants.isNetworkAvailable){
                     actualizarPerfil()
 
                 }else{
@@ -191,9 +168,12 @@ class EditarPerfilFragment : Fragment() {
                     report?.let {
                         if(report.areAllPermissionsGranted()){
                             showImagePickerOptions()
-                        }
-                        if (report.isAnyPermissionPermanentlyDenied) {
-                            //showSettingsDialog()
+                        }else {
+                            MetodosUsados.showCustomSnackBar(
+                                binding.root,
+                                requireActivity(),
+                                Constants.ToastALERTA,
+                                getString(R.string.msg_permissao_armazenamento_continuar))
                         }
                     }
                 }
@@ -226,7 +206,7 @@ class EditarPerfilFragment : Fragment() {
         intent.putExtra(ImagePickerActivity.INTENT_IMAGE_PICKER_OPTION, ImagePickerActivity.REQUEST_IMAGE_CAPTURE)
 
         // setting aspect ratio
-        intent.putExtra(ImagePickerActivity.INTENT_LOCK_ASPECT_RATIO, true);
+        intent.putExtra(ImagePickerActivity.INTENT_LOCK_ASPECT_RATIO, true)
         intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_X, 1) // 16x9, 1x1, 3:4, 3:2
         intent.putExtra(ImagePickerActivity.INTENT_ASPECT_RATIO_Y, 1)
 
@@ -239,7 +219,7 @@ class EditarPerfilFragment : Fragment() {
     }
 
     private fun launchGalleryIntent() {
-        val intent = Intent(getContext(), ImagePickerActivity::class.java)
+        val intent = Intent(requireContext(), ImagePickerActivity::class.java)
         intent.putExtra(ImagePickerActivity.INTENT_IMAGE_PICKER_OPTION, ImagePickerActivity.REQUEST_GALLERY_IMAGE)
 
         // setting aspect ratio
@@ -281,13 +261,8 @@ class EditarPerfilFragment : Fragment() {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 binding.spinKitBottom.visibility = View.GONE
                 activateViews()
-                isNetworkAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    isNetworkAvailable
-                }else{
-                    MetodosUsados.isConnected(Constants.REQUEST_TIMEOUT,TAG)
-                }
 
-                if (!isNetworkAvailable){
+                if (!Constants.isNetworkAvailable){
                     MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastALERTA,getString(R.string.msg_erro_internet))
                 }else if (!t.message.isNullOrEmpty() && t.message!!.contains("timeout")){
                     MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastALERTA,getString(R.string.msg_erro_internet_timeout))
@@ -306,7 +281,7 @@ class EditarPerfilFragment : Fragment() {
             binding.editNome.setText(usuario.userNome)
             binding.editEmail.setText(usuario.userEmail)
             binding.editTelefone.setText(usuario.userPhone)
-            if (usuario.userPhoto.isNullOrEmpty()){
+            if (usuario.userPhoto.isNullOrEmpty()|| usuario.userPhoto == "null"){
                 binding.txtUserNameInitial.visibility = View.VISIBLE
                 if (!usuario.userNome.isNullOrEmpty()){
 
@@ -561,13 +536,8 @@ class EditarPerfilFragment : Fragment() {
                                 //set image here
                                 selectedImage = it
 
-                                isNetworkAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                    isNetworkAvailable
-                                }else{
-                                    MetodosUsados.hasInternetConnection(requireContext())
-                                }
 
-                                if (isNetworkAvailable){
+                                if (Constants.isNetworkAvailable){
                                     upLoadProfilePhoto(selectedImage)
 
                                 }else{
@@ -593,7 +563,7 @@ class EditarPerfilFragment : Fragment() {
         postPath = selectedImage?.path
         val imageFile = selectedImage?.toFile()
         val fileName = selectedImage?.toFile()?.name
-        val requestFile = RequestBody.create("image/*".toMediaTypeOrNull(), imageFile!!)
+        val requestFile = imageFile!!.asRequestBody("image/*".toMediaTypeOrNull())
         val photo = MultipartBody.Part.createFormData("image",fileName,requestFile)
 
         val retrofit = RetrofitInstance.api.userPhotoUpdate(photo)
@@ -620,13 +590,8 @@ class EditarPerfilFragment : Fragment() {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 binding.spinKitBottom.visibility = View.GONE
                 activateViews()
-                isNetworkAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    isNetworkAvailable
-                }else{
-                    MetodosUsados.isConnected(Constants.REQUEST_TIMEOUT,TAG)
-                }
 
-                if (!isNetworkAvailable){
+                if (!Constants.isNetworkAvailable){
                     MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastALERTA,getString(R.string.msg_erro_internet))
                 }else if (!t.message.isNullOrEmpty() && t.message!!.contains("timeout")){
                     MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastALERTA,getString(R.string.msg_erro_internet_timeout))

@@ -37,7 +37,7 @@ class RetrofitInstance {
                 .build()
         }
 
-        val api by lazy {
+        val api: ZoomUnitelAPI by lazy {
             retrofit.create(ZoomUnitelAPI::class.java)
         }
     }

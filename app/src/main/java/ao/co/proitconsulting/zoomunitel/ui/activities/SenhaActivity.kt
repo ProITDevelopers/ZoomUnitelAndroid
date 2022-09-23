@@ -1,12 +1,16 @@
 package ao.co.proitconsulting.zoomunitel.ui.activities
 
+import android.os.Build
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import ao.co.proitconsulting.zoomunitel.R
 import ao.co.proitconsulting.zoomunitel.adapters.ViewPagerFragmentsAdapter
 import ao.co.proitconsulting.zoomunitel.databinding.ActivitySenhaBinding
 import ao.co.proitconsulting.zoomunitel.helpers.Constants
+import ao.co.proitconsulting.zoomunitel.helpers.MetodosUsados
+import ao.co.proitconsulting.zoomunitel.helpers.network.ConnectionLiveData
 import ao.co.proitconsulting.zoomunitel.ui.fragments.senha.InserirCodigoFragment
 import ao.co.proitconsulting.zoomunitel.ui.fragments.senha.NovaPassFragment
 import ao.co.proitconsulting.zoomunitel.ui.fragments.senha.RecuperarFragment
@@ -14,6 +18,7 @@ import ao.co.proitconsulting.zoomunitel.ui.fragments.senha.RecuperarFragment
 class SenhaActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySenhaBinding
+    private lateinit var connectionLiveData: ConnectionLiveData
 
     companion object{
         private var mViewPager: ViewPager2? = null
@@ -27,13 +32,23 @@ class SenhaActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySenhaBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//        goToFragment(RecuperarFragment())
-
         showFrags()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            connectionLiveData = ConnectionLiveData(this)
+            connectionLiveData.observe(this) { isNetwork ->
+                Constants.isNetworkAvailable = isNetwork
+            }
+        }else{
+            Constants.isNetworkAvailable = MetodosUsados.hasInternetConnection(this)
+        }
 
     }
 
     private fun showFrags() {
+        val imgBack : ImageView = binding.imgBack
+        imgBack.setOnClickListener {
+            onBackPressed()
+        }
         mViewPager = binding.viewPager
         mViewPager?.isUserInputEnabled = false
         val adapter = ViewPagerFragmentsAdapter(this)
@@ -49,18 +64,6 @@ class SenhaActivity : AppCompatActivity() {
         mViewPager?.currentItem = 0
 
 
-
-        mViewPager?.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-
-
-
-            override fun onPageSelected(position: Int) {
-                if(position == 1)
-                    adapter.updateFrag(InserirCodigoFragment.newInstance(Constants.SEND_EMAIL),position)
-            }
-
-        })
-
     }
 
     override fun onBackPressed() {
@@ -68,21 +71,7 @@ class SenhaActivity : AppCompatActivity() {
         super.onBackPressed()
     }
 
-    /*
-    *private fun goToFragment(fragment: Fragment) {
-        val fragmentManager = supportFragmentManager
-        val transaction = fragmentManager.beginTransaction()
-        transaction.replace(R.id.frame_layout_senha, fragment, null)
-        transaction.commit()
 
-
-
-    }
-
-    override fun onBackPressed() {
-        finish()
-        super.onBackPressed()
-    }**/
 }
 
 

@@ -5,11 +5,9 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
-import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.view.Window
@@ -20,12 +18,9 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import ao.co.proitconsulting.zoomunitel.R
 import com.google.android.material.snackbar.Snackbar
-import java.net.InetAddress
-import java.net.UnknownHostException
 import java.text.Normalizer
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.concurrent.*
 import kotlin.random.Random
 
 @Suppress("DEPRECATION")
@@ -34,17 +29,7 @@ class MetodosUsados {
 
     companion object {
 
-        fun transparentStatusBar(activity: Activity){
-            val window: Window = activity.window
-            val decorView: View = window.decorView
-            decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                window.statusBarColor = Color.TRANSPARENT
-            }
-
-        }
 
         fun transparentNavigationBar(activity: Activity){
             val window: Window = activity.window
@@ -106,9 +91,9 @@ class MetodosUsados {
         }
 
 
-        fun removeAcentos(text:String):String {
-            val temp = Normalizer.normalize(text, Normalizer.Form.NFD).replace("\\p{InCombiningDiacriticalMarks}+".toRegex(), "")
-            return temp
+        fun removeAcentos(text: String): String {
+            return Normalizer.normalize(text, Normalizer.Form.NFD)
+                .replace("\\p{InCombiningDiacriticalMarks}+".toRegex(), "")
         }
 
         fun showCustomSnackBar(view: View?,activity: Activity?, type: Int, message: String) {
@@ -201,8 +186,8 @@ class MetodosUsados {
                     Constants.SHARE_URL_PLAYSTORE + appPackageName
 
 
-            shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Baixar Agora!");
-            shareIntent.putExtra(Intent.EXTRA_TEXT, postData);
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Baixar Agora!")
+            shareIntent.putExtra(Intent.EXTRA_TEXT, postData)
             shareIntent.type = "text/plain"
             context.startActivity(Intent.createChooser(shareIntent, "Partilhar App"))
         }
@@ -226,29 +211,7 @@ class MetodosUsados {
             return false
         }
 
-        fun isConnected(timeOut:Long,TAG:String):Boolean{
-            var inetAddress: InetAddress?=null
 
-            try {
-                val future = Executors.newSingleThreadExecutor().submit(Callable<InetAddress> {
-                    try {
-                        InetAddress.getByName("google.com")
-                    } catch (e : UnknownHostException) {
-                        null
-                    }
-                })
-                inetAddress = future.get(timeOut, TimeUnit.MILLISECONDS)
-                future.cancel(true)
-            } catch (exception:InterruptedException ) {
-                Log.d(TAG, "isConnected: InterruptedException: ${exception.message}")
-            } catch (exception: ExecutionException) {
-                Log.d(TAG, "isConnected: ExecutionException: ${exception.message}")
-            } catch (exception: TimeoutException) {
-                Log.d(TAG, "isConnected: TimeoutException : ${exception.message}")
-            }
-
-            return inetAddress != null && !inetAddress.equals("")
-        }
 
 
 

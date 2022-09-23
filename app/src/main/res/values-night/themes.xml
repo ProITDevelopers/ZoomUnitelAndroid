@@ -22,8 +22,8 @@
     <style name="Theme.ZoomUnitel.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:fontFamily">@font/poppins_medium</item>
         <item name="android:windowDisablePreview">true</item>
+        <item name="android:fontFamily">@font/poppins_medium</item>
     </style>
 
     <style name="CustomActivityAnimation" parent="@android:style/Animation.Activity">

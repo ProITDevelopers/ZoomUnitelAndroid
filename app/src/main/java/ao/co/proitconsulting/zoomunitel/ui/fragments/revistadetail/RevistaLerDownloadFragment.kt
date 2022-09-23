@@ -1,7 +1,7 @@
 package ao.co.proitconsulting.zoomunitel.ui.fragments.revistadetail
 
 
-import android.os.AsyncTask
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,24 +23,11 @@ class RevistaLerDownloadFragment : Fragment() {
     private var _binding: FragmentRevistaDetailLerDownloadBinding? = null
     private val binding get() = _binding!!
 
-    lateinit var mViewPager: ViewPager2
-    lateinit var revistaList: List<RevistaModel>
-    var currentPosition: Int = 0
-    lateinit var revistasDetailAdapter: RevistasLerDownloadAdapter
-    private var myAsyncTasks = arrayListOf<AsyncTask<*, *, *>>()
+    private lateinit var mViewPager: ViewPager2
+    private lateinit var revistaList: List<RevistaModel>
+    private var currentPosition: Int = 0
+    private lateinit var revistasDetailAdapter: RevistasLerDownloadAdapter
 
-    fun cancelRunningTasks() {
-        for ( myAsyncTask in myAsyncTasks) {
-            if (myAsyncTask.status.equals(AsyncTask.Status.RUNNING)) {
-                myAsyncTask.cancel(true)
-            }
-        }
-        myAsyncTasks.clear()
-    }
-
-    fun addRunningTask(task: AsyncTask<*, *, *>) {
-        myAsyncTasks.add(task)
-    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -124,6 +111,8 @@ class RevistaLerDownloadFragment : Fragment() {
 
 
     override fun onDestroyView() {
+        if (revistasDetailAdapter!=null)
+            revistasDetailAdapter.cancelRunningTasks()
         super.onDestroyView()
         _binding = null
     }
