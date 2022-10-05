@@ -1,7 +1,11 @@
 package ao.co.proitconsulting.zoomunitel.ui.fragments.cadastro
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.PorterDuff
 import android.graphics.Typeface
+import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.SpannableString
@@ -17,6 +21,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import ao.co.proitconsulting.zoomunitel.R
@@ -38,6 +43,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
+@Suppress("DEPRECATION")
 class LoginFragment : Fragment() {
 val TAG = "TAG_LoginFrag"
 
@@ -50,6 +56,8 @@ val TAG = "TAG_LoginFrag"
     private lateinit var emailTelefone :String
     private lateinit var password :String
 
+    //NORMAL_DRAWABLE_COLORS
+    private lateinit var editPasswordDrawable: Drawable
 
 
     override fun onCreateView(
@@ -62,7 +70,7 @@ val TAG = "TAG_LoginFrag"
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         val view: View = binding.root
 
-
+        setEditTextTint_Pre_lollipop()
         binding.editEmail.addTextChangedListener(object : TextWatcher{
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -138,6 +146,23 @@ val TAG = "TAG_LoginFrag"
         }
 
         return view
+    }
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun setEditTextTint_Pre_lollipop() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+
+            context.let {
+                editPasswordDrawable = resources.getDrawable(R.drawable.ic_baseline_lock_24)
+                editPasswordDrawable = DrawableCompat.wrap(editPasswordDrawable)
+
+                DrawableCompat.setTint(editPasswordDrawable,resources.getColor(R.color.orange_unitel))
+                DrawableCompat.setTintMode(editPasswordDrawable, PorterDuff.Mode.SRC_IN)
+
+                binding.editPassword.setCompoundDrawablesWithIntrinsicBounds(editPasswordDrawable,null,null,null)
+                binding.editPassword.setHintTextColor(ContextCompat.getColor(requireContext(), R.color.gray_color))
+            }
+
+        }
     }
 
     private fun verificarCampoPass(password: String) {

@@ -1,6 +1,9 @@
 package ao.co.proitconsulting.zoomunitel.adapters
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
+import android.os.Build
+import android.text.Layout.JUSTIFICATION_MODE_INTER_WORD
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,13 +28,14 @@ import com.flaviofaria.kenburnsview.RandomTransitionGenerator
 import com.github.ybq.android.spinkit.SpinKitView
 import com.makeramen.roundedimageview.RoundedImageView
 
-
+@SuppressLint("WrongConstant")
 class RevistasDetailsAdapter : RecyclerView.Adapter<RevistasDetailsAdapter.RevistaViewHolder>() {
 
     var itemClickListener : ((view: View,revistaList: List<RevistaModel>, position:Int)->Unit)?=null
 
     private val aDI = AccelerateDecelerateInterpolator()
     private val generator = RandomTransitionGenerator(10000,aDI)
+
 
     inner class RevistaViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
 
@@ -42,6 +46,7 @@ class RevistasDetailsAdapter : RecyclerView.Adapter<RevistasDetailsAdapter.Revis
         val txtRvTitle:TextView = itemView.findViewById(R.id.txtRvTitle)
         val txtData:TextView = itemView.findViewById(R.id.txtData)
         val txtDescricao:TextView = itemView.findViewById(R.id.txtDescricao)
+
         val btnVermais:Button = itemView.findViewById(R.id.btnVermais)
 
 
@@ -109,6 +114,9 @@ class RevistasDetailsAdapter : RecyclerView.Adapter<RevistasDetailsAdapter.Revis
                 })
                 .into(holder.rvImg)
 
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                holder.txtDescricao.justificationMode = JUSTIFICATION_MODE_INTER_WORD
+            }
             holder.txtRvTitle.text = revista.title
             holder.txtDescricao.text = revista.descricao
             holder.txtData.text = StringBuilder().append(MetodosUsados.getTimeStamp(revista.created_at)).toString()

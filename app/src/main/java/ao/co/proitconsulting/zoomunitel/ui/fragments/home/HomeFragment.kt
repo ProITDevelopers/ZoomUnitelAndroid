@@ -40,7 +40,7 @@ import kotlin.math.abs
 
 class HomeFragment : Fragment() {
 
-    val TAG = "TAG_HomeFrag"
+    private val TAG = "TAG_HomeFrag"
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
@@ -49,7 +49,8 @@ class HomeFragment : Fragment() {
     private lateinit var imgBackgnd: KenBurnsView
     private lateinit var mViewPager: ViewPager2
     private lateinit var revistasAdapter: RevistasAdapter
-
+    private val aDI = AccelerateDecelerateInterpolator()
+    private val generator = RandomTransitionGenerator(3000,aDI)
 
     private val slideHandler = Handler(Looper.getMainLooper())
 
@@ -90,8 +91,7 @@ class HomeFragment : Fragment() {
         imgBackgnd = binding.imgBackgnd
         mViewPager = binding.viewPagerImageSlider
 
-        val aDI = AccelerateDecelerateInterpolator()
-        val generator = RandomTransitionGenerator(3000,aDI)
+
         imgBackgnd.setTransitionGenerator(generator)
 
         setViewPager()
@@ -243,11 +243,13 @@ class HomeFragment : Fragment() {
     }
 
     private val sliderRunnable = Runnable {
-        mViewPager.currentItem = mViewPager.currentItem + 1
+        //mViewPager.currentItem = mViewPager.currentItem + 1
+        mViewPager.setCurrentItem(mViewPager.currentItem.plus(1),true)
     }
 
     private val runnable = Runnable {
-        mViewPager.currentItem = 0
+        //mViewPager.currentItem = 0
+        mViewPager.setCurrentItem(0,true)
     }
 
     override fun onResume() {

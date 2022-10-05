@@ -1,7 +1,9 @@
 package ao.co.proitconsulting.zoomunitel.ui.fragments.cadastro
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -64,7 +66,7 @@ class RegistroFragment : Fragment() {
 
         _binding = FragmentRegistroBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
+        setEditTextTint_Pre_lollipop()
         binding.editNome.addTextChangedListener(object : TextWatcher {
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -174,6 +176,19 @@ class RegistroFragment : Fragment() {
         }
 
         return root
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun setEditTextTint_Pre_lollipop() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+
+            context.let {
+
+                binding.editPass.setHintTextColor(ContextCompat.getColor(requireContext(), R.color.gray_color))
+                binding.editConfirmPass.setHintTextColor(ContextCompat.getColor(requireContext(), R.color.gray_color))
+            }
+
+        }
     }
 
     private fun registrar() {

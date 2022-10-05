@@ -1,6 +1,9 @@
 package ao.co.proitconsulting.zoomunitel.adapters
 
+import android.annotation.SuppressLint
 import android.graphics.Color
+import android.os.Build
+import android.text.Layout.JUSTIFICATION_MODE_INTER_WORD
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +12,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import ao.co.proitconsulting.zoomunitel.R
 import ao.co.proitconsulting.zoomunitel.models.DefinicoesModel
+
 
 
 class DefinicoesAdapter: RecyclerView.Adapter<DefinicoesAdapter.DefinicoesAdapterViewHolder>(){
@@ -71,17 +75,27 @@ class DefinicoesAdapter: RecyclerView.Adapter<DefinicoesAdapter.DefinicoesAdapte
         private const val TYPE_SETTINGS= 1
         private const val TYPE_HEADER = 2
     }
-
+    @SuppressLint("WrongConstant")
     class DefinicoesAdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
 
         var itemClickListener : ((view:View, item:DefinicoesModel,position:Int)->Unit)?=null
+
+
 
         private fun bindAbout(item: DefinicoesModel.About) {
             //Do your view assignment here from the data model
 
 
-            itemView.findViewById<TextView>(R.id.txtTitle)?.text = item.aboutTitle
-            itemView.findViewById<TextView>(R.id.txtDesc)?.text = item.aboutDesc
+//            itemView.findViewById<TextView>(R.id.txtTitle)?.text = item.aboutTitle
+//            itemView.findViewById<TextView>(R.id.txtDesc)?.text = item.aboutDesc
+            val txtTitle:TextView = itemView.findViewById(R.id.txtTitle)
+            txtTitle.text = item.aboutTitle
+
+            val txtDesc:TextView = itemView.findViewById(R.id.txtDesc)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                txtDesc.justificationMode = JUSTIFICATION_MODE_INTER_WORD
+            }
+            txtDesc.text = item.aboutDesc
 
             itemView.setOnClickListener {
                 itemClickListener?.invoke(it,item,adapterPosition)

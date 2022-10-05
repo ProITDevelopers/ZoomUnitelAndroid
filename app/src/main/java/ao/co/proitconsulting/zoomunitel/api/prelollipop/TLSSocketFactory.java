@@ -14,7 +14,7 @@ import javax.net.ssl.TrustManager;
 
 public class TLSSocketFactory extends SSLSocketFactory {
 
-    private final SSLSocketFactory delegate;
+    private SSLSocketFactory delegate;
 
     public TLSSocketFactory(TrustManager[] trustAllCerts) throws KeyManagementException, NoSuchAlgorithmException {
         SSLContext context = SSLContext.getInstance("TLS");
@@ -22,6 +22,11 @@ public class TLSSocketFactory extends SSLSocketFactory {
         delegate = context.getSocketFactory();
     }
 
+    public TLSSocketFactory() throws KeyManagementException, NoSuchAlgorithmException {
+        SSLContext context = SSLContext.getInstance("TLS");
+        context.init(null, null, null);
+        delegate = context.getSocketFactory();
+    }
 
     @Override
     public String[] getDefaultCipherSuites() {

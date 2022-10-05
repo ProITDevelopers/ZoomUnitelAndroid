@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_begin="@dimen/guidelines_dimens"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="@dimen/guidelines_dimens"
+        android:layout_marginLeft="@dimen/guidelines_dimens"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/guidelines_dimens"
+        android:layout_marginRight="@dimen/guidelines_dimens"
+        android:layout_marginEnd="@dimen/guidelines_dimens"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/txtTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/lbl_set_profile_photo"
+        android:textColor="@color/orange_unitel"
+        android:layout_marginTop="8dp"
+        android:padding="8dp"
+        android:textSize="@dimen/text_normal_size"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabGallery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginTop="16dp"
+        app:backgroundTint="@color/orange_unitel"
+        app:tint="@color/white"
+        app:srcCompat="@drawable/ic_baseline_add_photo_alternate_24"
+        app:layout_constraintTop_toBottomOf="@+id/txtTitle"
+        app:layout_constraintStart_toEndOf="@+id/guideline_left"
+        />
+
+    <TextView
+        android:id="@+id/txtGallery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/txt_galeria"
+        android:textColor="@color/txt_color_alterar_pass"
+        android:paddingTop="10dp"
+        android:paddingBottom="5dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:layout_constraintTop_toBottomOf="@+id/fabGallery"
+        app:layout_constraintStart_toStartOf="@+id/fabGallery"
+        app:layout_constraintEnd_toEndOf="@+id/fabGallery"
+        />
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabCamera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginTop="16dp"
+        app:backgroundTint="@color/orange_unitel"
+        app:tint="@color/white"
+        app:srcCompat="@drawable/ic_baseline_add_a_photo_24"
+        app:layout_constraintTop_toBottomOf="@+id/txtTitle"
+        app:layout_constraintStart_toEndOf="@+id/fabGallery"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+        />
+
+    <TextView
+        android:id="@+id/txtCamera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/txt_camera"
+        android:textColor="@color/txt_color_alterar_pass"
+        android:paddingTop="10dp"
+        android:paddingBottom="5dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:layout_constraintTop_toBottomOf="@+id/fabCamera"
+        app:layout_constraintStart_toStartOf="@+id/fabCamera"
+        app:layout_constraintEnd_toEndOf="@+id/fabCamera"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

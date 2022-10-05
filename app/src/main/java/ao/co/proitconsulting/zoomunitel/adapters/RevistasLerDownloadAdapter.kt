@@ -289,11 +289,11 @@ class RevistasLerDownloadAdapter : RecyclerView.Adapter<RevistasLerDownloadAdapt
 
             try {
                 val response = call.execute()
-                if (response.isSuccessful && response.body != null){
-                    val fileLength = response.body!!.contentLength()
+                if (response.isSuccessful && response.body() != null){
+                    val fileLength = response.body()!!.contentLength()
 
                     //download the file
-                    inputStream = response.body!!.byteStream()
+                    inputStream = response.body()!!.byteStream()
                     val folder = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()
                             + File.separator + "ZoOM_Unitel")
 
@@ -329,12 +329,13 @@ class RevistasLerDownloadAdapter : RecyclerView.Adapter<RevistasLerDownloadAdapt
 
                     }
 
-                        Constants.resultMessage = "Guardado em\n $storageDir"
+                    Constants.resultMessage = "Guardado em\n $storageDir"
                 }
 
 
             } catch (e: Exception) {
-            }finally {
+
+            } finally {
                 if(isCancelled)
                 {
                     // delete file code here

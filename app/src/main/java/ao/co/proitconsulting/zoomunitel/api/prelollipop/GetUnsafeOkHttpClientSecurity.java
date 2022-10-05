@@ -1,20 +1,22 @@
 package ao.co.proitconsulting.zoomunitel.api.prelollipop;
 
-import android.annotation.SuppressLint;
 import android.os.Build;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import okhttp3.OkHttpClient;
 
-@SuppressLint({"CustomX509TrustManager", "TrustAllX509TrustManager","DEPRECATION","BadHostnameVerifier"})
+
+@SuppressWarnings("deprecation")
 public class GetUnsafeOkHttpClientSecurity {
 
     public static OkHttpClient.Builder getUnsafeOkHttpClient() {
@@ -65,7 +67,12 @@ public class GetUnsafeOkHttpClientSecurity {
                 final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
                 builder.sslSocketFactory(sslSocketFactory, (X509TrustManager) trustAllCerts[0]);
             }
-            builder.hostnameVerifier((hostname, session) -> true);
+            builder.hostnameVerifier(new HostnameVerifier() {
+                @Override
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+            });
             return builder;
         } catch (Exception e) {
             throw new RuntimeException(e);

@@ -1,5 +1,6 @@
 package ao.co.proitconsulting.zoomunitel.ui.fragments.definicoes
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -7,10 +8,13 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import ao.co.proitconsulting.zoomunitel.R
 import ao.co.proitconsulting.zoomunitel.adapters.DefinicoesAdapter
 import ao.co.proitconsulting.zoomunitel.databinding.FragmentDefinicoesBinding
 import ao.co.proitconsulting.zoomunitel.helpers.MetodosUsados
@@ -26,6 +30,8 @@ class DefinicoesFragment : Fragment() {
 
     private var _binding: FragmentDefinicoesBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var dialogLayoutAlertDialog:Dialog
 
 
     private val definicoesAdapter: DefinicoesAdapter by lazy {
@@ -46,6 +52,7 @@ class DefinicoesFragment : Fragment() {
 
         _binding = FragmentDefinicoesBinding.inflate(inflater, container, false)
         val root: View = binding.root
+
 
 
 
@@ -72,6 +79,32 @@ class DefinicoesFragment : Fragment() {
             goToOptionSelected(position)
 
         }
+
+        //-------------------------------------------------------------//
+        //-------------------------------------------------------------//
+        //DIALOG_LAYOUT_ALERTA_GPS
+        dialogLayoutAlertDialog = context?.let { Dialog(it) }!!
+        dialogLayoutAlertDialog.setContentView(R.layout.layout_terminar_sessao)
+        dialogLayoutAlertDialog.setCancelable(true)
+        val dialog_card_view: CardView = dialogLayoutAlertDialog.findViewById(R.id.dialog_card_view)
+        val dialog_btn_cancel:Button = dialogLayoutAlertDialog.findViewById(R.id.dialog_btn_cancel)
+        val dialog_btn_ok:Button = dialogLayoutAlertDialog.findViewById(R.id.dialog_btn_ok)
+        MetodosUsados.handleDialogLayout(dialogLayoutAlertDialog,dialog_card_view)
+
+        dialog_btn_cancel.setOnClickListener {
+            dialogLayoutAlertDialog.cancel()
+        }
+
+        dialog_btn_ok.setOnClickListener {
+            dialogLayoutAlertDialog.cancel()
+            binding.spinKitBottom.visibility = View.VISIBLE
+            Handler(Looper.getMainLooper()).postDelayed({
+                terminarSessao()
+            }, 2000)
+
+        }
+
+
 
         return root
     }
@@ -104,15 +137,14 @@ class DefinicoesFragment : Fragment() {
             }
             //LOGOUT
             8->{
-                binding.spinKitBottom.visibility = View.VISIBLE
-                Handler(Looper.getMainLooper()).postDelayed({
-                    terminarSessao()
-                }, 2000)
-
+                if (!dialogLayoutAlertDialog.isShowing)
+                    dialogLayoutAlertDialog.show()
 
             }
         }
     }
+
+
 
     private fun terminarSessao() {
         AppPrefsSettings.getInstance().clearAppPrefs()

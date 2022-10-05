@@ -16,20 +16,20 @@ class RetrofitInstance {
     companion object{
 
         private val retrofit by lazy {
+            val gson:Gson = GsonBuilder().setLenient().create()
             val logging = HttpLoggingInterceptor()
             val tokenInterceptor = AddTokenInterceptor()
             logging.setLevel(HttpLoggingInterceptor.Level.BODY)
 
-//            val client = OkHttpClient.Builder()
+            //val client = OkHttpClient.Builder()
+
             val client = GetUnsafeOkHttpClientSecurity.getUnsafeOkHttpClient()
                 .connectTimeout(Constants.REQUEST_TIMEOUT, TimeUnit.MILLISECONDS)
                 .readTimeout(Constants.REQUEST_TIMEOUT, TimeUnit.MILLISECONDS)
                 .writeTimeout(Constants.REQUEST_TIMEOUT, TimeUnit.MILLISECONDS)
                 .addInterceptor(logging)
-                .addInterceptor(tokenInterceptor)
-                .build()
+                .addInterceptor(tokenInterceptor).build()
 
-            val gson:Gson = GsonBuilder().setLenient().create()
             Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL_ZOOM_UNITEL)
                 .addConverterFactory(GsonConverterFactory.create(gson))

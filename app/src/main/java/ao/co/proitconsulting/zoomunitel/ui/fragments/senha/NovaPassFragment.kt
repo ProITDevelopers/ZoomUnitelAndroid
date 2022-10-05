@@ -1,5 +1,7 @@
 package ao.co.proitconsulting.zoomunitel.ui.fragments.senha
 
+import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import ao.co.proitconsulting.zoomunitel.R
 import ao.co.proitconsulting.zoomunitel.api.RetrofitInstance
@@ -43,7 +46,7 @@ class NovaPassFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentNovaPassBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
+        setEditTextTint_Pre_lollipop()
         binding.editPassword.addTextChangedListener(object : TextWatcher {
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -89,6 +92,19 @@ class NovaPassFragment : Fragment() {
 
         }
         return root
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun setEditTextTint_Pre_lollipop() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+
+            context.let {
+
+                binding.editPassword.setHintTextColor(ContextCompat.getColor(requireContext(), R.color.gray_color))
+                binding.editConfirmPassword.setHintTextColor(ContextCompat.getColor(requireContext(), R.color.gray_color))
+            }
+
+        }
     }
 
     private fun verificarCampoPass(senha: String) {

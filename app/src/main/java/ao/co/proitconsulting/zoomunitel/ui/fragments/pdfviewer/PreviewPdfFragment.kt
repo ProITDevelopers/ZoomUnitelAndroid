@@ -1,4 +1,4 @@
-@file:Suppress("DEPRECATION")
+
 
 package ao.co.proitconsulting.zoomunitel.ui.fragments.pdfviewer
 
@@ -43,7 +43,7 @@ import java.io.IOException
 import java.io.InputStream
 import java.lang.ref.WeakReference
 
-
+@Suppress("DEPRECATION")
 class PreviewPdfFragment : Fragment() {
 
     private val TAG = "TAG_Pdf"
@@ -129,7 +129,9 @@ class PreviewPdfFragment : Fragment() {
         _binding = FragmentPreviewPdfBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-
+        val frameLayout = MainActivity.getFrameLayoutImgToolbar()
+        if (frameLayout != null)
+            frameLayout.visibility = View.VISIBLE
 
         Log.d(TAG, "Oncreate: isNetworkAvailable: ${Constants.isNetworkAvailable}")
 
@@ -611,11 +613,11 @@ class PreviewPdfFragment : Fragment() {
 
             try {
                 val response = call.execute()
-                if (response.isSuccessful && response.body != null){
-                    val fileLength = response.body!!.contentLength()
+                if (response.isSuccessful && response.body() != null){
+                    val fileLength = response.body()!!.contentLength()
 
                     //download the file
-                    inputStream = response.body!!.byteStream()
+                    inputStream = response.body()!!.byteStream()
                     val folder = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()
                             + File.separator + "ZoOM_Unitel")
 

@@ -15,6 +15,7 @@
     <!--  Cores_Principais  -->
 
     <color name="unitel_logo_tint_color">@color/white</color>
+    <color name="unitel_logo_tint_sessao_color">@color/orange_unitel</color>
     <color name="edittext_box_bkg_color">@color/default_night_color</color>
     <color name="edittext_text_color">@color/orange_unitel</color>
     <color name="edittext_cursor_color">@color/orange_unitel</color>
@@ -36,5 +37,7 @@
     <color name="txt_position_color">@color/white</color>
     <color name="spinKitView_color">@color/orange_unitel</color>
     <color name="box_border_grey">@color/default_night_color</color>
+    <color name="screen_top_rounded_color">@color/default_night_color</color>
+    <color name="default_text_color">@color/white</color>
 
 </resources>

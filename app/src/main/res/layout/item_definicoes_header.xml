@@ -5,7 +5,7 @@
     android:id="@+id/clRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="14dp"
+    android:paddingBottom="8dp"
     tools:background="@color/orange_unitel">
 
     <TextView

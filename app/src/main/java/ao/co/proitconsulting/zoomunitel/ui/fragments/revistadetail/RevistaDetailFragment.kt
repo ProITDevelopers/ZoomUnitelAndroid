@@ -15,6 +15,7 @@ import ao.co.proitconsulting.zoomunitel.R
 import ao.co.proitconsulting.zoomunitel.adapters.RevistasDetailsAdapter
 import ao.co.proitconsulting.zoomunitel.databinding.FragmentRevistaDetailBinding
 import ao.co.proitconsulting.zoomunitel.models.RevistaModel
+import ao.co.proitconsulting.zoomunitel.ui.activities.MainActivity
 import java.io.Serializable
 import kotlin.math.abs
 
@@ -48,6 +49,9 @@ class RevistaDetailFragment : Fragment() {
         _binding = FragmentRevistaDetailBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        val frameLayout = MainActivity.getFrameLayoutImgToolbar()
+        if (frameLayout != null)
+            frameLayout.visibility = View.VISIBLE
 
         setViewPager()
 

@@ -2,9 +2,12 @@ package ao.co.proitconsulting.zoomunitel.helpers
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
@@ -15,6 +18,7 @@ import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import ao.co.proitconsulting.zoomunitel.R
 import com.google.android.material.snackbar.Snackbar
@@ -61,6 +65,28 @@ class MetodosUsados {
             val randomNumber = Random
             return randomNumber.nextInt((max - min) + 1) + min
         }
+
+        //======================DIALOG_LAYOUT===============================================//
+        fun handleDialogLayout(dialogLayout: Dialog, cardView: CardView){
+
+            dialogLayout.window.let { window ->
+                window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                    cardView.preventCornerOverlap = false
+                    try {
+                        val context = dialogLayout.context
+                        val dividerID = context.resources.getIdentifier("android:id/titleDivider", null, null)
+                        val viewDivider:View = dialogLayout.findViewById(dividerID)
+                        viewDivider.setBackgroundColor(Color.TRANSPARENT)
+                    }catch (e:Exception){
+                        //The above code is used to remove the blue line of the Holo theme
+                        e.printStackTrace()
+                    }
+                }
+            }
+
+        }
+
 
         //===============================================================================================================
         //===============================================================================================================

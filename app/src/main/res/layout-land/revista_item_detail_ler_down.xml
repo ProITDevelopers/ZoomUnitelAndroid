@@ -159,7 +159,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+                android:textColor="@color/default_text_color"
+                />
 
             <android.widget.Button
                 android:id="@+id/btnLer"
@@ -196,7 +197,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+                android:textColor="@color/default_text_color"
+                />
 
             <android.widget.Button
                 android:id="@+id/btnDownload"

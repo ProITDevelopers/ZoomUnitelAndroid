@@ -9,11 +9,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.OpenableColumns
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.style.ForegroundColorSpan
 import android.util.Log
-import androidx.appcompat.app.AlertDialog
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider.getUriForFile
@@ -21,6 +18,8 @@ import ao.co.proitconsulting.zoomunitel.R
 import ao.co.proitconsulting.zoomunitel.databinding.ActivityImagePickerBinding
 import ao.co.proitconsulting.zoomunitel.helpers.Constants
 import ao.co.proitconsulting.zoomunitel.helpers.MetodosUsados
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -49,36 +48,90 @@ class ImagePickerActivity : AppCompatActivity() {
         @JvmStatic
         fun showImagePickerOptions(context: Context, listener: PickerOptionListener){
 
-            val title = SpannableString(context.getString(R.string.lbl_set_profile_photo))
-            title.setSpan(
-                ForegroundColorSpan(context.resources.getColor(R.color.white)),
-                0, title.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+//            val title = SpannableString(context.getString(R.string.lbl_set_profile_photo))
+//            title.setSpan(
+//                ForegroundColorSpan(context.resources.getColor(R.color.white)),
+//                0, title.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+//
+////        // setup the alert builder
+//            val builder = AlertDialog.Builder(context,R.style.MyDialogTheme)
+//            builder.setTitle(title)
+//
+//            // add a list
+//            val options = arrayOf(context.getString(R.string.lbl_take_camera_picture), context.getString(R.string.lbl_choose_from_gallery))
+//
+//            builder.setItems(options
+//            ) { dialog, which ->
+//                when (which) {
+//                    0 -> {
+//                        listener.onTakeCameraSelected()
+//                    }
+//                    1 -> {
+//                        listener.onChooseGallerySelected()
+//                    }
+//                }
+//            }
+//
+//
+//            // create and show the alert dialog
+//            val dialog = builder.create()
+//            dialog.show()
 
-//        // setup the alert builder
-            val builder = AlertDialog.Builder(context,R.style.MyDialogTheme)
-            builder.setTitle(title)
+            val dialog = BottomSheetDialog(context)
+            dialog.setContentView(R.layout.layout_select_photo)
+            val fabGallery = dialog.findViewById<FloatingActionButton>(R.id.fabGallery)
+            val txtGallery= dialog.findViewById<TextView>(R.id.txtGallery)
+            val fabCamera = dialog.findViewById<FloatingActionButton>(R.id.fabCamera)
+            val txtCamera= dialog.findViewById<TextView>(R.id.txtCamera)
 
-            // add a list
-            val options = arrayOf(context.getString(R.string.lbl_take_camera_picture), context.getString(R.string.lbl_choose_from_gallery))
 
-            builder.setItems(options
-            ) { dialog, which ->
-                when (which) {
-                    0 -> {
-                        listener.onTakeCameraSelected()
-                    }
-                    1 -> {
-                        listener.onChooseGallerySelected()
-                    }
-                }
+            fabGallery?.setOnClickListener {
+                dialog.cancel()
+                listener.onChooseGallerySelected()
+
             }
+            txtGallery?.setOnClickListener {
+                dialog.cancel()
+                listener.onChooseGallerySelected()
 
+            }
+            fabCamera?.setOnClickListener {
+                dialog.cancel()
+                listener.onTakeCameraSelected()
 
-            // create and show the alert dialog
-            val dialog = builder.create()
+            }
+            txtCamera?.setOnClickListener {
+                dialog.cancel()
+                listener.onTakeCameraSelected()
+
+            }
             dialog.show()
 
         }
+
+//        @JvmStatic
+//        fun showDialogOne(context: Context) {
+//
+//            val dialog = BottomSheetDialog(context)
+//            dialog.setContentView(R.layout.layout_select_photo)
+//            val btnEdit= dialog.findViewById<RelativeLayout>(R.id.rl_edit)
+//            val btnDelete= dialog.findViewById<RelativeLayout>(R.id.rl_delete)
+//            val btnAdd= dialog.findViewById<RelativeLayout>(R.id.rl_add)
+//
+//            btnEdit?.setOnClickListener {
+//                MetodosUsados.mostrarMensagem(context, "Clicked on Edit")
+//
+//            }
+//            btnDelete?.setOnClickListener {
+//                MetodosUsados.mostrarMensagem(context, "Clicked on Delete")
+//
+//            }
+//            btnAdd?.setOnClickListener {
+//                MetodosUsados.mostrarMensagem(context, "Clicked on Add")
+//
+//            }
+//            dialog.show()
+//        }
     }
 
     private var lockAspectRatio: Boolean = false
@@ -307,4 +360,6 @@ class ImagePickerActivity : AppCompatActivity() {
         }
 
     }
+
+
 }
