@@ -31,7 +31,8 @@ import com.makeramen.roundedimageview.RoundedImageView
 @SuppressLint("WrongConstant")
 class RevistasDetailsAdapter : RecyclerView.Adapter<RevistasDetailsAdapter.RevistaViewHolder>() {
 
-    var itemClickListener : ((view: View,revistaList: List<RevistaModel>, position:Int)->Unit)?=null
+//    var itemClickListener : ((view: View,revistaList: List<RevistaModel>, position:Int)->Unit)?=null
+    var itemClickListener : ((view: View,revista: RevistaModel, position:Int)->Unit)?=null
 
     private val aDI = AccelerateDecelerateInterpolator()
     private val generator = RandomTransitionGenerator(10000,aDI)
@@ -129,10 +130,10 @@ class RevistasDetailsAdapter : RecyclerView.Adapter<RevistasDetailsAdapter.Revis
         holder.rvImgBackgnd.setTransitionGenerator(generator)
 
         holder.rvImg.setOnClickListener {
-            itemClickListener?.invoke(it,differ.currentList,position)
+            itemClickListener?.invoke(it,revista,position)
         }
         holder.btnVermais.setOnClickListener {
-            itemClickListener?.invoke(it,differ.currentList,position)
+            itemClickListener?.invoke(it,revista,position)
         }
     }
 

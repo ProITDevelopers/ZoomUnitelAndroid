@@ -26,6 +26,7 @@ import ao.co.proitconsulting.zoomunitel.databinding.FragmentHomeBinding
 import ao.co.proitconsulting.zoomunitel.helpers.Constants
 import ao.co.proitconsulting.zoomunitel.helpers.Resource
 import ao.co.proitconsulting.zoomunitel.localDB.RevistaDatabase
+import ao.co.proitconsulting.zoomunitel.models.BookmarkRevistaModel
 import ao.co.proitconsulting.zoomunitel.ui.activities.MainActivity
 import ao.co.proitconsulting.zoomunitel.ui.repository.RevistaRepository
 import ao.co.proitconsulting.zoomunitel.ui.repository.RevistaViewModelProviderFactory
@@ -58,6 +59,8 @@ class HomeFragment : Fragment() {
     private lateinit var errorLayout: RelativeLayout
     private lateinit var imgErro: ImageView
     private lateinit var txtErro: TextView
+
+
 
 
 
@@ -131,7 +134,18 @@ class HomeFragment : Fragment() {
                     showErrorScreen(message)
                 }
             }
+
+            Constants.bookmarkList.clear()
+            for (revista in result.data as List){
+                val bookmark = BookmarkRevistaModel(revista.uid,0,0)
+                Constants.bookmarkList.add(bookmark)
+            }
+
+
+
         }
+
+
 
 
         return root
@@ -267,5 +281,6 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+
     }
 }

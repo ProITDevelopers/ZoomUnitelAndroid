@@ -27,6 +27,8 @@ import ao.co.proitconsulting.zoomunitel.api.prelollipop.GetUnsafeOkHttpClientSec
 import ao.co.proitconsulting.zoomunitel.databinding.FragmentPreviewPdfBinding
 import ao.co.proitconsulting.zoomunitel.helpers.Constants
 import ao.co.proitconsulting.zoomunitel.helpers.MetodosUsados
+import ao.co.proitconsulting.zoomunitel.localDB.AppPrefsSettings
+import ao.co.proitconsulting.zoomunitel.models.BookmarkRevistaModel
 import ao.co.proitconsulting.zoomunitel.models.RevistaModel
 import ao.co.proitconsulting.zoomunitel.ui.activities.MainActivity
 import com.github.barteksc.pdfviewer.PDFView
@@ -59,6 +61,7 @@ class PreviewPdfFragment : Fragment() {
     private lateinit var txtErro: TextView
 
     private lateinit var revista: RevistaModel
+    private var positionInList: Int = 0
     private lateinit var pdfView: PDFView
     private lateinit var progressBar: SpinKitView
     private lateinit var txtProgress: TextView
@@ -87,6 +90,8 @@ class PreviewPdfFragment : Fragment() {
     private var lastPageNumber:Int=0
     private var myAsyncTasks = arrayListOf<AsyncTask<*,*,*>>()
 
+    private var bookmarkList = AppPrefsSettings.getInstance().getBookmark()
+
     private fun cancelRunningTasks() {
         for ( myAsyncTask in myAsyncTasks) {
             if (myAsyncTask.status.equals(AsyncTask.Status.RUNNING)) {
@@ -100,21 +105,34 @@ class PreviewPdfFragment : Fragment() {
         myAsyncTasks.add(task)
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putInt("currentPageNumber",currentPageNumber)
-    }
+//    override fun onSaveInstanceState(outState: Bundle) {
+//        super.onSaveInstanceState(outState)
+//        outState.putInt("currentPageNumber",currentPageNumber)
+//    }
 
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         revista = args.revista
-        if (savedInstanceState!=null){
-            currentPageNumber = savedInstanceState.getInt("currentPageNumber",-1)
-            if (currentPageNumber == -1)
-                currentPageNumber = 0
+        positionInList = args.position
+
+
+        if (bookmarkList!=null){
+            if (bookmarkList!!.size>0){
+                for (rev in bookmarkList!!){
+                    if (revista.uid == rev.revistaId){
+                        currentPageNumber = rev.currentPage
+                        lastPageNumber = rev.lastPageNumber
+
+                        break
+                    }
+                }
+            }
+        }else{
+            bookmarkList = ArrayList(Constants.bookmarkList)
         }
+
 
     }
 
@@ -199,17 +217,6 @@ class PreviewPdfFragment : Fragment() {
             DrawableCompat.setTintMode(lastPageDrawableGray, PorterDuff.Mode.SRC_IN)
         }
 
-        imgFirstPage.setImageDrawable(firstPageDrawableGray)
-        imgFirstPage.isEnabled = false
-
-        imgPreviousPage.setImageDrawable(previousPageDrawableGray)
-        imgPreviousPage.isEnabled = false
-
-        imgNextPage.setImageDrawable(nextPageDrawable)
-        imgNextPage.isEnabled = true
-
-        imgLastPage.setImageDrawable(lastPageDrawable)
-        imgLastPage.isEnabled = true
 
         imgFirstPage.setOnClickListener {
             pdfView.jumpTo(0)
@@ -231,31 +238,7 @@ class PreviewPdfFragment : Fragment() {
         pdfView.setOnClickListener {
             showAndHideViews()
         }
-
-//        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
-//            override fun handleOnBackPressed() {
-//                // in here you can do logic when backPress is clicked
-//                try {
-//                    if (((activity as MainActivity)).supportActionBar != null){
-//                        if (!((activity as MainActivity)).supportActionBar!!.isShowing){
-//                            ((activity as MainActivity)).supportActionBar!!.show()
-//                            linearPageSectios.visibility = View.VISIBLE
-//
-//                        }else{
-//                            findNavController().navigateUp()
-//                        }
-//                    }
-//                } catch (e: Exception) {
-//
-//                }
-//
-//
-//
-//            }
-//        })
-
-
-
+        changePageListener()
         checkForStoragePermission()
 
         return root
@@ -331,7 +314,7 @@ class PreviewPdfFragment : Fragment() {
                 carregarPDF()
 
             }else{
-                showErrorScreen()
+                showErrorScreen(getString(R.string.msg_erro_internet))
 
             }
         }
@@ -342,10 +325,16 @@ class PreviewPdfFragment : Fragment() {
 
     }
 
-    private fun showErrorScreen(){
+    private fun showErrorScreen(msg:String){
 
-        imgErro.setImageResource(R.drawable.ic_baseline_wifi_off_24)
-        txtErro.text = getString(R.string.msg_erro_internet)
+        if (msg.contains("Wi-Fi")){
+            imgErro.setImageResource(R.drawable.ic_baseline_wifi_off_24)
+            txtErro.text = msg
+        }else{
+            imgErro.setImageResource(R.drawable.ic_baseline_error_outline_24)
+            txtErro.text = msg
+        }
+
 
         if (errorLayout.visibility == View.GONE){
             errorLayout.visibility = View.VISIBLE
@@ -683,7 +672,7 @@ class PreviewPdfFragment : Fragment() {
             if (pdfFragment == null || pdfFragment.isDetached){
                 return
             }
-            Log.d(pdfFragment.TAG, "onProgressUpdate: ${progress[0]}%")
+
             pdfFragment.txtProgress.text = StringBuilder().append(progress[0]!!).append("%").toString()
             super.onProgressUpdate(*progress)
 
@@ -700,15 +689,23 @@ class PreviewPdfFragment : Fragment() {
             pdfFragment.txtProgress.visibility = View.GONE
 
             if (fileResult == null){
-//                pdfView.visibility = (View.GONE)
-//                MetodosUsados.showCustomSnackBar(getString(R.string.msg_nenhuma_informacao))
+
+                pdfFragment.showErrorScreen(pdfFragment.getString(R.string.msg_nenhuma_informacao))
                 return
             }else if (fileResult.length().toInt() == 0) {
-//                pdfView.setVisibility(View.GONE);
-//                mostrarMensagemPopUp(getString(R.string.msg_nenhuma_informacao));
+                pdfFragment.showErrorScreen(pdfFragment.getString(R.string.msg_nenhuma_informacao))
+
+                return
+            }else if (!fileResult.isFile){
+                pdfFragment.showErrorScreen(pdfFragment.getString(R.string.msg_nenhuma_informacao))
                 return
             }
 
+            MetodosUsados.showCustomSnackBar(
+                pdfFragment.binding.root,
+                pdfFragment.activity,
+            Constants.ToastSUCESS,
+            "Ficheiro salvo em: Download/ZoOM_Unitel")
             pdfFragment.showPDfViewer(fileResult)
             super.onPostExecute(fileResult)
 
@@ -724,6 +721,7 @@ class PreviewPdfFragment : Fragment() {
 
 
     private fun showPDfViewer(fileResult: File) {
+
         pdfView.fromFile(fileResult)
             .password(null) // If have password
             .defaultPage(currentPageNumber) // Open default page, you can remember this value to open from the last time
@@ -820,6 +818,13 @@ class PreviewPdfFragment : Fragment() {
                 ((activity as MainActivity)).supportActionBar!!.show()
             }
         }
+
+        val bookmark = BookmarkRevistaModel(revista.uid,currentPageNumber,lastPageNumber)
+        bookmarkList!![positionInList] = bookmark
+        AppPrefsSettings.getInstance().saveBookmark(bookmarkList!!)
+
+
+
         super.onDestroyView()
         _binding = null
     }

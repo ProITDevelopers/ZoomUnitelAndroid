@@ -16,7 +16,6 @@ import ao.co.proitconsulting.zoomunitel.adapters.RevistasDetailsAdapter
 import ao.co.proitconsulting.zoomunitel.databinding.FragmentRevistaDetailBinding
 import ao.co.proitconsulting.zoomunitel.models.RevistaModel
 import ao.co.proitconsulting.zoomunitel.ui.activities.MainActivity
-import java.io.Serializable
 import kotlin.math.abs
 
 class RevistaDetailFragment : Fragment() {
@@ -97,15 +96,16 @@ class RevistaDetailFragment : Fragment() {
 
 
 
-        revistasDetailAdapter.itemClickListener = {v,revistaList, position ->
+        revistasDetailAdapter.itemClickListener = {v,revista,position ->
             v.setOnClickListener(null)
             val bundle = Bundle().apply {
-                putSerializable("revistaList",revistaList as Serializable)
+                putSerializable("revista",revista)
                 putInt("position",position)
+
             }
 
             findNavController().navigate(
-                R.id.action_revistaDetailFragment_to_revistaLerDownloadFragment,
+                R.id.action_revistaDetailFragment_to_previewPdfFragment,
                 bundle
             )
 

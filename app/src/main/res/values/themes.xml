@@ -14,11 +14,8 @@
         <item name="android:windowDisablePreview">true</item>
 
         <item name="android:windowAnimationStyle">@style/CustomActivityAnimation</item>
-    </style>
 
-    <style name="SplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:fontFamily">@font/poppins_medium</item>
-        <item name="android:windowDisablePreview">true</item>
+        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
 
     </style>
 
@@ -29,16 +26,21 @@
         <item name="android:windowDisablePreview">true</item>
     </style>
 
-    <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:fontFamily">@font/poppins_medium</item>
-        <item name="android:background">@color/orange_unitel</item>
-    </style>
-
     <style name="CustomActivityAnimation" parent="@android:style/Animation.Activity">
         <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
         <item name="android:activityOpenExitAnimation">@anim/slide_out_left</item>
         <item name="android:activityCloseEnterAnimation">@anim/slide_in_left</item>
         <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
+    </style>
+
+    <style name="AppBottomSheetDialogTheme"
+        parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+    </style>
+
+    <style name="AppModalStyle"
+        parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/rounded_dialog</item>
     </style>
 
     <style name="Theme.ZoomUnitel.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>

@@ -13,23 +13,16 @@
     <color name="gray_color">#808080</color>
     <!--  Cores_Principais  -->
 
-    <color name="unitel_logo_tint_color">@null</color>
     <color name="unitel_logo_tint_sessao_color">@null</color>
     <color name="edittext_box_bkg_color">#f8f4f4</color>
     <color name="edittext_text_color">@color/blue_unitel</color>
     <color name="edittext_cursor_color">@color/blue_unitel</color>
-    <color name="box_border_color">@color/blue_unitel</color>
 
     <color name="btn_login_start_color">@color/orange_unitel</color>
     <color name="btn_login_end_color">@color/orange_unitel</color>
     <color name="txt_color_login">@color/white</color>
 
     <color name="txt_color_alterar_pass">@color/blue_unitel</color>
-    <color name="txt_color_alterar_pass_number">@color/blue_unitel</color>
-    <color name="txt_color_register">@color/blue_unitel</color>
-
-    <color name="edittext_perfil_text_color">@color/orange_unitel</color>
-    <color name="edittext_perfil_cursor_color">@color/orange_unitel</color>
 
     <color name="bottom_navigation_color">@color/white</color>
     <color name="txt_position_color">@color/blue_unitel</color>

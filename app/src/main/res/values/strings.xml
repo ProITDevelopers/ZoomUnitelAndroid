@@ -7,7 +7,6 @@
 
     <string name="menu_home">Início</string>
     <string name="menu_perfil">Meu Perfil</string>
-    <string name="menu_editar_perfil">Editar Perfil</string>
     <string name="menu_definicoes">@string/action_settings</string>
 
 
@@ -16,8 +15,6 @@
     <string name="hint_forgot_password">Esqueceu a senha?</string>
     <string name="hint_btn_login">Entrar</string>
     <string name="hint_registe_se">Não tem uma conta? Registe-se</string>
-    <string name="msg_login_auth_verification">Verificando…</string>
-    <string name="msg_login_auth_validando">Validando os dados…</string>
 
     <!--    ============================REGISTER HINTS===========================-->
     <string name="primeiro_nome">Nome de usuário</string>
@@ -27,8 +24,6 @@
     <string name="hint_confirm_password">Confirmar Senha</string>
     <string name="btn_registar_text">Registar</string>
     <string name="cancelar">Cancelar</string>
-    <string name="msg_register_quase_pronto">Quase pronto…</string>
-    <string name="msg_register_enviando_dados">Enviando dados…</string>
     <string name="ja_possui_conta_login">Já possui uma conta? Login</string>
 
 
@@ -46,23 +41,11 @@
     <string name="msg_erro_num_telefone_invalido">Preencha com um número válido</string>
     <string name="msg_erro_password_fraca">Senha fraca</string>
     <string name="msg_erro_password_diferentes">Senha diferente</string>
-    <string name="enviar_email_client">Enviar email</string>
     <string name="terminar_sessao">Terminar a sessão</string>
     <string name="msg_deseja_continuar">Deseja continuar?</string>
-    <string name="text_sim">Sim</string>
-    <string name="text_nao">Não</string>
     <string name="text_ok">OK</string>
     <string name="toast_image_intent_null">Falta a opção de seletor de imagem!</string>
     <string name="lbl_set_profile_photo">Definir imagem de perfil</string>
-    <string name="lbl_take_camera_picture">Tirar uma foto</string>
-    <string name="lbl_choose_from_gallery">Escolha da galeria</string>
-    <string name="dialog_permission_title">Conceder permissões</string>
-    <string name="dialog_permission_message">Este aplicativo precisa de permissão para usar este recurso. Você pode concedê-los nas configurações do aplicativo.</string>
-    <string name="go_to_settings">VÁ PARA AS CONFIGURAÇÕES</string>
-    <string name="salvando_foto">Salvando a foto…</string>
-    <string name="salvando_dados">Salvando dados…</string>
-    <string name="msg_login_auth_carregando_dados">Carregando dados…</string>
-    <string name="msg_pass_send_email">Enviando email…</string>
     <string name="leia_o_texto">Leia o texto na integra como na versão impressa</string>
     <string name="leia_o_texto_digitais">Leia o texto formatado para dispositivos digitais</string>
     <string name="formatos_dispon_veis">Formatos disponíveis</string>
@@ -71,12 +54,9 @@
     <string name="revista">Revista</string>
     <string name="baixar_revista">Baixar revista</string>
     <string name="detalhes">Detalhes</string>
-    <string name="ver_mais">Ver mais</string>
+    <string name="ver_mais">Ler mais</string>
     <string name="logo_unitel_blue">logo_unitel_blue</string>
     <string name="logo_unitel_white">logo_unitel_white</string>
-    <string name="seguranca_e_login">Segurança e login</string>
-    <string name="alterar_senha">Alterar senha</string>
-    <string name="sobre">Sobre</string>
     <string name="g">G</string>
     <string name="salvar_dados">Salvar dados</string>
     <string name="telemovel">Telemóvel</string>
@@ -86,16 +66,12 @@
     <string name="esqueceu_a_senha">Esqueceu a senha?</string>
     <string name="continuar">Continuar</string>
     <string name="c_digo_de_redefini_o_enviado_para">Código de redefinição enviado para</string>
-    <string name="c_digo_de_redefini_o">Código de redefinição</string>
-    <string name="confirmar">Confirmar</string>
-    <string name="enviar">Enviar</string>
     <string name="sucesso">Sucesso</string>
 
     <string name="nao_recebeu_clique_aqui">Não recebeu? Clique aqui</string>
 
     <string name="foto_atualizada_sucesso">Foto de perfil atualizada com sucesso.</string>
     <string name="perfil_atualizado_sucesso">Perfil atualizado com sucesso.</string>
-    <string name="msg_nenhuma_informacao">Nenhuma informação disponível</string>
     <string name="msg_permissao_armazenamento_continuar">É necessário a permissão de Armazenamento para continuar</string>
     <string name="msg_erro_codigo_invalido">Código inválido</string>
     <string name="recuperar_senha">Recuperar Senha</string>
@@ -103,4 +79,5 @@
     <string name="nova_senha">Nova Senha</string>
     <string name="txt_galeria">Galeria</string>
     <string name="txt_camera">Câmera</string>
+    <string name="msg_nenhuma_informacao">Nenhuma informação disponível.</string>
 </resources>

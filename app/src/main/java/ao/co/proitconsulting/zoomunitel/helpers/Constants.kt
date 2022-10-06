@@ -1,5 +1,7 @@
 package ao.co.proitconsulting.zoomunitel.helpers
 
+import ao.co.proitconsulting.zoomunitel.models.BookmarkRevistaModel
+
 class Constants {
 
     companion object{
@@ -16,6 +18,8 @@ class Constants {
         const val ToastSUCESS:Int = 0
         const val ToastALERTA:Int = 1
         const val ToastERRO:Int = 3
+
+        val bookmarkList = ArrayList<BookmarkRevistaModel>()
 
         var SEND_EMAIL = "email"
         var PDF_FILE_NAME = ""
