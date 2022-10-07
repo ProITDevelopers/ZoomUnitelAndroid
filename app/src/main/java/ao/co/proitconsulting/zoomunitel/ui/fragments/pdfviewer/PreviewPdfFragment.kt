@@ -105,11 +105,6 @@ class PreviewPdfFragment : Fragment() {
         myAsyncTasks.add(task)
     }
 
-//    override fun onSaveInstanceState(outState: Bundle) {
-//        super.onSaveInstanceState(outState)
-//        outState.putInt("currentPageNumber",currentPageNumber)
-//    }
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -215,6 +210,8 @@ class PreviewPdfFragment : Fragment() {
 
             DrawableCompat.setTint(lastPageDrawableGray,resources.getColor(R.color.gray_color))
             DrawableCompat.setTintMode(lastPageDrawableGray, PorterDuff.Mode.SRC_IN)
+
+
         }
 
 
@@ -351,151 +348,10 @@ class PreviewPdfFragment : Fragment() {
         downloadTask.execute(pdfUrl.toString())
         addRunningTask(downloadTask)
 
-//        val retrofit = RetrofitInstance.api.downloadPdfFile(pdfUrl.toString())
-//        retrofit.enqueue(object :
-//            Callback<ResponseBody> {
-//
-//            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-//                if (response.isSuccessful) {
-//
-//                    val downloadTask = DownloadRetrofitTask(this@PreviewPdfFragment)
-//                    downloadTask.execute(response.body())
-//                    addRunningTask(downloadTask)
-////                    writeToFile(response.body()!!)
-//
-//                } else{
-//
-//                    progressBar.visibility = View.GONE
-//                    MetodosUsados.showCustomSnackBar(coordinatorLayout,requireActivity(),Constants.ToastALERTA,getString(R.string.msg_erro_servidor))
-//                }
-//
-//            }
-//
-//
-//
-//            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-//                Log.d(TAG, "onFailure: ${t.message}")
-//                progressBar.visibility = View.GONE
-//
-////                isNetworkAvailable = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-////                    isNetworkAvailable
-////                }else{
-////                    MetodosUsados.hasInternetConnection(requireContext())
-////                }
-//
-//                if (!Constants.isNetworkAvailable){
-//                    MetodosUsados.showCustomSnackBar(coordinatorLayout,requireActivity(),Constants.ToastALERTA,getString(R.string.msg_erro_internet))
-//                }else if (!t.message.isNullOrEmpty() && t.message!!.contains("timeout")){
-//                    MetodosUsados.showCustomSnackBar(coordinatorLayout,requireActivity(),Constants.ToastALERTA,getString(R.string.msg_erro_internet_timeout))
-//                }else{
-//                    MetodosUsados.showCustomSnackBar(coordinatorLayout,requireActivity(),Constants.ToastALERTA,getString(R.string.msg_erro_servidor))
-//                }
-//            }
-//
-//        })
     }
 
 
-//    private fun writeToFile(response: ResponseBody) {
-//        thread {
-//            var pdf_File: File? = null
-//            lateinit var inputStream:InputStream
-//            lateinit var outputStream:FileOutputStream
-//
-//            try {
-//                val fileLength = response.contentLength()
-//
-//                //download the file
-//                inputStream = response.byteStream()
-//                val folder = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()
-//                        + File.separator + "ZoOM_Unitel")
-//
-//                val storageDir = folder.absolutePath
-//
-//                if (!folder.exists())
-//                    folder.mkdirs()
-//
-//                pdf_File = File(storageDir+ Constants.PDF_FILE_NAME)
-//
-//                outputStream = FileOutputStream(pdf_File)
-//
-//                val data = ByteArray(4096)
-//                var total: Long = 0
-//                var count :Int=0
-//                var progressResult:Long =0
-//
-//                while ((inputStream.read(data).also { count = it }) != -1){
-//                    if (isCancelled) {
-//                        inputStream.close()
-//
-//                    }
-//                    total += count.toLong()
-//                    // publishing the progress....
-//                    if (fileLength > 0) { // only if total length is known
-//                        progressResult = (total * 100 / fileLength)
-//
-//                        requireActivity().runOnUiThread {
-//                            progressResult.let { progress->
-//                                if (progress.toInt()<=100){
-//                                    txtProgress.text = StringBuilder(progress.toInt()).append("%").toString()
-//                                }else{
-//                                    txtProgress.text = "100%"
-//                                    txtProgress.visibility = View.GONE
-//                                    progressBar.visibility = View.GONE
-//                                }
-//                            }
-//                        }
-//
-//                    }
-//
-//                    outputStream.write(data, 0, count)
-//
-//                }
-//
-//            } catch (e: Exception) {
-//            }finally {
-//                if(isCancelled)
-//                {
-//                    // delete file code here
-//                    pdf_File?.delete()
-//
-//                }
-//                try {
-//                    if (outputStream != null)
-//                        outputStream.close()
-//                    if (inputStream != null)
-//                        inputStream.close()
-//                } catch (ignored: IOException) {
-//                }
-//
-//
-//            }
-//            requireActivity().runOnUiThread() {
-//                pdf_File.let { fileResult->
-//                    if (fileResult == null){
-////                pdfView.visibility = (View.GONE)
-////                MetodosUsados.showCustomSnackBar(getString(R.string.msg_nenhuma_informacao))
-//
-//                    }else if (fileResult.length().toInt() == 0) {
-////                pdfView.setVisibility(View.GONE);
-////                mostrarMensagemPopUp(getString(R.string.msg_nenhuma_informacao));
-//
-//                    }
-//
-//                   showPDfViewer(fileResult!!)
-//                }
-//            }
-//
-//
-//        }
-//
-//
-//    }
 
-
-
-
-    //    class DownloadRetrofitTask(pdfFragment:PreviewPdfFragment) : AsyncTask<ResponseBody,Int?,File?>() {
     @Suppress("DEPRECATION")
     private class DownloadRetrofitTask(pdfFragment:PreviewPdfFragment) : AsyncTask<String?,Int?,File?>() {
 
@@ -520,74 +376,6 @@ class PreviewPdfFragment : Fragment() {
         }
 
 
-
-//        override fun doInBackground(vararg response: ResponseBody?): File? {
-//
-//            var pdf_File: File? = null
-//            lateinit var inputStream:InputStream
-//            lateinit var outputStream:FileOutputStream
-//
-//
-//            try {
-//                val fileLength = response[0]!!.contentLength()
-//
-//                //download the file
-//                inputStream = response[0]!!.byteStream()
-//                val folder = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString()
-//                        + File.separator + "ZoOM_Unitel")
-//
-//                val storageDir = folder.absolutePath
-//
-//                if (!folder.exists())
-//                    folder.mkdirs()
-//
-//                pdf_File = File(storageDir+ Constants.PDF_FILE_NAME)
-//
-//                outputStream = FileOutputStream(pdf_File)
-//
-//                val data = ByteArray(1024 * 4)
-//                var total: Long = 0
-//                var count :Int=0
-//                var progressResult:Long =0
-//
-//
-//
-//                while ((inputStream.read(data).also { count = it }) != -1){
-//                    if (isCancelled) {
-//                        inputStream.close()
-//                        return null
-//                    }
-//                    total += count.toLong()
-//                    // publishing the progress....
-//                    if (fileLength > 0) { // only if total length is known
-//                        progressResult = (total * 100 / fileLength)
-//                        publishProgress(progressResult.toInt())
-//                    }
-//
-//                    outputStream.write(data, 0, count)
-//
-//                }
-//
-//            } catch (e: Exception) {
-//            }finally {
-//                if(isCancelled)
-//                {
-//                    // delete file code here
-//                    pdf_File?.delete()
-//
-//                }
-//                try {
-//                    if (outputStream != null)
-//                        outputStream.close()
-//                    if (inputStream != null)
-//                        inputStream.close()
-//                } catch (ignored: IOException) {
-//                }
-//
-//
-//            }
-//            return pdf_File
-//        }
 
         @Deprecated("Deprecated in Java")
         override fun doInBackground(vararg sUrl: String?): File? {
@@ -645,6 +433,7 @@ class PreviewPdfFragment : Fragment() {
 
 
             } catch (e: Exception) {
+                e.printStackTrace()
             }finally {
                 if(isCancelled)
                 {
@@ -750,10 +539,11 @@ class PreviewPdfFragment : Fragment() {
             .onTap { true }
             .onRender { nbPages -> lastPageNumber = nbPages }
             .enableAnnotationRendering(true)
-//                .invalidPageColor(Color.WHITE)
+
             .load()
 
         txtPosition.visibility = (View.VISIBLE)
+
     }
 
     private fun changePageListener() {
@@ -770,6 +560,7 @@ class PreviewPdfFragment : Fragment() {
 
             imgLastPage.setImageDrawable(lastPageDrawable)
             imgLastPage.isEnabled = true
+
 
         }
         if (currentPageNumber>0 && currentPageNumber<lastPageNumber-1){

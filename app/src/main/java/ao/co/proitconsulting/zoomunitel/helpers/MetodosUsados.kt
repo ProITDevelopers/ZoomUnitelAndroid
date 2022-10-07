@@ -17,18 +17,16 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
 import ao.co.proitconsulting.zoomunitel.R
 import com.google.android.material.snackbar.Snackbar
 import java.text.Normalizer
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import kotlin.random.Random
 
 @Suppress("DEPRECATION")
-
 class MetodosUsados {
 
     companion object {
@@ -43,28 +41,10 @@ class MetodosUsados {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 window.navigationBarColor = ContextCompat.getColor(activity, R.color.white)
+                WindowCompat.setDecorFitsSystemWindows(window, false)
             }
         }
 
-        //=====================================================================//
-        //==============MOSTRAR_MENSAGENS=======================================================//
-        fun mostrarMensagem(mContexto: Context, mensagem:Int) {
-            Toast.makeText(mContexto,mensagem,Toast.LENGTH_SHORT).show()
-        }
-
-        fun mostrarMensagem(mContexto: Context, mensagem:String) {
-            Toast.makeText(mContexto,mensagem,Toast.LENGTH_SHORT).show()
-        }
-
-        //======================GERAR_NUMEROS_ALEATORIOS_INTEIROS===============================================//
-        fun getRandomNumbers(min: Int, max: Int): Int {
-            if (min>=max){
-                throw IllegalArgumentException("max must be greater than min")
-            }
-
-            val randomNumber = Random
-            return randomNumber.nextInt((max - min) + 1) + min
-        }
 
         //======================DIALOG_LAYOUT===============================================//
         fun handleDialogLayout(dialogLayout: Dialog, cardView: CardView){

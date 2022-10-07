@@ -226,9 +226,9 @@ class RegistroFragment : Fragment() {
 
                         Log.d(TAG, "ResponseBody: $mensagem")
                     }catch (e: IOException){
-
-                    }catch (e:JSONException){
-
+                        Log.e(TAG, "onResponseIOException: ${e.message}")
+                    }catch (e: JSONException){
+                        Log.e(TAG, "onResponseJSONException: ${e.message}")
                     }
 
                 } else{
@@ -245,10 +245,10 @@ class RegistroFragment : Fragment() {
                             MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastERRO,errorMessage.toString())
                         }
                         Log.d(TAG, "onResponse_NOTsuccess: ${response.errorBody()?.string()}")
-                    }catch (e:IOException){
-
-                    }catch (e:JSONException){
-
+                    }catch (e: IOException){
+                        Log.e(TAG, "onResponseIOException: ${e.message}")
+                    }catch (e: JSONException){
+                        Log.e(TAG, "onResponseJSONException: ${e.message}")
                     }
                 }
             }
@@ -312,10 +312,10 @@ class RegistroFragment : Fragment() {
                                 AppPrefsSettings.getInstance().saveAuthToken(jsonResponse.getString("token"))
                                 launchHomescreen()
                             }
-                        }catch (e:IOException){
-
-                        }catch (e:JSONException){
-
+                        }catch (e: IOException){
+                            Log.e(TAG, "onResponseIOException: ${e.message}")
+                        }catch (e: JSONException){
+                            Log.e(TAG, "onResponseJSONException: ${e.message}")
                         }
 
                     }else{

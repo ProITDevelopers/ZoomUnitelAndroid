@@ -120,10 +120,10 @@ class InserirCodigoFragment : Fragment() {
                                 MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastSUCESS,mensagem.toString())
 
                             }
-                        }catch (e:IOException){
-
-                        }catch (e:JSONException){
-
+                        }catch (e: IOException){
+                            Log.e(TAG, "onResponseIOException: ${e.message}")
+                        }catch (e: JSONException){
+                            Log.e(TAG, "onResponseJSONException: ${e.message}")
                         }
 
                     }else{
@@ -144,10 +144,10 @@ class InserirCodigoFragment : Fragment() {
                             MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastERRO,errorMessage.toString())
                         }
                         Log.d(TAG, "onResponse_NOTsuccess: ${response.errorBody()?.string()}")
-                    }catch (e:IOException){
-
-                    }catch (e:JSONException){
-
+                    }catch (e: IOException){
+                        Log.e(TAG, "onResponseIOException: ${e.message}")
+                    }catch (e: JSONException){
+                        Log.e(TAG, "onResponseJSONException: ${e.message}")
                     }
                 }
             }
@@ -200,10 +200,10 @@ class InserirCodigoFragment : Fragment() {
                             MetodosUsados.showCustomSnackBar(view,activity,Constants.ToastERRO,errorMessage.toString())
                         }
                         Log.d(TAG, "onResponse_NOTsuccess: ${response.errorBody()?.string()}")
-                    }catch (e:IOException){
-
-                    }catch (e:JSONException){
-
+                    }catch (e: IOException){
+                        Log.e(TAG, "onResponseIOException: ${e.message}")
+                    }catch (e: JSONException){
+                        Log.e(TAG, "onResponseJSONException: ${e.message}")
                     }
                 }
             }

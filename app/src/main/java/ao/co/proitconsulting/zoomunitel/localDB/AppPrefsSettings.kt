@@ -90,8 +90,8 @@ class AppPrefsSettings {
     fun getBookmark(): ArrayList<BookmarkRevistaModel> ? {
         val bookmarkData:String? = sharedPreferences.getString(KEY_BOOKMARK, null)
         val type: Type = object : TypeToken<ArrayList<BookmarkRevistaModel>>(){}.type
-        val bookmarkList = gson.fromJson(bookmarkData,type) as? ArrayList<BookmarkRevistaModel>
-        return bookmarkList
+        return gson.fromJson(bookmarkData,type) as? ArrayList<BookmarkRevistaModel>
+
     }
 
 

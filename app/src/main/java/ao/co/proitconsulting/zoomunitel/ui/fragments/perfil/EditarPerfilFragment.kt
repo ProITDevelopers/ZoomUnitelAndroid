@@ -637,9 +637,9 @@ class EditarPerfilFragment : Fragment() {
                             }
                             Log.d(TAG, "onResponse_success: $body")
                         } catch (e: Exception) {
-
+                            Log.e(TAG, "onResponseException: ${e.message}")
                         } catch (e: JSONException){
-
+                            Log.e(TAG, "onResponseJSONException: ${e.message}")
                         }
 
                     }
@@ -656,9 +656,9 @@ class EditarPerfilFragment : Fragment() {
                         }
                         Log.d(TAG, "onResponse_NOTsuccess: ${response.errorBody()?.string()}")
                     }catch (e: IOException){
-
+                        Log.e(TAG, "onResponseIOException: ${e.message}")
                     }catch (e: JSONException){
-
+                        Log.e(TAG, "onResponseJSONException: ${e.message}")
                     }
                 }
             }

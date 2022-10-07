@@ -46,13 +46,6 @@
     <string name="text_ok">OK</string>
     <string name="toast_image_intent_null">Falta a opção de seletor de imagem!</string>
     <string name="lbl_set_profile_photo">Definir imagem de perfil</string>
-    <string name="leia_o_texto">Leia o texto na integra como na versão impressa</string>
-    <string name="leia_o_texto_digitais">Leia o texto formatado para dispositivos digitais</string>
-    <string name="formatos_dispon_veis">Formatos disponíveis</string>
-    <string name="digital">Digital</string>
-    <string name="ler_revista">Ler revista</string>
-    <string name="revista">Revista</string>
-    <string name="baixar_revista">Baixar revista</string>
     <string name="detalhes">Detalhes</string>
     <string name="ver_mais">Ler mais</string>
     <string name="logo_unitel_blue">logo_unitel_blue</string>

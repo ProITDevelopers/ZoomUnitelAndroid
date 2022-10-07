@@ -85,9 +85,6 @@ class DefinicoesAdapter: RecyclerView.Adapter<DefinicoesAdapter.DefinicoesAdapte
         private fun bindAbout(item: DefinicoesModel.About) {
             //Do your view assignment here from the data model
 
-
-//            itemView.findViewById<TextView>(R.id.txtTitle)?.text = item.aboutTitle
-//            itemView.findViewById<TextView>(R.id.txtDesc)?.text = item.aboutDesc
             val txtTitle:TextView = itemView.findViewById(R.id.txtTitle)
             txtTitle.text = item.aboutTitle
 

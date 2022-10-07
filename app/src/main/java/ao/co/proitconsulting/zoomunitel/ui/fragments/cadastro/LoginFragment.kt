@@ -299,10 +299,10 @@ val TAG = "TAG_LoginFrag"
                                 AppPrefsSettings.getInstance().saveAuthToken(jsonResponse.getString("token"))
                                 launchHomescreen()
                             }
-                        }catch (e:IOException){
-
+                        }catch (e: IOException){
+                            Log.e(TAG, "onResponseIOException: ${e.message}")
                         }catch (e: JSONException){
-
+                            Log.e(TAG, "onResponseJSONException: ${e.message}")
                         }
                     }else{
                         binding.spinKitBottom.visibility = View.GONE
@@ -325,9 +325,9 @@ val TAG = "TAG_LoginFrag"
                         }
                         Log.d(TAG, "onResponse_NOTsuccess: ${response.errorBody()?.string()}")
                     }catch (e: IOException){
-
+                        Log.e(TAG, "onResponseIOException: ${e.message}")
                     }catch (e: JSONException){
-
+                        Log.e(TAG, "onResponseJSONException: ${e.message}")
                     }
 
                 }

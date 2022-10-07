@@ -57,7 +57,5 @@ interface ZoomUnitelAPI {
     @GET("/revista")
     suspend fun getTodasRevistas() : List<RevistaModel>
 
-    @Streaming
-    @GET
-    fun downloadPdfFile(@Url pdfUrl: String) : Call<ResponseBody>
+
 }

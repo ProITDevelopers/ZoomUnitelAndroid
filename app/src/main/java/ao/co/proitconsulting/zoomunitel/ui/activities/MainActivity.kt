@@ -98,11 +98,6 @@ class MainActivity : AppCompatActivity() {
         txtUserName = view.findViewById(R.id.txtUserName)
         txtUserEmail = view.findViewById(R.id.txtUserEmail)
 
-        //        binding.appBarMain.fab.setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                .setAction("Action", null).show()
-//        }
-
 
         carregarDadosLocal(AppPrefsSettings.getInstance().getUser())
 
@@ -207,19 +202,12 @@ class MainActivity : AppCompatActivity() {
                 } else{
 
                     try {
-//                        val responseBodyError = response.errorBody()?.string()
-//                        if (!responseBodyError.isNullOrEmpty()){
-//                            val jsonResponseBodyError = JSONObject(responseBodyError)
-//                            val jsorError = jsonResponseBodyError.get("erro")
-//                            val jsonBodyError = JSONObject(jsorError.toString())
-//                            val errorMessage = jsonBodyError.get("mensagem")
-//
-//                        }
+
                         Log.d(TAG, "onResponse_NOTsuccess: ${response.errorBody()?.string()}")
                     }catch (e: IOException){
-
+                        Log.e(TAG, "onResponseIOException: ${e.message}")
                     }catch (e: JSONException){
-
+                        Log.e(TAG, "onResponseJSONException: ${e.message}")
                     }
                 }
             }

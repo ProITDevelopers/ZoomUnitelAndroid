@@ -23,7 +23,7 @@ class Constants {
 
         var SEND_EMAIL = "email"
         var PDF_FILE_NAME = ""
-        var resultMessage :String?=null
+
         var isNetworkAvailable:Boolean = false
 
 

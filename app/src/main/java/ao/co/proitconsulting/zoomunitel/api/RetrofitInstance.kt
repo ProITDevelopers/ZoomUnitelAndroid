@@ -19,7 +19,7 @@ class RetrofitInstance {
             val gson:Gson = GsonBuilder().setLenient().create()
             val logging = HttpLoggingInterceptor()
             val tokenInterceptor = AddTokenInterceptor()
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY)
+            logging.level = HttpLoggingInterceptor.Level.BODY
 
             //val client = OkHttpClient.Builder()
 

@@ -18,9 +18,6 @@ class ViewPagerFragmentsAdapter(fa: FragmentActivity): FragmentStateAdapter(fa) 
         mFragmentTitleList.add(title)
     }
 
-//    fun updateFrag(fragment: Fragment, position: Int){
-//        mFragmentList[position] = fragment
-//    }
 
     override fun getItemCount(): Int {
         return mFragmentList.size
