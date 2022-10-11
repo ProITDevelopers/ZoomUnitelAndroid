@@ -2,6 +2,7 @@ package ao.co.proitconsulting.zoomunitel.ui.fragments.definicoes
 
 import android.app.Dialog
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -9,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -32,11 +34,17 @@ class DefinicoesFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var dialogLayoutAlertDialog:Dialog
-
-
     private val definicoesAdapter: DefinicoesAdapter by lazy {
         DefinicoesAdapter()
     }
+
+    private var appHiddenFeatureCount=0
+    private var versionHiddenFeatureCount=0
+    private var hiddenFeatureCount=0
+
+    private val user = AppPrefsSettings.getInstance().getUser()
+    private  var mediaPlayer: MediaPlayer?=null
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -106,6 +114,7 @@ class DefinicoesFragment : Fragment() {
 
 
 
+
         return root
     }
 
@@ -113,15 +122,26 @@ class DefinicoesFragment : Fragment() {
         when(position){
             //ZOOM
             1->{
+                appHiddenFeatureCount+=1
 
             }
             //VERSAO
             2->{
+                versionHiddenFeatureCount+=1
 
             }
             //DESENVOLVEDOR
             3->{
-
+                showHiddenFeature()
+//                playBeep()
+//
+//
+//                Handler(Looper.getMainLooper()).postDelayed({
+//                    binding.spinKitBottom.visibility = View.GONE
+//                    findNavController().navigate(
+//                        R.id.action_nav_definicoes_to_userDocFragment
+//                    )
+//                }, 1000)
             }
             //FEEDBACK
             4->{
@@ -146,6 +166,73 @@ class DefinicoesFragment : Fragment() {
 
 
 
+    private fun showHiddenFeature() {
+        hiddenFeatureCount = appHiddenFeatureCount + versionHiddenFeatureCount
+
+        if (hiddenFeatureCount<25 || hiddenFeatureCount>25){
+            appHiddenFeatureCount = 0
+            versionHiddenFeatureCount= 0
+            return
+        }else{
+            Handler(Looper.getMainLooper()).postDelayed({
+                hiddenFeatureCount = 0
+                appHiddenFeatureCount = 0
+                versionHiddenFeatureCount= 0
+                playBeep()
+
+                binding.spinKitBottom.visibility = View.VISIBLE
+                Handler(Looper.getMainLooper()).postDelayed({
+                    binding.spinKitBottom.visibility = View.GONE
+//                    findNavController().navigate(
+//                        R.id.action_nav_definicoes_to_userDocFragment
+//                    )
+                    if(user!=null){
+                        Toast.makeText(requireContext(), "Olá ${user.userNome}", Toast.LENGTH_SHORT).show()
+
+                    }
+                }, 1000)
+
+
+            }, 500)
+
+        }
+
+
+
+
+
+    }
+
+    private fun playBeep() {
+        try {
+
+            if (mediaPlayer == null){
+                mediaPlayer = MediaPlayer.create(requireContext(),R.raw.ring_sound_effect)
+                mediaPlayer?.setOnCompletionListener{
+                    MediaPlayer.OnCompletionListener {
+                        stopMediaPlayer()
+
+                    }
+
+                }
+            }
+            mediaPlayer?.setVolume(100f, 100f)
+            mediaPlayer?.isLooping = false
+            mediaPlayer?.start()
+
+        } catch (e:Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun stopMediaPlayer() {
+        if (mediaPlayer!=null){
+            mediaPlayer?.release()
+            mediaPlayer = null
+        }
+    }
+
+
     private fun terminarSessao() {
         AppPrefsSettings.getInstance().clearAppPrefs()
         binding.spinKitBottom.visibility = View.GONE
@@ -155,9 +242,16 @@ class DefinicoesFragment : Fragment() {
         activity?.finish()
     }
 
+    override fun onStop() {
+        stopMediaPlayer()
+        super.onStop()
+    }
+
     override fun onDestroyView() {
+        stopMediaPlayer()
         super.onDestroyView()
         _binding = null
+
     }
 
 

@@ -12,6 +12,8 @@ class Constants {
         const val PDF_PATH = BASE_URL_ZOOM_UNITEL+"revista/view/"
         const val SHARE_URL_PLAYSTORE = "https://play.google.com/store/apps/details?id="
 
+        const val GOOGLE_DRIVE_LINK = "https://drive.google.com/viewerng/viewer?embedded=true&url="
+
         const val SLIDE_TIME_DELAY:Long = 8000
         const val REQUEST_TIMEOUT:Long = 10000
 

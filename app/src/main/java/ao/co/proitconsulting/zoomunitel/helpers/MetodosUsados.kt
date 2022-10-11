@@ -18,8 +18,6 @@ import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
-import androidx.core.view.WindowCompat
 import ao.co.proitconsulting.zoomunitel.R
 import com.google.android.material.snackbar.Snackbar
 import java.text.Normalizer
@@ -40,10 +38,13 @@ class MetodosUsados {
                 WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN)
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                window.navigationBarColor = ContextCompat.getColor(activity, R.color.white)
-                WindowCompat.setDecorFitsSystemWindows(window, false)
+//                window.navigationBarColor = ContextCompat.getColor(activity, R.color.white)
+                window.navigationBarColor = Color.TRANSPARENT
+
             }
         }
+
+
 
 
         //======================DIALOG_LAYOUT===============================================//

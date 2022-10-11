@@ -542,6 +542,8 @@ class PreviewPdfFragment : Fragment() {
 
             .load()
 
+
+
         txtPosition.visibility = (View.VISIBLE)
 
     }

@@ -49,7 +49,11 @@
         app:exitAnim="@anim/slide_out_left"
         app:popEnterAnim="@anim/slide_in_left"
         app:popExitAnim="@anim/slide_out_right"
-        />
+        >
+        <action
+            android:id="@+id/action_nav_definicoes_to_userDocFragment"
+            app:destination="@id/userDocFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/editarPerfilFragment"
@@ -87,4 +91,10 @@
             android:name="position"
             app:argType="integer" />
     </fragment>
+
+    <fragment
+        android:id="@+id/userDocFragment"
+        android:name="ao.co.proitconsulting.zoomunitel.ui.fragments.definicoes.UserDocFragment"
+        android:label="@string/curriculum_vitae"
+        tools:layout="@layout/fragment_user_doc" />
 </navigation>
