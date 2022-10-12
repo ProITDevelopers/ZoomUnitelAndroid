@@ -10,10 +10,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ao.co.proitconsulting.zoomunitel.R
@@ -40,7 +40,7 @@ class DefinicoesFragment : Fragment() {
 
     private var appHiddenFeatureCount=0
     private var versionHiddenFeatureCount=0
-    private var hiddenFeatureCount=0
+
 
     private val user = AppPrefsSettings.getInstance().getUser()
     private  var mediaPlayer: MediaPlayer?=null
@@ -133,15 +133,6 @@ class DefinicoesFragment : Fragment() {
             //DESENVOLVEDOR
             3->{
                 showHiddenFeature()
-//                playBeep()
-//
-//
-//                Handler(Looper.getMainLooper()).postDelayed({
-//                    binding.spinKitBottom.visibility = View.GONE
-//                    findNavController().navigate(
-//                        R.id.action_nav_definicoes_to_userDocFragment
-//                    )
-//                }, 1000)
             }
             //FEEDBACK
             4->{
@@ -167,35 +158,48 @@ class DefinicoesFragment : Fragment() {
 
 
     private fun showHiddenFeature() {
-        hiddenFeatureCount = appHiddenFeatureCount + versionHiddenFeatureCount
 
-        if (hiddenFeatureCount<25 || hiddenFeatureCount>25){
+        if ((appHiddenFeatureCount == 16 && versionHiddenFeatureCount == 9) ||
+            (appHiddenFeatureCount == 9 && versionHiddenFeatureCount == 16)){
             appHiddenFeatureCount = 0
             versionHiddenFeatureCount= 0
-            return
-        }else{
             Handler(Looper.getMainLooper()).postDelayed({
-                hiddenFeatureCount = 0
-                appHiddenFeatureCount = 0
-                versionHiddenFeatureCount= 0
+
                 playBeep()
 
-                binding.spinKitBottom.visibility = View.VISIBLE
                 Handler(Looper.getMainLooper()).postDelayed({
-                    binding.spinKitBottom.visibility = View.GONE
-//                    findNavController().navigate(
-//                        R.id.action_nav_definicoes_to_userDocFragment
-//                    )
-                    if(user!=null){
-                        Toast.makeText(requireContext(), "Olá ${user.userNome}", Toast.LENGTH_SHORT).show()
+                    findNavController().navigate(
+                        R.id.action_nav_definicoes_to_userDocFragment
+                    )
 
-                    }
-                }, 1000)
+                }, 800)
 
 
             }, 500)
+        }else{
 
+            appHiddenFeatureCount = 0
+            versionHiddenFeatureCount= 0
+            return
         }
+
+
+
+//        Handler(Looper.getMainLooper()).postDelayed({
+//            appHiddenFeatureCount = 0
+//            versionHiddenFeatureCount= 0
+//            playBeep()
+//
+//
+//            Handler(Looper.getMainLooper()).postDelayed({
+//                findNavController().navigate(
+//                    R.id.action_nav_definicoes_to_userDocFragment
+//                )
+//
+//            }, 800)
+//
+//
+//        }, 500)
 
 
 
@@ -211,7 +215,6 @@ class DefinicoesFragment : Fragment() {
                 mediaPlayer?.setOnCompletionListener{
                     MediaPlayer.OnCompletionListener {
                         stopMediaPlayer()
-
                     }
 
                 }

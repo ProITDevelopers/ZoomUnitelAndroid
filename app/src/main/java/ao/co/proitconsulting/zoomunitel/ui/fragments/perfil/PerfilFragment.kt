@@ -96,6 +96,11 @@ class PerfilFragment : Fragment() {
                     .centerCrop()
                     .placeholder(R.drawable.user_placeholder)
                     .into(binding.imgUserPhoto)
+
+                Glide.with(this).asBitmap()
+                    .load(Constants.USER_IMAGE_PATH + usuario.userPhoto)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(binding.imgBackgnd)
             }
         }else{
             Glide.with(this)

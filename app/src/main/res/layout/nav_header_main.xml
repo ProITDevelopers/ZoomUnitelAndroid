@@ -33,9 +33,6 @@
             android:paddingTop="@dimen/nav_header_vertical_spacing"
             android:contentDescription="@string/nav_header_desc"
             android:layout_gravity="center"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?android:attr/selectableItemBackground"
             app:civ_border_color="@color/orange_unitel"
             app:civ_border_width="2dp"
 

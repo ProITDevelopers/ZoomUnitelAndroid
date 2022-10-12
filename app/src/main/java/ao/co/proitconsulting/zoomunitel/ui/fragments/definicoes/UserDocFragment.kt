@@ -41,9 +41,18 @@ class UserDocFragment : Fragment() {
     private lateinit var progressBar: SpinKitView
     private lateinit var txtProgress: TextView
     private var currentProgress = 0
-    val cv_link = "https://drive.google.com/file/d/1Eq6N15jbhjl_qIj9PgIS_K94k9LdSyho/view?usp=sharing"
-    val pdfUrl = Uri.parse(Constants.GOOGLE_DRIVE_LINK.plus(cv_link))
+    private val pdfUrl = Uri.parse(Constants.GOOGLE_DRIVE_LINK)
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        webView.saveState(outState)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        if (savedInstanceState!=null)
+            webView.restoreState(savedInstanceState)
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -53,10 +62,10 @@ class UserDocFragment : Fragment() {
         _binding = FragmentUserDocBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+
         val frameLayout = MainActivity.getFrameLayoutImgToolbar()
         if (frameLayout != null)
             frameLayout.visibility = View.GONE
-
 
 
         coordinatorLayout = root.findViewById(R.id.coordinatorLayout)
@@ -141,7 +150,11 @@ class UserDocFragment : Fragment() {
         }
 
         if (Constants.isNetworkAvailable){
-            webView.loadUrl(pdfUrl.toString())
+            if (savedInstanceState == null)
+            {
+                webView.loadUrl(pdfUrl.toString())
+            }
+
 
         }else{
             showErrorScreen(getString(R.string.msg_erro_internet))

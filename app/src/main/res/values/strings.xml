@@ -52,8 +52,6 @@
     <string name="logo_unitel_white">logo_unitel_white</string>
     <string name="g">G</string>
     <string name="salvar_dados">Salvar dados</string>
-    <string name="telemovel">Telemóvel</string>
-    <string name="nome">Nome</string>
     <string name="email">Email</string>
     <string name="editar_perfil">Editar Perfil</string>
     <string name="esqueceu_a_senha">Esqueceu a senha?</string>
@@ -74,4 +72,5 @@
     <string name="txt_camera">Câmera</string>
     <string name="msg_nenhuma_informacao">Nenhuma informação disponível.</string>
     <string name="curriculum_vitae">Curriculum Vitae</string>
+
 </resources>

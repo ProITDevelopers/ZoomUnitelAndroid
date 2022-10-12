@@ -3,16 +3,16 @@ package ao.co.proitconsulting.zoomunitel.helpers
 import ao.co.proitconsulting.zoomunitel.models.BookmarkRevistaModel
 
 class Constants {
-
     companion object{
 
+        private const val developer_link = "https://appaws.s3.us-east-2.amazonaws.com/android_developer_privacy.pdf"
         const val BASE_URL_ZOOM_UNITEL = "http://41.78.18.144:3000/"
         const val USER_IMAGE_PATH = BASE_URL_ZOOM_UNITEL+"user/image/"
         const val IMAGE_PATH = BASE_URL_ZOOM_UNITEL+"revista/image/"
         const val PDF_PATH = BASE_URL_ZOOM_UNITEL+"revista/view/"
         const val SHARE_URL_PLAYSTORE = "https://play.google.com/store/apps/details?id="
 
-        const val GOOGLE_DRIVE_LINK = "https://drive.google.com/viewerng/viewer?embedded=true&url="
+        const val GOOGLE_DRIVE_LINK = "https://drive.google.com/viewerng/viewer?embedded=true&url=".plus(developer_link)
 
         const val SLIDE_TIME_DELAY:Long = 8000
         const val REQUEST_TIMEOUT:Long = 10000
