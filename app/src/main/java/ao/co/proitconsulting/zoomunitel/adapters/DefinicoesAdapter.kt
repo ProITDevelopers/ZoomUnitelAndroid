@@ -28,7 +28,6 @@ class DefinicoesAdapter: RecyclerView.Adapter<DefinicoesAdapter.DefinicoesAdapte
         val layout = when (viewType) {
 
             TYPE_ABOUT -> R.layout.item_definicoes
-            TYPE_SETTINGS -> R.layout.item_definicoes
             TYPE_HEADER -> R.layout.item_definicoes_header
             else -> throw IllegalArgumentException("Invalid view type")
         }
@@ -45,7 +44,6 @@ class DefinicoesAdapter: RecyclerView.Adapter<DefinicoesAdapter.DefinicoesAdapte
         holder.bind(adapterData[position])
         holder.itemClickListener = itemClickListener
 
-
     }
 
 
@@ -56,7 +54,6 @@ class DefinicoesAdapter: RecyclerView.Adapter<DefinicoesAdapter.DefinicoesAdapte
     override fun getItemViewType(position: Int): Int {
         return when (adapterData[position]) {
             is DefinicoesModel.About -> TYPE_ABOUT
-            is DefinicoesModel.Settings -> TYPE_SETTINGS
             else -> TYPE_HEADER
         }
     }
@@ -72,8 +69,7 @@ class DefinicoesAdapter: RecyclerView.Adapter<DefinicoesAdapter.DefinicoesAdapte
 
     companion object {
         private const val TYPE_ABOUT = 0
-        private const val TYPE_SETTINGS= 1
-        private const val TYPE_HEADER = 2
+        private const val TYPE_HEADER = 1
     }
     @SuppressLint("WrongConstant")
     class DefinicoesAdapterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
@@ -99,16 +95,7 @@ class DefinicoesAdapter: RecyclerView.Adapter<DefinicoesAdapter.DefinicoesAdapte
             }
         }
 
-        private fun bindSettings(item: DefinicoesModel.Settings) {
-            //Do your view assignment here from the data model
 
-            itemView.findViewById<TextView>(R.id.txtTitle)?.text = item.settingsTitle
-            itemView.findViewById<TextView>(R.id.txtDesc)?.visibility = View.GONE
-
-            itemView.setOnClickListener {
-                itemClickListener?.invoke(it,item,adapterPosition)
-            }
-        }
 
 
 
@@ -130,7 +117,6 @@ class DefinicoesAdapter: RecyclerView.Adapter<DefinicoesAdapter.DefinicoesAdapte
 
             when (definicoesModel) {
                 is DefinicoesModel.About -> bindAbout(definicoesModel)
-                is DefinicoesModel.Settings -> bindSettings(definicoesModel)
                 is DefinicoesModel.Header -> bindHeader(definicoesModel)
             }
         }

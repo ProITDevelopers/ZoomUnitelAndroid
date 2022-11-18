@@ -1,13 +1,22 @@
 package ao.co.proitconsulting.zoomunitel.ui.activities
 
 import android.annotation.SuppressLint
+import android.app.Dialog
+import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -24,6 +33,7 @@ import ao.co.proitconsulting.zoomunitel.localDB.AppPrefsSettings
 import ao.co.proitconsulting.zoomunitel.models.UsuarioModel
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.github.ybq.android.spinkit.SpinKitView
 import com.google.android.material.navigation.NavigationView
 import de.hdodenhof.circleimageview.CircleImageView
 import okhttp3.ResponseBody
@@ -44,9 +54,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var  txtUserNameInitial:TextView
     private lateinit var  txtUserName:TextView
     private lateinit var  txtUserEmail:TextView
+    private lateinit var  spinKitBottom: SpinKitView
 
-    private lateinit var connectionLiveData: ConnectionLiveData
 
+    private lateinit var dialogLayoutAlertDialog: Dialog
 
 
 
@@ -61,6 +72,11 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.navigationBarColor = Color.parseColor("#CC000000")
+
+        }
+
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -69,7 +85,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            connectionLiveData = ConnectionLiveData(this)
+            val connectionLiveData = ConnectionLiveData(this)
             connectionLiveData.observe(this) { isNetwork ->
                 Constants.isNetworkAvailable = isNetwork
             }
@@ -97,11 +113,33 @@ class MainActivity : AppCompatActivity() {
         txtUserNameInitial = view.findViewById(R.id.txtUserNameInitial)
         txtUserName = view.findViewById(R.id.txtUserName)
         txtUserEmail = view.findViewById(R.id.txtUserEmail)
-
+        spinKitBottom = findViewById(R.id.spin_kit_bottom)
 
         carregarDadosLocal(AppPrefsSettings.getInstance().getUser())
 
+        //-------------------------------------------------------------//
+        //-------------------------------------------------------------//
+        //DIALOG_LAYOUT_ALERTA_GPS
+        dialogLayoutAlertDialog = Dialog(this)
+        dialogLayoutAlertDialog.setContentView(R.layout.layout_terminar_sessao)
+        dialogLayoutAlertDialog.setCancelable(true)
+        val dialog_card_view: CardView = dialogLayoutAlertDialog.findViewById(R.id.dialog_card_view)
+        val dialog_btn_cancel: Button = dialogLayoutAlertDialog.findViewById(R.id.dialog_btn_cancel)
+        val dialog_btn_ok: Button = dialogLayoutAlertDialog.findViewById(R.id.dialog_btn_ok)
+        MetodosUsados.handleDialogLayout(dialogLayoutAlertDialog,dialog_card_view)
 
+        dialog_btn_cancel.setOnClickListener {
+            dialogLayoutAlertDialog.cancel()
+        }
+
+        dialog_btn_ok.setOnClickListener {
+            dialogLayoutAlertDialog.cancel()
+            spinKitBottom.visibility = View.VISIBLE
+            Handler(Looper.getMainLooper()).postDelayed({
+                terminarSessao()
+            }, 2000)
+
+        }
 
     }
 
@@ -159,6 +197,12 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+            if (!Constants.isNetworkAvailable){
+                Constants.isNetworkAvailable = MetodosUsados.hasInternetConnection(this)
+            }
+        }
+
         if (Constants.isNetworkAvailable)
             carregarMeuPerfil()
 
@@ -193,9 +237,9 @@ class MainActivity : AppCompatActivity() {
                             }
                             Log.d(TAG, "onResponse_success: $body")
                         } catch (e: Exception) {
-
+                            e.printStackTrace()
                         } catch (e:JSONException){
-
+                            e.printStackTrace()
                         }
 
                     }
@@ -225,5 +269,30 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+
+        if (id == R.id.logOut) {
+            if (!dialogLayoutAlertDialog.isShowing)
+                dialogLayoutAlertDialog.show()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun terminarSessao() {
+        AppPrefsSettings.getInstance().clearAppPrefs()
+        spinKitBottom.visibility = View.GONE
+        val intent = Intent(this, SplashScreenActivity::class.java)
+        intent.flags = (Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        startActivity(intent)
+        finish()
     }
 }

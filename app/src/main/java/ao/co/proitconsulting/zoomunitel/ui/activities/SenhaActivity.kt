@@ -1,5 +1,6 @@
 package ao.co.proitconsulting.zoomunitel.ui.activities
 
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.widget.ImageView
@@ -18,7 +19,7 @@ import ao.co.proitconsulting.zoomunitel.ui.fragments.senha.RecuperarFragment
 class SenhaActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySenhaBinding
-    private lateinit var connectionLiveData: ConnectionLiveData
+
 
     companion object{
         private var mViewPager: ViewPager2? = null
@@ -29,12 +30,15 @@ class SenhaActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.navigationBarColor = Color.TRANSPARENT
+        }
         super.onCreate(savedInstanceState)
         binding = ActivitySenhaBinding.inflate(layoutInflater)
         setContentView(binding.root)
         showFrags()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            connectionLiveData = ConnectionLiveData(this)
+            val connectionLiveData = ConnectionLiveData(this)
             connectionLiveData.observe(this) { isNetwork ->
                 Constants.isNetworkAvailable = isNetwork
             }
@@ -69,6 +73,15 @@ class SenhaActivity : AppCompatActivity() {
     override fun onBackPressed() {
         finish()
         super.onBackPressed()
+    }
+
+    override fun onResume() {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+            if (!Constants.isNetworkAvailable){
+                Constants.isNetworkAvailable = MetodosUsados.hasInternetConnection(this)
+            }
+        }
+        super.onResume()
     }
 
 

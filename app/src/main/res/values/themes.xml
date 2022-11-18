@@ -17,6 +17,9 @@
 
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
 
+        <item name="android:enforceStatusBarContrast"  tools:targetApi="q">true</item>
+        <item name="android:enforceNavigationBarContrast"  tools:targetApi="q">true</item>
+
     </style>
 
     <style name="Theme.ZoomUnitel.NoActionBar">
@@ -26,6 +29,8 @@
         <item name="android:windowDisablePreview">true</item>
 
     </style>
+
+
 
     <style name="CustomActivityAnimation" parent="@android:style/Animation.Activity">
         <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>

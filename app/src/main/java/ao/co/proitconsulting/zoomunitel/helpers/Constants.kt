@@ -3,7 +3,7 @@ package ao.co.proitconsulting.zoomunitel.helpers
 import ao.co.proitconsulting.zoomunitel.models.BookmarkRevistaModel
 
 class Constants {
-    companion object{
+    companion object {
 
         private const val developer_link = "https://appaws.s3.us-east-2.amazonaws.com/android_developer_privacy.pdf"
         const val BASE_URL_ZOOM_UNITEL = "http://41.78.18.144:3000/"

@@ -14,10 +14,10 @@ import android.os.Build
 import android.util.Patterns
 import android.view.View
 import android.view.Window
-import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.core.view.WindowCompat
 import ao.co.proitconsulting.zoomunitel.R
 import com.google.android.material.snackbar.Snackbar
 import java.text.Normalizer
@@ -29,20 +29,65 @@ class MetodosUsados {
 
     companion object {
 
+        fun hideSystemBars(activity: Activity) {
+            val window: Window = activity.window
+            // Enables regular immersive mode.
+            // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
+            // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 
+                window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        // Set the content to appear under the system bars so that the
+                        // content doesn't resize when the system bars hide and show.
+                        or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        // Hide the nav bar and status bar
+                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_FULLSCREEN)
+            }
+
+        }
+
+        // Shows the system bars by removing all the flags
+        // except for the ones that make the content appear under the system bars.
+        fun showSystemUI(activity: Activity) {
+            val window: Window = activity.window
+            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+        }
+
+        fun transparentStatusANDNavigationBar(activity: Activity){
+            //<item name="android:enforceStatusBarContrast"  tools:targetApi="q">true</item>
+            //<item name="android:enforceNavigationBarContrast"  tools:targetApi="q">true</item>
+            val window: Window = activity.window
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                WindowCompat.setDecorFitsSystemWindows(window, false)
+                window.statusBarColor = Color.TRANSPARENT
+                window.navigationBarColor = Color.TRANSPARENT
+            }
+
+        }
 
         fun transparentNavigationBar(activity: Activity){
+//            <item name="android:enforceStatusBarContrast"  tools:targetApi="q">true</item>
+//            <item name="android:enforceNavigationBarContrast"  tools:targetApi="q">true</item>
             val window: Window = activity.window
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN)
-
+            WindowCompat.setDecorFitsSystemWindows(window, false)
+//            window.setFlags(
+//                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+//                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //                window.navigationBarColor = ContextCompat.getColor(activity, R.color.white)
                 window.navigationBarColor = Color.TRANSPARENT
-
             }
+
+
         }
+
+
+
 
 
 
@@ -81,6 +126,7 @@ class MetodosUsados {
                 val date = inputFormatter.parse(timeStamp)
                 return outputFormatter.format(date!!)
             } catch (e: ParseException) {
+                e.printStackTrace()
             }
             return ""
         }
@@ -172,6 +218,7 @@ class MetodosUsados {
                 }
 
             } catch (e: PackageManager.NameNotFoundException) {
+                e.printStackTrace()
             }
         }
 

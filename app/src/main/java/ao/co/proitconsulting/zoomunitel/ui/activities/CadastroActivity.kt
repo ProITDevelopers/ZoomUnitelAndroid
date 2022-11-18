@@ -17,7 +17,7 @@ import ao.co.proitconsulting.zoomunitel.ui.fragments.cadastro.RegistroFragment
 class CadastroActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCadastroBinding
-    private lateinit var connectionLiveData: ConnectionLiveData
+
 
 
     companion object{
@@ -29,13 +29,13 @@ class CadastroActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
+        MetodosUsados.transparentStatusANDNavigationBar(this)
         super.onCreate(savedInstanceState)
         binding = ActivityCadastroBinding.inflate(layoutInflater)
         setContentView(binding.root)
         showFrags()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            connectionLiveData = ConnectionLiveData(this)
+            val connectionLiveData = ConnectionLiveData(this)
             connectionLiveData.observe(this) { isNetwork ->
                 Constants.isNetworkAvailable = isNetwork
             }
@@ -74,6 +74,16 @@ class CadastroActivity : AppCompatActivity() {
             // Otherwise, select the previous step.
             mViewPager?.currentItem = mViewPager?.currentItem!! - 1
         }
+    }
+
+
+    override fun onResume() {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+            if (!Constants.isNetworkAvailable){
+                Constants.isNetworkAvailable = MetodosUsados.hasInternetConnection(this)
+            }
+        }
+        super.onResume()
     }
 
 }

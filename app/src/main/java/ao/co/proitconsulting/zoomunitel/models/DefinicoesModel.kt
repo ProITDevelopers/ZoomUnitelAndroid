@@ -12,10 +12,6 @@ sealed class DefinicoesModel {
         val aboutDesc: String
     ) : DefinicoesModel()
 
-    data class Settings(
-        val settingsTitle: String
-
-    ) : DefinicoesModel()
 
 
 

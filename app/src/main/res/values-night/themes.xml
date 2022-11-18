@@ -17,6 +17,9 @@
         <!-- Applying the new style that is defined below  -->
         <item name="actionBarStyle">@style/MyActionBarDarkStyle</item>
         <item name="android:windowAnimationStyle">@style/CustomActivityAnimation</item>
+
+        <item name="android:enforceStatusBarContrast"  tools:targetApi="q">true</item>
+        <item name="android:enforceNavigationBarContrast"  tools:targetApi="q">true</item>
     </style>
 
     <style name="Theme.ZoomUnitel.NoActionBar">
@@ -26,6 +29,9 @@
         <item name="android:fontFamily">@font/poppins_medium</item>
 
     </style>
+
+
+
 
     <style name="CustomActivityAnimation" parent="@android:style/Animation.Activity">
         <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>

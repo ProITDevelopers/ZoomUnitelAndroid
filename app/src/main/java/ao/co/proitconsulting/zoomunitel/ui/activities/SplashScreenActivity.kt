@@ -14,11 +14,11 @@ class SplashScreenActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySplashScreenBinding
 
-    private lateinit var mainHandler: Handler
-    private lateinit var mainRunnable: Runnable
+    private var mainHandler: Handler?=null
+    private var mainRunnable: Runnable?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        MetodosUsados.transparentNavigationBar(this)
+        MetodosUsados.hideSystemBars(this)
         super.onCreate(savedInstanceState)
         binding = ActivitySplashScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -43,7 +43,7 @@ class SplashScreenActivity : AppCompatActivity() {
             }
 
         }
-        mainHandler.postDelayed(mainRunnable, 2000)
+        mainHandler?.postDelayed(mainRunnable!!, 2000)
     }
 
     private fun launchHomeScreen() {
@@ -56,7 +56,11 @@ class SplashScreenActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         if (mainHandler != null && mainRunnable != null) {
-            mainHandler.removeCallbacks(mainRunnable)
+            mainHandler?.removeCallbacks(mainRunnable!!)
         }
     }
+
+
+
+
 }

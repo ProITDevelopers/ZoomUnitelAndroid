@@ -146,7 +146,7 @@ class PreviewPdfFragment : Fragment() {
         if (frameLayout != null)
             frameLayout.visibility = View.VISIBLE
 
-        Log.d(TAG, "Oncreate: isNetworkAvailable: ${Constants.isNetworkAvailable}")
+        Log.d(TAG, "onCreateView: isNetworkAvailable: ${Constants.isNetworkAvailable}")
 
         coordinatorLayout = root.findViewById(R.id.coordinatorLayout)
         errorLayout = root.findViewById(R.id.erroLayout)
@@ -246,9 +246,11 @@ class PreviewPdfFragment : Fragment() {
             if (((activity as MainActivity)).supportActionBar!!.isShowing){
                 ((activity as MainActivity)).supportActionBar!!.hide()
                 linearPageSectios.visibility = View.GONE
+
             }else{
                 ((activity as MainActivity)).supportActionBar!!.show()
                 linearPageSectios.visibility = View.VISIBLE
+
             }
 
         }
@@ -293,10 +295,13 @@ class PreviewPdfFragment : Fragment() {
         if (!folder.exists())
             folder.mkdirs()
 
-        var nomePDF = MetodosUsados.removeAcentos(revista.title)
-        nomePDF = nomePDF.replace("\\s+".toRegex(),"_")
-        nomePDF = nomePDF.replace("/","_")
-        nomePDF = nomePDF.lowercase()
+//        var nomePDF = MetodosUsados.removeAcentos(revista.title)
+//        nomePDF = nomePDF.replace("\\s+".toRegex(),"_")
+//        nomePDF = nomePDF.replace("/","_")
+//        nomePDF = nomePDF.lowercase()
+
+        var nomePDF = revista.pdfLink
+        nomePDF = nomePDF.replace(".pdf","")
         Constants.PDF_FILE_NAME = File.separator+nomePDF+".pdf"
 
         Log.d(TAG, "PDF_FILE_NAME: ${Constants.PDF_FILE_NAME}")
@@ -381,8 +386,8 @@ class PreviewPdfFragment : Fragment() {
         override fun doInBackground(vararg sUrl: String?): File? {
 
             var pdf_File: File? = null
-            lateinit var inputStream:InputStream
-            lateinit var outputStream:FileOutputStream
+            var inputStream:InputStream?=null
+            var outputStream:FileOutputStream?=null
 
             val httpClient = GetUnsafeOkHttpClientSecurity.getUnsafeOkHttpClient()
             val okHttpClient = httpClient.build()
@@ -613,7 +618,11 @@ class PreviewPdfFragment : Fragment() {
         }
 
         val bookmark = BookmarkRevistaModel(revista.uid,currentPageNumber,lastPageNumber)
-        bookmarkList!![positionInList] = bookmark
+        try {
+            bookmarkList!![positionInList] = bookmark
+        } catch (e: Exception) {
+            Log.e(TAG, "onDestroyView: ${e.printStackTrace()}")
+        }
         AppPrefsSettings.getInstance().saveBookmark(bookmarkList!!)
 
 

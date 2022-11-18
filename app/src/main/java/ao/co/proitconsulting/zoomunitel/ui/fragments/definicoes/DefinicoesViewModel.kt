@@ -24,31 +24,23 @@ class DefinicoesViewModel : ViewModel() {
                     "Unitel, dedicada à partilha de conhecimento sobre projectos (internos e externos), tecnologias e investigação."
         ),
         DefinicoesModel.About(
-            aboutTitle = "Versão",
-            aboutDesc = BuildConfig.VERSION_NAME
-        ),
-        DefinicoesModel.About(
-            aboutTitle = "Desenvolvedor",
-            aboutDesc = "Copyright © 2021 - Powered by Pro-IT Consulting"
+            aboutTitle = "Partilhar",
+            aboutDesc = "Partilhe o link da app com os seus contactos."
         ),
         DefinicoesModel.About(
             aboutTitle = "Enviar feedback",
             aboutDesc = "Tem alguma dúvida? Estamos felizes em ajudar."
         ),
         DefinicoesModel.About(
-            aboutTitle = "Partilhar",
-            aboutDesc = "Partilhe o link da app com os seus contactos."
+            aboutTitle = "Desenvolvedor",
+            aboutDesc = "Copyright © 2021 - Powered by Pro-IT Consulting"
         ),
-        DefinicoesModel.Header(
-            title = "Segurança"
-        ),
-        DefinicoesModel.Settings(
-            settingsTitle = "Alterar Senha"
-
-        ),
-        DefinicoesModel.Settings(
-            settingsTitle = "Terminar sessão"
-
+        DefinicoesModel.About(
+            aboutTitle = "Versão",
+            aboutDesc = BuildConfig.VERSION_NAME
         )
+
+
+
     )
 }

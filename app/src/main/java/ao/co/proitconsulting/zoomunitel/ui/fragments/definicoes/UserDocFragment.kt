@@ -128,7 +128,7 @@ class UserDocFragment : Fragment() {
                     view?.loadUrl(pdfUrl.toString())
                 }else{
                     view?.loadUrl("javascript:(function() { " +
-                            "document.getElementsByClassName('ndfHFb-c4YZDc-GSQQnc-LgbsSe ndfHFb-c4YZDc-to915-LgbsSe VIpgJd-TzA9Ye-eEGnhe ndfHFb-c4YZDc-LgbsSe')[0].style.display='none'; })()");
+                            "document.getElementsByClassName('ndfHFb-c4YZDc-GSQQnc-LgbsSe ndfHFb-c4YZDc-to915-LgbsSe VIpgJd-TzA9Ye-eEGnhe ndfHFb-c4YZDc-LgbsSe')[0].style.display='none'; })()")
                 }
             }
 
@@ -149,17 +149,7 @@ class UserDocFragment : Fragment() {
             showAndHideViews()
         }
 
-        if (Constants.isNetworkAvailable){
-            if (savedInstanceState == null)
-            {
-                webView.loadUrl(pdfUrl.toString())
-            }
 
-
-        }else{
-            showErrorScreen(getString(R.string.msg_erro_internet))
-
-        }
 
         return root
     }
@@ -196,6 +186,22 @@ class UserDocFragment : Fragment() {
         }
     }
 
+
+    override fun onResume() {
+        if (Constants.isNetworkAvailable){
+
+            if (errorLayout.visibility == View.VISIBLE){
+                errorLayout.visibility = View.GONE
+                coordinatorLayout.visibility = View.VISIBLE
+            }
+            webView.loadUrl(pdfUrl.toString())
+
+        }else{
+            showErrorScreen(getString(R.string.msg_erro_internet))
+
+        }
+        super.onResume()
+    }
 
 
     override fun onDestroyView() {
